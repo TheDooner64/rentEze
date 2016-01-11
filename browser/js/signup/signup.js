@@ -10,7 +10,7 @@
 
 // app.controller('SignupCtrl', function ($scope, AuthService, $state) {
 
-//     $scope.login = {};
+//     $scope.signup = {};
 //     $scope.error = null;
 
 //     $scope.sendSignup = function (signupInfo) {

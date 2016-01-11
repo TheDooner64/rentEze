@@ -37,6 +37,15 @@ navbar {
     }
   }
 
+  .signup-button {
+    float: right;
+    border: 1px solid black;
+    margin-top: 10px;
+    margin-right: 5px;
+    background: none;
+    outline: none !important;
+  }
+
   .login-button {
     float: right;
     border: 1px solid black;
