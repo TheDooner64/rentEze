@@ -36,9 +36,8 @@
             margin-top: 100px;
         }
 
-        #marketplace-graphic {
-            height: 600px;
-            align: middle;
+        img {
+            width: 100%;
         }
 
         p {
@@ -51,11 +50,8 @@
     }
 
     #company-description {
-        height: 400px;
         background: url(http://hdwallpapersfit.com/wp-content/uploads/2015/04/dark-background.jpg) no-repeat center center;
         background-size: cover;
-        color: white;
-        opacity: 0.9;
         margin-top: 80px;
 
         .glyphicon {
@@ -65,14 +61,22 @@
         }
 
         h3 {
+            color: $ivory;
             text-align: center;
             padding-bottom: 18px;
             font-weight: bold;
         }
 
         p {
+            color: $bright-robin-egg-blue;
             text-align: center;
             font-size: 16px;
+        }
+
+        i {
+            color: $ivory;
+            display: block;
+            margin: 0 auto;
         }
     }
 }
