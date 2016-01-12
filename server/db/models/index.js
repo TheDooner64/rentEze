@@ -4,3 +4,4 @@
 require('./user');
 require('./neighborhood');
 require('./review');
+require('./order');
