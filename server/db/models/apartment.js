@@ -1,5 +1,13 @@
 var mongoose = require('mongoose');
-var Review = mongoose.model('Review')
+var Review = mongoose.model('Review');
+var rp = require('request-promise');
+
+var latLongSchema = new mongoose.Schema({
+    lat:{type:Number, required: true;},
+    lng:{type:Number, required: true;}
+});
+
+var apiKey=require('../../../apiInfo.js').maps;
 var schema = new mongoose.Schema({
     title: {type: String},
     monthlyPrice: {type: Number},
@@ -8,15 +16,18 @@ var schema = new mongoose.Schema({
     aptNum: {type: String},
     city: {type: String},
     state: {type: String},
-    zipCode: {type: Number},
+    zipCode: {type: String},
+    latLong:{type:latLongSchema},
     landlord: {type: mongoose.Schema.ObjectId, ref: "User"},
-    neighborhood: {type: mongoose.Schema.ObjectId, ref: "Neighborhood"},
+    neighborhood: {type: mongoose.Schema.ObjectId, ref: "Neighborhood"}, //we'll need to be sure how to reference neighborhood
     numBedrooms: {type: Number},
     numBathrooms: {type: Number},
     description: {type: String},
-    pictureUrl: [{type:String}],
+    pictureUrls: [{type:String}],
     termOfLease: {type:String},
-    availability: {type:String}
+    availability: {type:String},
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
 
     //name it "Apartment"
     // user schema is "User"
@@ -30,21 +41,36 @@ schema.virtuals.ppsf = function () {
     return apartment.monthlyPrice/apartment.squareFootage;
 }
 
-schema.virtuals.latLong = function (){
+schema.virtuals.addressString = function (){
+    return this.streetAddress + " " + this.city + " " + this.state + " " + this.zipCode;
 }
+
+schema.pre('save', function(next){
+    var apartment=this;
+
+//be on look out for other "special character issues besides space character"
+    var queryAddress = apartment.addressString.replace(" ", "%20");
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ queryAddress +"&sensor=false&key=" + apiKey;
+        rp(url)
+        .then(function(res) {
+            var info=JSON.parse(res);
+            apartment.latLong = info.results[0].geometry.location;
+            next();
+        }).then(null, console.log)
+
+})
 
 
 schema.virtuals.averageRating = function (){
     var apartment = this;
     Review.find({aptId:apartment._id}).exec()
         .then(function(reviews){
+            if (reviews.length === 0) return null;
             var total = reviews.reduce(function(a,b){
                 return a+b.rating;
-            },0)
+            },0);
             return total/reviews.length;
         }).then(null, console.log)
 }
 
 mongoose.model('Apartment', schema)
-
-var maps_key = "AIzaSyC3BnyTstjr2A1TpTL6bbVphSZdCQk5BPs";
