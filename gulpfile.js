@@ -48,8 +48,7 @@ gulp.task('buildJS', ['lintJS'], function () {
         .pipe(concat('main.js'))
         .pipe(babel())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./public'))
-        .pipe(notify('js compiled'));
+        .pipe(gulp.dest('./public'));
 });
 
 gulp.task('testServerJS', function () {
@@ -94,8 +93,7 @@ gulp.task('buildCSS', function () {
         }))
         .pipe(sassCompilation)
         .pipe(rename('style.css'))
-        .pipe(gulp.dest('./public'))
-        .pipe(notify('css compiled'));
+        .pipe(gulp.dest('./public'));
 });
 
 // Production tasks
