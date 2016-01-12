@@ -1,7 +1,40 @@
-<div id="app" class="clearfix">
-  <div class="map-container col-xs-12">
-    <div>
-      <div id="map-canvas"></div>
+<div class="map-container col-xs-12">
+    <div id="search-box">
+        <div class="container">
+            <div class="new-search">
+                <label>Search...</label>
+                <input class="search-box-input" type="text">
+                <button class="btn">Search</button>
+            </div>
+
+            <form name="filterMapForm" ng-submit="filterResults()">
+                <label># of bedrooms</label>
+                <select class="search-box-input" ng-options="bedroom for bedroom in bedroomOptions" ng-model="filterCriteria.numBedrooms">
+                    <option value="">--</option>
+                </select>
+
+                <label>Rent Price</label>
+                <select class="search-box-input" ng-options="rentOption for rentOption in rentOptions" ng-model="filterCriteria.monthlyPrice">
+                    <option value="">--</option>
+                </select>
+
+                <label>Star Rating</label>
+                <select class="search-box-input" ng-options="ratingOption for ratingOption in ratingOptions" ng-model="filterCriteria.averageRating">
+                    <option value="">--</option>
+                </select>
+
+                <label>Term of Lease</label>
+                <select class="search-box-input" ng-options="term for term in termOfLease" ng-model="filterCriteria.termOfLease">
+                    <option value="">--</option>
+                </select>
+
+                <label>Include unavailable?</label>
+                <input class="search-box-input" type="checkbox" ng-model="filterCriteria.availability">
+
+                <button type="submit" class="btn">Filter Results</button>
+            </form>
+        </div>
     </div>
-  </div>
+
+    <div id="map-canvas"></div>
 </div>
