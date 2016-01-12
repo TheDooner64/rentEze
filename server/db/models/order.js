@@ -13,7 +13,7 @@ var schema = new mongoose.Schema({
     },
     sellerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
     },
     isSold: {
         type: Boolean,

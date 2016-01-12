@@ -9,5 +9,5 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('MapCtrl', function ($scope, MapFactory) {
-
+    $scope.map = MapFactory.initialize_gmaps();
 });
