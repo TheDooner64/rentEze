@@ -87,13 +87,21 @@
         };
 
         this.login = function (credentials) {
-            console.log(credentials);
             return $http.post('/login', credentials)
                 .then(onSuccessfulLogin)
                 .catch(function () {
                     return $q.reject({ message: 'Invalid login credentials.' });
                 });
         };
+
+        // BOBBY NOTE: Need to create a new ajax function
+        // this.signup = function (credentials) {
+        //     return $http.post('/signup', credentials)
+        //         .then(onSuccessfulLogin)
+        //         .catch(function () {
+        //             return $q.reject({ message: 'Invalid login credentials.' });
+        //         });
+        // };
 
         this.logout = function () {
             return $http.get('/logout').then(function () {
