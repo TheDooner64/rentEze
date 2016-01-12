@@ -2,8 +2,6 @@ app.factory('MapFactory', function () {
 
     var MapFactory = {};
 
-    console.log(google);
-
     MapFactory.initialize_gmaps = function() {
 
         var styleArr = [{
