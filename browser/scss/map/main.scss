@@ -1,26 +1,53 @@
-#app {
-  border-left: 2px solid #b1a398;
-  border-right: 2px solid #b1a398;
-}
+@import '../variables';
 
 #map-canvas {
-  height: calc(100vh - 50px);
-  border-right: 2px solid #b1a398;
-  border-bottom: 2px solid #b1a398;
-  border-left: 2px solid #b1a398;
-  width: 100%;
+    height: calc(100vh - 50px);
+    border-bottom: 2px solid #b1a398;
+    border-left: 2px solid #b1a398;
+    width: 100%;
+}
+
+#search-box {
+    display: block;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px;
+    box-shadow: 1px 1px 14px -3px $space-dark-blue;
+    .container {
+        .new-search {
+            display: inline;
+            width: 400px;
+            border-radius: 5px;
+            padding: 10px;
+            background: $medium-faded-blue;
+            label {
+                color: $ivory;
+            }
+        }
+        form {
+            display: inline;
+        }
+        width: 91%;
+        max-width: 1340px;
+        label {
+            margin-right: 8px;
+        }
+        .search-box-input {
+            margin-right: 30px;
+        }
+    }
 }
 
 @media (min-width: 768px) {
-  #map-canvas {
-    border-bottom: none;
-    border-left: none;
-  }
-  .map-container {
-    padding: 0;
-  }
-  .map-container > div {
-    position: fixed;
-    width: inherit;
-  }
+    #map-canvas {
+        border-bottom: none;
+        border-left: none;
+    }
+    .map-container {
+        padding: 0;
+    }
+    .map-container > div {
+        position: fixed;
+        width: inherit;
+    }
 }
