@@ -1,9 +1,12 @@
+@import 'variables';
+
 * {
   box-sizing: border-box;
 }
 
 body {
   background: #fdfdfd;
+  font-family: $paragraph-font-stack;
 }
 
 @mixin clearfix {
@@ -18,8 +21,32 @@ body {
   margin: 0 auto;
 }
 
+
+
+/* Font styles */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $header-font-stack;
+}
+
+p, span {
+    font-family: $paragraph-font-stack;
+    color: $deep-brown;
+}
+
+
+
+/* Button styles */
+
+button {
+    &.btn {
+        border: 0;
+        border-radius: 4px;
+        background: $bright-robin-egg-blue;
+        color: $space-dark-blue;
+    }
+}
+
 @import 'directives/main';
 @import 'home/main';
-@import 'about/main';
-@import 'tutorial/main';
 @import 'login/main';
