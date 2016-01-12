@@ -24,11 +24,42 @@ var schema = new mongoose.Schema({
     },
     google: {
         id: String
-    }
+    },
+    classification: {
+        type: String
+    },
+    isAdmin: {
+        type: Boolean
+    },
+    // Remember, there is a virtual property for fullName, see below.
+    // (but you can't access it on the front end!)
+    firstName: {
+        type: String
+    },
+    lastName: {
+        type: String
+    },
+    apartmentsOwned: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Apartment'
+    }]
+});
+
+// pre-validate hook to ensure that a user isn't saved or updated with a value for the
+// apartmentsOwned property unless the user is also a landlord
+schema.pre('validate', function(next) {
+    var user = this;
+    if (user.apartmentsOwned && this.classification !== "renter") throw new Error('Renters can\'t possess any apartments!');
+});
+
+// virtual property for the user's full name
+schema.virtual('fullName').get(function () {
+    var user = this;
+    return user.firstName + " " + user.lastName;
 });
 
 // method to remove sensitive information from user objects before sending them out
-schema.methods.sanitize =  function () {
+schema.methods.sanitize = function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 };
 
