@@ -1,41 +1,63 @@
+@import '../variables';
+
 navbar {
 
   display: block;
-  background: white;
-  border-bottom: 1px solid black;
+  background: $space-dark-blue;
   box-shadow: 1px 1px 14px -3px black;
+  padding-bottom: 10px;
+  nav.navbar {
+    margin-bottom: 0;
+  }
 
   .container {
     width: 91%;
     max-width: 1340px;
-    padding-top: 20px;
+  }
+
+  .navbar-header {
+    h2 {
+        color: $ivory;
+        margin-right: 30px;
+    }
   }
 
   a {
-    color: black;
+    color: $bright-robin-egg-blue;
     font-size: 16px;
+  }
+
+  ul.nav {
+    margin-top: 10px;
   }
 
   .nav > li > a {
     cursor: pointer;
     transition: color 0.2s;
     &.active {
-      color: darken(#f31214, 10%);
+      color: darken($bright-robin-egg-blue, 10%);
     }
     &:hover {
       background: none;
-      color: #f31214;
+      color: lighten($bright-robin-egg-blue, 10%);
     }
     &:focus {
       background: none;
     }
   }
 
-  .login-button {
+  .signup-button {
     float: right;
     border: 1px solid black;
     margin-top: 10px;
+    margin-right: 5px;
     background: none;
+    outline: none !important;
+  }
+
+  .login-button {
+    float: right;
+    margin-top: 18px;
     outline: none !important;
   }
 

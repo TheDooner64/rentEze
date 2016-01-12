@@ -1,0 +1,26 @@
+#app {
+  border-left: 2px solid #b1a398;
+  border-right: 2px solid #b1a398;
+}
+
+#map-canvas {
+  height: calc(100vh - 50px);
+  border-right: 2px solid #b1a398;
+  border-bottom: 2px solid #b1a398;
+  border-left: 2px solid #b1a398;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  #map-canvas {
+    border-bottom: none;
+    border-left: none;
+  }
+  .map-container {
+    padding: 0;
+  }
+  .map-container > div {
+    position: fixed;
+    width: inherit;
+  }
+}
