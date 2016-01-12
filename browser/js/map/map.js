@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('MapCtrl', function ($scope, MapFactory) {
+app.controller('MapCtrl', function ($scope, MapFactory, FilterFactory) {
     $scope.map = MapFactory.initialize_gmaps();
 
     $scope.bedroomOptions = ["Studio", "1", "2", "3+"];
@@ -16,7 +16,11 @@ app.controller('MapCtrl', function ($scope, MapFactory) {
     $scope.ratingOptions = ["1", "2", "3", "4", "5"];
     $scope.termOfLease = ["1 month", "3 months", "6 months", "1 year", "2 years"];
 
+    // Function to retrieve apartments based on user filters
     $scope.filterResults = function() {
-        console.log($scope.filterCriteria);
-    };
+        FilterFactory.filterResults($scope.filterCriteria)
+        .then(function(apartments) {
+            console.log(apartments);
+        });
+    }
 });
