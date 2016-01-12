@@ -18,14 +18,12 @@ var schema = new mongoose.Schema({
     termOfLease: {type:String},
     availability: {type:String}
 
-
-
     //name it "Apartment"
     // user schema is "User"
     //create ppsf static, lat/long static, isRentable static
 
 })
-
+//nearly all this virtual logic may make more sense on the front end
 //virtual to represent price per squarefoot
 schema.virtuals.ppsf = function () {
     var apartment = this;
@@ -35,16 +33,18 @@ schema.virtuals.ppsf = function () {
 schema.virtuals.latLong = function (){
 }
 
-//
+
 schema.virtuals.averageRating = function (){
     var apartment = this;
-    Review.find(aptId:apartment._id).exec()
+    Review.find({aptId:apartment._id}).exec()
         .then(function(reviews){
             var total = reviews.reduce(function(a,b){
                 return a+b.rating;
-            },0)gi
+            },0)
             return total/reviews.length;
         }).then(null, console.log)
 }
 
 mongoose.model('Apartment', schema)
+
+var maps_key = "AIzaSyC3BnyTstjr2A1TpTL6bbVphSZdCQk5BPs";
