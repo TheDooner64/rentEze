@@ -4,4 +4,5 @@ npm-debug.log
 public
 .DS_Store
 coverage
+apiInfo.js
 .secret-keys.js
