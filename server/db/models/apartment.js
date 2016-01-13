@@ -47,9 +47,8 @@ var schema = new mongoose.Schema({
         ref: "User"
     },
     neighborhood: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Neighborhood"
-    }, //we'll need to be sure how to reference neighborhood
+        type: String
+    }, //TODO we expect to remove the neighborhood model
     numBedrooms: {
         type: Number
     },
@@ -89,19 +88,16 @@ schema.virtuals.ppsf = function() {
     return apartment.monthlyPrice / apartment.squareFootage;
 }
 
-schema.virtuals.addressString = function() {
-    return this.streetAddress + " " + this.city + " " + this.state + " " + this.zipCode;
-}
-
 schema.pre('save', function(next) {
     var apartment = this;
-
+    var addressString = apartment.streetAddress + " " + apartment.city + " " + apartment.state + " " + apartment.zipCode;
     //be on look out for other "special character issues besides space character"
-    var queryAddress = apartment.addressString.replace(" ", "%20");
+    var queryAddress = addressString.replace(" ", "%20");
     var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + queryAddress + "&sensor=false&key=" + apiKey;
     rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
+            if(info.results.length < 1) next();
             apartment.latLong = info.results[0].geometry.location;
             next();
         }).then(null, console.log)
