@@ -47,10 +47,10 @@ var schema = new mongoose.Schema({
 
 // pre-validate hook to ensure that a user isn't saved or updated with a value for the
 // apartmentsOwned property unless the user is also a landlord
-schema.pre('validate', function(next) {
-    var user = this;
-    if (user.apartmentsOwned && this.classification !== "renter") throw new Error('Renters can\'t possess any apartments!');
-});
+// schema.pre('validate', function(next) {
+//     var user = this;
+//     if (user.apartmentsOwned && this.classification !== "renter") throw new Error('Renters can\'t possess any apartments!');
+// });
 
 // virtual property for the user's full name
 schema.virtual('fullName').get(function () {

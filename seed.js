@@ -20,15 +20,20 @@ name in the environment files.
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var chalk = require('chalk');
-var chance = require('chance');
+var Chance = require('chance');
+var chance = new Chance();
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
 var Apartment = Promise.promisifyAll(mongoose.model('Apartment'));
+var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
-
+var _=require('lodash');
 var numApts = 20;
 var numUsers = 20;
+var numReviews = 50;
+var userIds;
+var aptIds;
 
 var lat = [40.71, 40.75];
 var lon = [-74, -73.98];
@@ -37,13 +42,16 @@ var randApt = function() {
     var randLat = chance.latitude({ min: lat[0], max: lat[1] });
     var randLon = chance.longitude({ min: lon[0], max: lon[1] });
     var latLong = randLat + ',' + randLon;
-
+    var termOfLease = ["1 month", "3 months", "6 months", "1 year", "2 years"]
     var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latLong + '&key=' + apiKey;
+    var availability = ["available", "unavailable", "pending"]
+    var pictureUrls = require("./seedInfo/imageurls.js").imageUrls
 
-    rp(url)
+    return rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
             var addressComponents = info.results[0].address_components;
+
             var city = addressComponents.map(function(component) {
                 if (component.types.indexOf('locality') > -1 || component.types.indexOf('sublocality') > -1) {
                     return component;
@@ -59,42 +67,91 @@ var randApt = function() {
                     return component;
                 }
             })[0];
-            return new Apartment({
+            var neighborhood = addressComponents.map(function(component) {
+                if (component.types.indexOf('neighborhood') > -1) {
+                    return component;
+                }
+            })[0];
+            return {
                 streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
-                city: city,
-                state: state,
-                zipCode: zip,
-                neighborhood: addressComponents[].long_name,
+                city: city.long_name,
+                state: state.long_name,
+                zipCode: zip.long_name,
+                neighborhood: neighborhood.long_name,
                 title: adj + ' ' + numBed + ' Bedroom Apartment',
-                monthlyPrice: chance.integer({min: 600, max: 5000}),
+                monthlyPrice: chance.integer({min: 600, max: 10000}),
                 squareFootage: chance.integer({min: 350, max: 3000}),
-                numBedrooms: chance.integer({min: 1, max: 4}),
+                numBedrooms: chance.integer({min: 0, max: 4}),
                 numBathrooms: chance.integer({min: 1, max: 3}),
                 description: chance.paragraph(),
-                pictureUrls:,
-                termOfLease:,
-                availability:
-            });
+                pictureUrls: [pictureUrls[chance.integer({min:0, max: pictureUrls.length-1})], pictureUrls[chance.integer({min:0, max: pictureUrls.length-1})]],
+                termOfLease: termOfLease[chance.integer({min:0, max: termOfLease.length-1})],
+                availability: availability[chance.integer({min:0, max: availability.length-1})]
+            };
         });
 };
 
+var seedApartments = function(){
+    var aptPromises = _.times(numApts, randApt)
+    console.log (aptPromises)
+    return Promise.all(aptPromises)
+    .then(function(apartmentArray){
+        console.log(apartmentArray)
+        return Apartment.createAsync(apartmentArray);
+    }).then(null, console.log)
+}
+
+var emails = chance.unique(chance.email, numUsers);
+var randUser = function() {
+    var name = chance.name().split(' ')
+    return{
+        firstName: chance.first(),
+        lastName: chance.last(),
+        email: emails.pop(),
+        classification: 'tenant',
+        isAdmin: false,
+        password: chance.word()
+    };
+}
 
 var seedUsers = function () {
-
-    var users = [
-        {
+    var users = _.times(numUsers, randUser)
+    users.push({
             email: 'testing@fsa.com',
-            password: 'password'
-        },
-        {
+            password: 'password',
+            firstName: "Full",
+            lastName: "Stack",
+            isAdmin: true,
+            classification: 'tenant'
+        });
+    users.push({
             email: 'obama@gmail.com',
-            password: 'potus'
-        }
-    ];
+            password: 'potus',
+            firstName: "Barack",
+            lastName: "Obama",
+            isAdmin: true,
+            classification: 'landlord'
+        });
 
     return User.createAsync(users);
 
 };
+
+var randReview = function(){
+    return {
+        reviewTitle: chance.sentence({words:4}),
+        reviewContent: chance.paragraph(),
+        rating: chance.integer({min:1, max:5}),
+        aptId: aptIds[chance.integer({min:0, max: aptIds.length-1})],
+        reviewerId: user[chance.integer({min:0, max: user.length-1})],
+    }
+}
+
+
+
+var seedReviews = function() {
+    return Review.createAsync(_.times(numReviews, randReview));
+}
 
 connectToDb.then(function () {
     User.findAsync({}).then(function (users) {
@@ -104,7 +161,14 @@ connectToDb.then(function () {
             console.log(chalk.magenta('Seems to already be user data, exiting!'));
             process.kill(0);
         }
-    }).then(function () {
+    }).then(function(createdUsers){
+        userIds = createdUsers.map(function(user){ return user._id});
+        return seedApartments()//here we create the apartments
+    }).then(function(createdApartments){
+        aptIds = createdApartments.map(function(apt){ return apt._id});
+        return seedReviews()
+    })
+    .then(function () {
         console.log(chalk.green('Seed successful!'));
         process.kill(0);
     }).catch(function (err) {

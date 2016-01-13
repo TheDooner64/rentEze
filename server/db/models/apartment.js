@@ -47,9 +47,8 @@ var schema = new mongoose.Schema({
         ref: "User"
     },
     neighborhood: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Neighborhood"
-    }, //we'll need to be sure how to reference neighborhood
+        type: String
+    }, //TODO we expect to remove the neighborhood model
     numBedrooms: {
         type: Number
     },
