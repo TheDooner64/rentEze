@@ -1,39 +1,48 @@
 <div class="map-container col-xs-12">
-    <div id="search-box">
-        <div class="container">
-            <div class="new-search">
-                <label>Search...</label>
+    <div id="search-and-filter">
+        <div class="container clearfix">
+            <!--             <div class="new-search">
                 <input class="search-box-input" type="text">
                 <button class="btn">Search</button>
-            </div>
+            </div> -->
+            <form name="searchForm" class="new-search form-inline">
+                <div id="search-area" class="form-group input-group">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search…">
+                    <div class="input-group-addon">Go</div>
+                </div>
+            </form>
 
-            <form name="filterMapForm" ng-submit="filterResults()">
-                <label># of bedrooms</label>
-                <select class="search-box-input" ng-options="bedroom for bedroom in bedroomOptions" ng-model="filterCriteria.numBedrooms">
-                    <option value="">--</option>
-                </select>
+            <form name="filterMapForm" class="filter form-inline" ng-submit="filterResults()">
+                <div class="form-group">
+                    <label># of bedrooms</label>
+                    <select class="form-control" ng-options="bedroom for bedroom in bedroomOptions" ng-model="filterCriteria.numBedrooms">
+                        <option value="">--</option>
+                    </select>
+                </div>
 
-                <label>Rent</label>
-                <input type="number" class="search-box-input" ng-model="filterCriteria.monthlyPriceMin">
-                    <option value="">--</option>
-                </input>
-                <label>to</label>
-                <input type="number" class="search-box-input" ng-model="filterCriteria.monthlyPriceMax">
-                    <option value="">--</option>
-                </input>
+                <div class="form-group">
+                    <label>Rent</label>
+                    <input type="text" class="form-control" ng-model="filterCriteria.monthlyPriceMin" placeholder="Min">
+                </div>
 
-                <label>Star Rating</label>
-                <select class="search-box-input" ng-options="ratingOption for ratingOption in ratingOptions" ng-model="filterCriteria.averageRating">
-                    <option value="">--</option>
-                </select>
+                <div class="form-group">
+                    <label>to</label>
+                    <input type="text" class="form-control" ng-model="filterCriteria.monthlyPriceMax" placeholder="Max">
+                </div>
 
-                <label>Term of Lease</label>
-                <select class="search-box-input" ng-options="term for term in termOfLease" ng-model="filterCriteria.termOfLease">
-                    <option value="">--</option>
-                </select>
+                <div class="form-group">
+                    <label>Star Rating</label>
+                    <select class="form-control" ng-options="ratingOption for ratingOption in ratingOptions" ng-model="filterCriteria.averageRating">
+                        <option value="">--</option>
+                    </select>
+                </div>
 
-                <label>Include unavailable?</label>
-                <input class="search-box-input" type="checkbox" ng-model="filterCriteria.availability">
+                <div class="form-group">
+                    <label>Term of Lease</label>
+                    <select class="form-control" ng-options="term for term in termOfLease" ng-model="filterCriteria.termOfLease">
+                        <option value="">--</option>
+                    </select>
+                </div>
 
                 <button type="submit" class="btn">Filter Results</button>
             </form>
