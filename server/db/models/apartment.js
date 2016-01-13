@@ -97,7 +97,7 @@ schema.pre('save', function(next) {
     rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
-            if(!info.results[0].geometry) console.log(apartment)
+            if(info.results.length < 1) next();
             apartment.latLong = info.results[0].geometry.location;
             next();
         }).then(null, console.log)

@@ -50,7 +50,7 @@ var randApt = function() {
     return rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
-            // console.log(info.results[0].address_components)
+            if(info.results.length < 1) return;
             var addressComponents = info.results[0].address_components;
             var numBed = chance.integer({min: 0, max: 4})
 
