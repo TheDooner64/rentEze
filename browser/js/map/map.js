@@ -4,7 +4,11 @@ app.config(function($stateProvider) {
         url: '/map',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl'
-    });
+    }).state('map.list', {
+        url: '/list',
+        templateUrl: 'js/map/list.html',
+        controller: 'MapListCtrl'
+    })
 
 });
 
@@ -39,5 +43,9 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory) {
                 addMarkersToMap(apartments);
             });
     }
+
+    // This is just for testing the child state, delete later
+    // $scope.showChildState = () => {
+    // }
 
 });
