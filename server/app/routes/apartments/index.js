@@ -10,7 +10,11 @@ var bodyParser = require('body-parser');
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
 router.post('/filter', function(req, res, next) {
-    Apartment.find(req.body)
+
+    // NOTE: Need to cleanse inputs for the database search
+    var filterCriteria = req.body;
+
+    Apartment.find(filterCriteria)
         .then(function(apartments) {
             res.json(apartment);
         }).then(null, function(err) {

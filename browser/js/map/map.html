@@ -13,10 +13,14 @@
                     <option value="">--</option>
                 </select>
 
-                <label>Rent Price</label>
-                <select class="search-box-input" ng-options="rentOption for rentOption in rentOptions" ng-model="filterCriteria.monthlyPrice">
+                <label>Rent</label>
+                <input type="number" class="search-box-input" ng-model="filterCriteria.monthlyPriceMin">
                     <option value="">--</option>
-                </select>
+                </input>
+                <label>to</label>
+                <input type="number" class="search-box-input" ng-model="filterCriteria.monthlyPriceMax">
+                    <option value="">--</option>
+                </input>
 
                 <label>Star Rating</label>
                 <select class="search-box-input" ng-options="ratingOption for ratingOption in ratingOptions" ng-model="filterCriteria.averageRating">

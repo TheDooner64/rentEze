@@ -18,6 +18,7 @@ app.factory('FilterFactory', function($http) {
     // AJAX request to find apartments based on user's filters
     // NOTE: This route currently does not exist on the back-end
     FilterFactory.filterResults = function(filterCriteria) {
+        console.log(filterCriteria);
         return $http.post("/api/apartments/filter", filterCriteria)
             .then(response => response.data)
             .then(null, console.error);
