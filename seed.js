@@ -20,8 +20,64 @@ name in the environment files.
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var chalk = require('chalk');
+var chance = require('chance');
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
+var Apartment = Promise.promisifyAll(mongoose.model('Apartment'));
+var apiKey = require('./apiInfo.js').maps;
+var rp = require('request-promise');
+
+var numApts = 20;
+var numUsers = 20;
+
+var lat = [40.71, 40.75];
+var lon = [-74, -73.98];
+
+var randApt = function() {
+    var randLat = chance.latitude({ min: lat[0], max: lat[1] });
+    var randLon = chance.longitude({ min: lon[0], max: lon[1] });
+    var latLong = randLat + ',' + randLon;
+
+    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latLong + '&key=' + apiKey;
+
+    rp(url)
+        .then(function(res) {
+            var info = JSON.parse(res);
+            var addressComponents = info.results[0].address_components;
+            var city = addressComponents.map(function(component) {
+                if (component.types.indexOf('locality') > -1 || component.types.indexOf('sublocality') > -1) {
+                    return component;
+                }
+            })[0];
+            var state = addressComponents.map(function(component) {
+                if (component.types.indexOf('administrative_area_level_1') > -1) {
+                    return component;
+                }
+            })[0];
+            var zip = addressComponents.map(function(component) {
+                if (component.types.indexOf('postal_code') > -1) {
+                    return component;
+                }
+            })[0];
+            return new Apartment({
+                streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
+                city: city,
+                state: state,
+                zipCode: zip,
+                neighborhood: addressComponents[].long_name,
+                title: adj + ' ' + numBed + ' Bedroom Apartment',
+                monthlyPrice:,
+                squareFootage:,
+                numBedrooms:,
+                numBathrooms:,
+                description:,
+                pictureUrls:,
+                termOfLease:,
+                availability:
+            });
+        });
+};
+
 
 var seedUsers = function () {
 
