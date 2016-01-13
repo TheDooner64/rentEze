@@ -13,7 +13,23 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory) {
 
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
-    $scope.bedroomOptions = ["Studio", "1", "2", "3+"];
+    $scope.bedroomOptions = [{
+        name: "Studio",
+        val: 0
+    }, {
+        name: "1",
+        val: 1
+    }, {
+        name: "2",
+        val: 2
+    }, {
+        name: "3",
+        val: 3
+    }, {
+        name: "4+",
+        val: 4
+    }];
+
     $scope.ratingOptions = [1, 2, 3, 4, 5];
     $scope.termOfLease = ["1 month", "3 months", "6 months", "1 year", "2 years"];
 

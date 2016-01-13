@@ -3,20 +3,29 @@ var router = require('express').Router();
 module.exports = router;
 var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
-var bodyParser = require('body-parser');
-
-// May or may not need to configure body-parser here...
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
 router.post('/filter', function(req, res, next) {
 
-    // NOTE: Need to cleanse inputs for the database search
-    var filterCriteria = req.body;
+    var rawFilterCriteria = req.body;
 
-    Apartment.find(filterCriteria)
+    // Create MongoDB search object
+    // Need to figure out how to populate averageRating virtual field
+    var cleanFilterCriteria = {
+        numBedrooms: rawFilterCriteria.numBedrooms.val,
+        monthlyPrice: {
+            $gt: parseInt(rawFilterCriteria.monthlyPriceMin),
+            $lt: parseInt(rawFilterCriteria.monthlyPriceMax)
+        },
+        // averageRating: rawFilterCriteria.averageRating,
+        termOfLease: rawFilterCriteria.termOfLease
+    };
+
+    Apartment.find(cleanFilterCriteria)
         .then(function(apartments) {
-            res.json(apartment);
+            console.log("Apt found in DB: ", apartments);
+            res.status(200).json(apartments);
         }).then(null, function(err) {
             throw new Error("Something went wrong when finding apartments!");
             next(err);
