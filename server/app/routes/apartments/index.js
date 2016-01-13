@@ -6,6 +6,17 @@ var Apartment = mongoose.model('Apartment');
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
+
+router.get('/', function(req, res, next){
+    Apartment.find({availability:"available"}).exec().
+    then(function(apartments){
+        res.json(apartments);
+    }).then(null, function(err){
+        throw new Error("Something went wrong when finding apartments!");
+        next(err);
+    })
+})
+
 router.post('/filter', function(req, res, next) {
 
     var rawFilterCriteria = req.body;
