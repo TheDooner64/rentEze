@@ -15,7 +15,7 @@
             <form name="filterMapForm" class="filter form-inline" ng-submit="filterResults()">
                 <div class="form-group">
                     <label># of bedrooms</label>
-                    <select class="form-control" ng-options="bedroom for bedroom in bedroomOptions" ng-model="filterCriteria.numBedrooms">
+                    <select class="form-control" ng-options="bedroom as bedroom.name for bedroom in bedroomOptions track by bedroom.val" ng-model="filterCriteria.numBedrooms">
                         <option value="">--</option>
                     </select>
                 </div>
