@@ -50,38 +50,36 @@ var randApt = function() {
     return rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
+            // console.log(info.results[0].address_components)
             var addressComponents = info.results[0].address_components;
+            var numBed = chance.integer({min: 0, max: 4})
 
-            var city = addressComponents.map(function(component) {
-                if (component.types.indexOf('locality') > -1 || component.types.indexOf('sublocality') > -1) {
-                    return component;
+            var city = addressComponents.filter(function(component) {
+                return component.types.indexOf('locality') > -1 || component.types.indexOf('sublocality') > -1
                 }
-            })[0];
-            var state = addressComponents.map(function(component) {
-                if (component.types.indexOf('administrative_area_level_1') > -1) {
-                    return component;
+            )[0];
+            var state = addressComponents.filter(function(component) {
+                return component.types.indexOf('administrative_area_level_1') > -1
                 }
-            })[0];
-            var zip = addressComponents.map(function(component) {
-                if (component.types.indexOf('postal_code') > -1) {
-                    return component;
+            )[0];
+            var zip = addressComponents.filter(function(component) {
+                return component.types.indexOf('postal_code') > -1
                 }
-            })[0];
-            var neighborhood = addressComponents.map(function(component) {
-                if (component.types.indexOf('neighborhood') > -1) {
-                    return component;
+            )[0];
+            var neighborhood = addressComponents.filter(function(component) {
+                return component.types.indexOf('neighborhood') > -1
                 }
-            })[0];
+            )[0];
             return {
                 streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
                 city: city.long_name,
                 state: state.long_name,
                 zipCode: zip.long_name,
                 neighborhood: neighborhood.long_name,
-                title: adj + ' ' + numBed + ' Bedroom Apartment',
+                title: numBed + ' Bedroom Apartment',
                 monthlyPrice: chance.integer({min: 600, max: 10000}),
                 squareFootage: chance.integer({min: 350, max: 3000}),
-                numBedrooms: chance.integer({min: 0, max: 4}),
+                numBedrooms: numBed,
                 numBathrooms: chance.integer({min: 1, max: 3}),
                 description: chance.paragraph(),
                 pictureUrls: [pictureUrls[chance.integer({min:0, max: pictureUrls.length-1})], pictureUrls[chance.integer({min:0, max: pictureUrls.length-1})]],
@@ -93,10 +91,10 @@ var randApt = function() {
 
 var seedApartments = function(){
     var aptPromises = _.times(numApts, randApt)
-    console.log (aptPromises)
+    // console.log (aptPromises)
     return Promise.all(aptPromises)
     .then(function(apartmentArray){
-        console.log(apartmentArray)
+        // console.log(apartmentArray)
         return Apartment.createAsync(apartmentArray);
     }).then(null, console.log)
 }
@@ -143,7 +141,7 @@ var randReview = function(){
         reviewContent: chance.paragraph(),
         rating: chance.integer({min:1, max:5}),
         aptId: aptIds[chance.integer({min:0, max: aptIds.length-1})],
-        reviewerId: user[chance.integer({min:0, max: user.length-1})],
+        reviewerId: userIds[chance.integer({min:0, max: userIds.length-1})],
     }
 }
 
@@ -155,12 +153,12 @@ var seedReviews = function() {
 
 connectToDb.then(function () {
     User.findAsync({}).then(function (users) {
-        if (users.length === 0) {
+        // if (users.length === 0) {
             return seedUsers();
-        } else {
-            console.log(chalk.magenta('Seems to already be user data, exiting!'));
-            process.kill(0);
-        }
+        // } else {
+        //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
+        //     process.kill(0);
+        // }
     }).then(function(createdUsers){
         userIds = createdUsers.map(function(user){ return user._id});
         return seedApartments()//here we create the apartments
