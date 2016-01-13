@@ -1,5 +1,4 @@
 @import '../variables';
-
 #map-canvas {
     height: calc(100vh - 50px);
     border-bottom: 2px solid #b1a398;
@@ -7,33 +6,44 @@
     width: 100%;
 }
 
-#search-box {
+#search-and-filter {
     display: block;
     z-index: 1000;
     background: rgba(255, 255, 255, 0.85);
-    padding: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     box-shadow: 1px 1px 14px -3px $space-dark-blue;
     .container {
-        .new-search {
+        form.new-search {
+            float: left;
             display: inline;
-            width: 400px;
             border-radius: 5px;
-            padding: 10px;
-            background: $medium-faded-blue;
             label {
                 color: $ivory;
             }
+            button {
+                height: 25px;
+            }
+            div#search-area {
+                width: 250px;
+            }
         }
-        form {
-            display: inline;
-        }
-        width: 91%;
+        width: 100%;
         max-width: 1340px;
         label {
-            margin-right: 8px;
+            margin-right: 4px;
         }
-        .search-box-input {
-            margin-right: 30px;
+        form.filter {
+            display: inline;
+            float: right;
+            input,
+            select {
+                max-width: 100px;
+                margin-right: 10px;
+                line-height: 1;
+                font-size: 12px;
+                padding: 5px;
+            }
         }
     }
 }
