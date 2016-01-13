@@ -54,5 +54,15 @@ app.factory('MapFactory', function () {
         return map;
     }
 
+    // Draw a location to the map
+    MapFactory.drawLocation = function(map, location, opts) {
+        if (typeof opts !== 'object') {
+            opts = {};
+        }
+        opts.position = new google.maps.LatLng(location[0], location[1]);
+        opts.map = map;
+        return new google.maps.Marker(opts);
+    }
+
     return MapFactory;
 });
