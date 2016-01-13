@@ -4,7 +4,20 @@ module.exports = router;
 var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
 var bodyParser = require('body-parser');
+
 // May or may not need to configure body-parser here...
+
+// Retrieving apartments based on criteria, which are sent in the req.body
+// POST /api/apartments/filter
+router.post('/filter', function(req, res, next) {
+    Apartment.find(req.body)
+        .then(function(apartments) {
+            res.json(apartment);
+        }).then(null, function(err) {
+            throw new Error("Something went wrong when finding apartments!");
+            next(err);
+        });
+});
 
 // Getting One apartment
 // GET /api/apartments/:aptId
