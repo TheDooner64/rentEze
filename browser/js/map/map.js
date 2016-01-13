@@ -4,11 +4,7 @@ app.config(function($stateProvider) {
         url: '/map',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl'
-    }).state('map.list', {
-        url: '/list',
-        templateUrl: 'js/map/list.html',
-        controller: 'MapListCtrl'
-    })
+    });
 
 });
 

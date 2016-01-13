@@ -1,6 +1,9 @@
 @import '../variables';
+
 #map-canvas {
-    height: calc(100vh - 50px);
+    position: fixed;
+    height: calc(100vh - 70px);
+    margin: 0;
     border-bottom: 2px solid #b1a398;
     border-left: 2px solid #b1a398;
     width: 100%;
