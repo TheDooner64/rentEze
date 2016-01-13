@@ -1,10 +1,6 @@
 <div class="map-container col-xs-12">
     <div id="search-and-filter">
         <div class="container clearfix">
-            <!--             <div class="new-search">
-                <input class="search-box-input" type="text">
-                <button class="btn">Search</button>
-            </div> -->
             <form name="searchForm" class="new-search form-inline">
                 <div id="search-area" class="form-group input-group">
                     <input type="text" id="search-input" class="form-control" placeholder="Search…">
@@ -49,7 +45,7 @@
         </div>
     </div>
 
-    <div id="map-list">
+    <div id="map-list" ng-show="apartmentIsSelected">
         <div class="list-apartment">
             <div class="clearfix">
                 <h2 class="pull-left">Apartment Title <span class="availability-label label label-success">Available</span></h2>
@@ -95,7 +91,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="map-canvas"></div>
 </div>
