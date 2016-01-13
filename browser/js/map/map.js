@@ -20,43 +20,24 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory) {
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
 
-    var fakeLatLongObject = {
-        latLng: {
-            lat: 40.705189,
-            lng: -74.009209
-        },
-        title: "My fake apartment!"
-    }
-
-    // Function to add a market to the map
-    // NOTE: Need to figure out how to access the relevant map data that google needs
+    // Function to add the markers to the map
     var addMarkersToMap = function(apartments) {
-
-        // apartments.forEach(function(apartment) {
-        //     var createdMapMarker = MapFactory.drawLocation($scope.map, apartment.latLong, {
-        //         icon: "/assets/images/star-3.png"
-        //     });
-        //     createdMapMarker["apartmentName"] = apartment.title;
-        //     $scope.currentMarkers.push(createdMapMarker);
-        // });
-
-        var createdMapMarker = MapFactory.drawLocation($scope.map, apartments, {
-            icon: "/assets/images/star-3.png"
+        apartments.forEach(function(apartment) {
+            var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
+                icon: "/assets/images/star-3.png"
+            });
+            createdMapMarker["apartmentName"] = apartment.title;
+            $scope.currentMarkers.push(createdMapMarker);
         });
-        createdMapMarker["apartmentName"] = apartments.title;
-        $scope.currentMarkers.push(createdMapMarker);
     }
 
     // Function to retrieve apartments based on user filters
     $scope.filterResults = function() {
-        console.log("Adding fake apt: ", fakeLatLongObject);
-        addMarkersToMap(fakeLatLongObject);
-
-        // FilterFactory.filterResults($scope.filterCriteria)
-        //     .then(function(apartments) {
-        //         console.log(apartments);
-        //         addMarkersToMap(apartments);
-        //     });
+        FilterFactory.filterResults($scope.filterCriteria)
+            .then(function(apartments) {
+                console.log("Apartments found: ", apartments);
+                addMarkersToMap(apartments);
+            });
     }
 
 });
