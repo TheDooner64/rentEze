@@ -1,0 +1,66 @@
+@import '../variables';
+#map-list {
+    display: block;
+    background: $ivory;
+    z-index: 999;
+    width: 33%;
+    right: 0;
+    top: 130px;
+    padding-left: 8px;
+    padding-right: 8px;
+    overflow: auto;
+
+    .list-apartment {
+        display: block;
+        width: 100%;
+        background: none;
+        margin-right: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        .monthly-rent {
+            margin-top: 12px;
+        }
+        span.availability-label {
+            vertical-align: top;
+        }
+        .tiny-sc {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: lighten(black, 15%);
+            margin-bottom: -5px;
+        }
+        .big-price {
+            font-family: $header-font-stack;
+            font-size: 24px;
+            letter-spacing: 0.05;
+        }
+        .stats {
+            padding: 10px;
+            padding-left: 15px;
+            padding-right: 15px;
+            margin: 0;
+            border-radius: 5px;
+            border-bottom-left-radius:0;
+            border-bottom-right-radius:0;
+            margin-top: 15px;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: $light-grey;
+            .medium-stat {
+                font-family: $header-font-stack;
+                font-size: 18px;
+            }
+        }
+        .pictures {
+            margin-bottom: 20px;
+            img {
+                width: 100%;
+            }
+        }
+    }
+}
