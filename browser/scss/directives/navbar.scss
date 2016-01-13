@@ -1,78 +1,73 @@
 @import '../variables';
-
 navbar {
-
-  display: block;
-  background: $space-dark-blue;
-  box-shadow: 1px 1px 14px -3px black;
-  padding-bottom: 10px;
-  nav.navbar {
-    margin-bottom: 0;
-  }
-
-  .container {
-    width: 91%;
-    max-width: 1340px;
-  }
-
-  .navbar-header {
-    h2 {
-        color: $ivory;
-        margin-right: 30px;
+    display: block;
+    background: $space-dark-blue;
+    box-shadow: 1px 1px 14px -3px black;
+    padding-bottom: 10px;
+    nav.navbar {
+        margin-bottom: 0;
     }
-  }
-
-  a {
-    color: $bright-robin-egg-blue;
-    font-size: 16px;
-  }
-
-  ul.nav {
-    margin-top: 10px;
-  }
-
-  .nav > li > a {
-    cursor: pointer;
-    transition: color 0.2s;
-    &.active {
-      color: darken($bright-robin-egg-blue, 10%);
+    .container {
+        width: 91%;
+        max-width: 1340px;
     }
-    &:hover {
-      background: none;
-      color: lighten($bright-robin-egg-blue, 10%);
-    }
-    &:focus {
-      background: none;
-    }
-  }
-
-  .signup-button {
-    float: right;
-    border: 1px solid black;
-    margin-top: 10px;
-    margin-right: 5px;
-    background: none;
-    outline: none !important;
-  }
-
-  .login-button {
-    float: right;
-    margin-top: 18px;
-    outline: none !important;
-  }
-
-  .welcome {
-    float: right;
-    margin-top: 12px;
-    span {
-      color: black;
-      font-size: 16px;
-      margin-right: 5px;
+    .navbar-header {
+        h2 {
+            color: $ivory;
+            margin-right: 30px;
+            a {
+                font-size: 36px;
+                &:hover{
+                    color: $ivory;
+                    text-decoration: none;
+                }
+            }
+        }
     }
     a {
-      color: #f30046;
-      cursor: pointer;
+        color: $bright-robin-egg-blue;
+        font-size: 16px;
     }
-  }
-
+    ul.nav {
+        margin-top: 10px;
+    }
+    .nav > li > a {
+        cursor: pointer;
+        transition: color 0.2s;
+        &.active {
+            color: darken($bright-robin-egg-blue, 10%);
+        }
+        &:hover {
+            background: none;
+            color: lighten($bright-robin-egg-blue, 10%);
+        }
+        &:focus {
+            background: none;
+        }
+    }
+    .signup-button {
+        float: right;
+        margin-top: 18px;
+        margin-right: 5px;
+        background: $ivory;
+        outline: none !important;
+    }
+    .login-button {
+        float: right;
+        margin-top: 18px;
+        outline: none !important;
+    }
+    .welcome {
+        float: right;
+        margin-top: 12px;
+        span {
+            color: black;
+            font-size: 16px;
+            margin-right: 5px;
+        }
+        a {
+            color: #f30046;
+            cursor: pointer;
+        }
+    }
 }
