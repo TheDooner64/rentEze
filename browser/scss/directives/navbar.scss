@@ -1,9 +1,17 @@
 @import '../variables';
+
 navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    width: 100%;
     display: block;
     background: $space-dark-blue;
     box-shadow: 1px 1px 14px -3px black;
     padding-bottom: 10px;
+    height: 70px;
+
     nav.navbar {
         margin-bottom: 0;
     }
@@ -16,8 +24,9 @@ navbar {
             color: $ivory;
             margin-right: 30px;
             a {
+                margin-top: -5px;
                 font-size: 36px;
-                &:hover{
+                &:hover {
                     color: $ivory;
                     text-decoration: none;
                 }

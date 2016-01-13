@@ -40,4 +40,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory) {
             });
     }
 
+    // This is just for testing the child state, delete later
+    // $scope.showChildState = () => {
+    // }
+
 });
