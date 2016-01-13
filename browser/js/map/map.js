@@ -71,7 +71,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
                 var filteredIds = apartments.map(function(apartment){
                     return apartment._id;
                 });
-                currentMarkers.forEach(function(marker){
+                $scope.currentMarkers.forEach(function(marker){
                     if(filteredIds.indexOf(marker["apartmentId"]) === -1 ){
                         marker.setMap(null);
                     }
