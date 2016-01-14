@@ -54,6 +54,18 @@ router.post('/', function(req, res, next) {
         });
 });
 
+router.get("/:aptId", function(req, res, next){
+    Apartment.findOne({
+        _id: req.params.aptId
+    }).exec()
+    .then(function(apartment){
+        res.json(apartment);
+    }).then(null, function(err) {
+            throw new Error("Apartment was not successfully saved :(");
+            next(err);
+        });
+});
+
 // Updating an apartment
 // PUT /api/apartments/:aptId
 router.put('/:aptId', function(req, res, next) {
