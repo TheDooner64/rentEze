@@ -59,7 +59,7 @@ app.factory('MapFactory', function () {
         if (typeof opts !== 'object') {
             opts = {};
         }
-        opts.position = new google.maps.LatLng(location.latLng.lat, location.latLng.lng);
+        opts.position = new google.maps.LatLng(location.latLong.lat, location.latLong.lng);
         opts.map = map;
         return new google.maps.Marker(opts);
     }
