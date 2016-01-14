@@ -24,15 +24,14 @@ router.post('/filter', function(req, res, next) {
     // Create MongoDB search object
     // Need to figure out how to populate averageRating virtual field
     var cleanFilterCriteria = {
-        numBedrooms: rawFilterCriteria.numBedrooms.val,
-        monthlyPrice: {
-            $gt: parseInt(rawFilterCriteria.monthlyPriceMin),
-            $lt: parseInt(rawFilterCriteria.monthlyPriceMax)
-        },
-        // averageRating: rawFilterCriteria.averageRating,
-        termOfLease: rawFilterCriteria.termOfLease
+        monthlyPrice:{}
     };
 
+    if (rawFilterCriteria.numBedrooms) cleanFilterCriteria.numBedrooms = rawFilterCriteria.numBedrooms.val;
+    if (rawFilterCriteria.monthlyPriceMin) cleanFilterCriteria.monthlyPrice.$gt = parseInt(rawFilterCriteria.monthlyPriceMin);
+    if (rawFilterCriteria.monthlyPriceMax) cleanFilterCriteria.monthlyPrice.$lt = parseInt(rawFilterCriteria.monthlyPriceMax);
+    if (rawFilterCriteria.termOfLease) cleanFilterCriteria.termOfLease = rawFilterCriteria.termOfLease;
+    console.log(cleanFilterCriteria)
     Apartment.find(cleanFilterCriteria)
         .then(function(apartments) {
             console.log("Apt found in DB: ", apartments);
@@ -48,9 +47,21 @@ router.post('/filter', function(req, res, next) {
 router.post('/', function(req, res, next) {
     Apartment.create(req.body)
         .then(function(apartment) {
-            res.json(apartment);
+            res.status(201).json(apartment);
         }).then(null, function(err) {
             throw new Error("Apartment was not created!");
+            next(err);
+        });
+});
+
+router.get("/:aptId", function(req, res, next){
+    Apartment.findOne({
+        _id: req.params.aptId
+    }).exec()
+    .then(function(apartment){
+        res.status(200).json(apartment);
+    }).then(null, function(err) {
+            throw new Error("Apartment was not successfully saved :(");
             next(err);
         });
 });
@@ -66,7 +77,7 @@ router.put('/:aptId', function(req, res, next) {
             apartment = req.body;
             return apartment.save();
         }).then(function(savedApt) {
-            res.json(savedApt);
+            res.status(200).json(savedApt);
         }).then(null, function(err) {
             throw new Error("Apartment was not successfully saved :(");
             next(err);
