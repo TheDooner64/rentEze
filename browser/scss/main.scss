@@ -1,39 +1,46 @@
 @import 'variables';
-
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: $paragraph-font-stack;
+    font-family: $paragraph-font-stack;
 }
 
 @mixin clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
 }
 
 #main {
-  margin: 0 auto;
-  margin-top:70px;
+    margin: 0 auto;
+    margin-top: 70px;
 }
 
+.spacer {
+    margin-top: 30px;
+}
 
 
 /* Font styles */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: $header-font-stack;
 }
 
-p, span {
+p,
+span {
     font-family: $paragraph-font-stack;
     color: $deep-brown;
 }
-
 
 
 /* Button styles */
