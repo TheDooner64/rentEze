@@ -24,15 +24,14 @@ router.post('/filter', function(req, res, next) {
     // Create MongoDB search object
     // Need to figure out how to populate averageRating virtual field
     var cleanFilterCriteria = {
-        numBedrooms: rawFilterCriteria.numBedrooms.val,
-        monthlyPrice: {
-            $gt: parseInt(rawFilterCriteria.monthlyPriceMin),
-            $lt: parseInt(rawFilterCriteria.monthlyPriceMax)
-        },
-        // averageRating: rawFilterCriteria.averageRating,
-        termOfLease: rawFilterCriteria.termOfLease
+        monthlyPrice:{}
     };
 
+    if (rawFilterCriteria.numBedrooms) cleanFilterCriteria.numBedrooms = rawFilterCriteria.numBedrooms.val;
+    if (rawFilterCriteria.monthlyPriceMin) cleanFilterCriteria.monthlyPrice.$gt = parseInt(rawFilterCriteria.monthlyPriceMin);
+    if (rawFilterCriteria.monthlyPriceMax) cleanFilterCriteria.monthlyPrice.$lt = parseInt(rawFilterCriteria.monthlyPriceMax);
+    if (rawFilterCriteria.termOfLease) cleanFilterCriteria.termOfLease = rawFilterCriteria.termOfLease;
+    console.log(cleanFilterCriteria)
     Apartment.find(cleanFilterCriteria)
         .then(function(apartments) {
             console.log("Apt found in DB: ", apartments);

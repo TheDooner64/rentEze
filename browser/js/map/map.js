@@ -88,9 +88,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
                     return apartment._id;
                 });
                 $scope.currentMarkers.forEach(function(marker) {
-                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) {
-                        marker.setMap(null);
-                    }
+                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) marker.setMap(null);
+                    else marker.setMap($scope.map)
                 })
             });
     }

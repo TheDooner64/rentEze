@@ -67,6 +67,12 @@ var randApt = function() {
                 max: 4
             });
 
+            var adjectives = ["Suspicious", "Luxurious", "Ludacris", "Spacious", "Sexy", "Ambigious",
+            "Nautical", "Outrageously Priced", "Smelly", "Quaint", "Cozy", "Dynamic", "Responsive",
+            "Asynchronous", "Weird", "Magical", "Wonky", "Hacky", "Perfect for Cats", "Existential",
+            "Holographic", "Possibly Real", "Comfortable", "Flex-Box", "RESTful", "Rat Infested", "Roach Infested",
+            "Dilapidated", "Toasted w/ Cream Cheese"]
+
             var city = addressComponents.filter(function(component) {
                 return component.types.indexOf('locality') > -1 || component.types.indexOf('sublocality') > -1
             })[0];
@@ -89,7 +95,10 @@ var randApt = function() {
                 state: state.long_name,
                 zipCode: zip.long_name,
                 neighborhood: neighborhood.long_name,
-                title: numBed + ' Bedroom Apartment',
+                title: numBed + adjectives[chance.integer({
+                    min: 0,
+                    max: adjectives.length - 1
+                })] + ' Bedroom Apartment',
                 monthlyPrice: chance.integer({
                     min: 600,
                     max: 5000
