@@ -17,12 +17,11 @@ app.config(function($stateProvider) {
 });
 
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, apartments, center) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
-    console.log($scope.center);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -53,10 +52,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
 
-    $scope.selectApartment = function() {
-        console.log("This ran!");
+    $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
-        $scope.$apply();
+        console.log(apartment)
+        $scope.apartment=apartment;
     }
 
     $scope.closeApartmentSelectPanel = function() {
@@ -70,10 +69,16 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
                     icon: "/assets/images/home.png"
                 });
-                createdMapMarker["apartmentId"] = apartment._id;
+                createdMapMarker.apartmentId = apartment._id;
 
                 // Add click event to marker
-                createdMapMarker.addListener("click", $scope.selectApartment);
+                // createdMapMarker.addListener("click", $scope.selectApartment);
+                createdMapMarker.addListener("click", function(){
+                    ApartmentFactory.getOneApartment(createdMapMarker.apartmentId)
+                    .then(function(apartment){
+                        $scope.selectApartment(apartment);
+                    })
+                });
 
                 $scope.currentMarkers.push(createdMapMarker);
             }
@@ -96,7 +101,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                     return apartment._id;
                 });
                 $scope.currentMarkers.forEach(function(marker) {
-                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) marker.setMap(null);
+                    if (filteredIds.indexOf(marker.apartmentId) === -1) marker.setMap(null);
                     else marker.setMap($scope.map)
                 })
             });
