@@ -1,22 +1,26 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('map', {
-        url: '/map',
+        url: '/map/:query',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl',
         resolve: {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
+            },
+            center: function(MapFactory, $stateParams){
+                return MapFactory.findCenter($stateParams.query)
             }
         }
     });
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments) {
-    $scope.map = MapFactory.initialize_gmaps();
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments, center) {
+    $scope.center = center;
+    $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
-
+    console.log($scope.center);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{

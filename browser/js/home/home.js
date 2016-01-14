@@ -4,9 +4,9 @@ app.config(function ($stateProvider) {
         templateUrl: 'js/home/home.html',
         controller: function ($scope, $state, neighborhoods){
             $scope.neighborhoods = neighborhoods;
-            console.log($scope.neighborhoods)
             $scope.search = function (){
-                $state.go('map', {query:$scope.query})
+                console.log($scope.query);
+                $state.go('map', {query:$scope.query});
             }
         },
         resolve: {
