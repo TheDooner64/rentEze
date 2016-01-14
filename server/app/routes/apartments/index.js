@@ -47,7 +47,7 @@ router.post('/filter', function(req, res, next) {
 router.post('/', function(req, res, next) {
     Apartment.create(req.body)
         .then(function(apartment) {
-            res.json(apartment);
+            res.status(201).json(apartment);
         }).then(null, function(err) {
             throw new Error("Apartment was not created!");
             next(err);
@@ -59,7 +59,7 @@ router.get("/:aptId", function(req, res, next){
         _id: req.params.aptId
     }).exec()
     .then(function(apartment){
-        res.json(apartment);
+        res.status(200).json(apartment);
     }).then(null, function(err) {
             throw new Error("Apartment was not successfully saved :(");
             next(err);
@@ -77,7 +77,7 @@ router.put('/:aptId', function(req, res, next) {
             apartment = req.body;
             return apartment.save();
         }).then(function(savedApt) {
-            res.json(savedApt);
+            res.status(200).json(savedApt);
         }).then(null, function(err) {
             throw new Error("Apartment was not successfully saved :(");
             next(err);
