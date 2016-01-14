@@ -73,15 +73,20 @@ navbar {
     }
     .welcome {
         float: right;
-        margin-top: 12px;
+        margin-top: 21px;
         span {
-            color: black;
+            color: $ivory;
             font-size: 16px;
             margin-right: 5px;
         }
         a {
-            color: #f30046;
+            color: $bright-robin-egg-blue;
             cursor: pointer;
+            &:hover {
+                color: $ivory;
+                transition: color .3s;
+                text-decoration: none;
+            }
         }
     }
 }
