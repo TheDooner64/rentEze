@@ -11,12 +11,11 @@
     overflow: auto;
     position: relative;
     float: right;
-
     #close-panel {
         margin-top: 15px;
     }
-
     .list-apartment {
+        z-index: 1005;
         display: block;
         width: 100%;
         background: none;
@@ -28,6 +27,23 @@
         }
         p {
             color: darken($light-grey, 60%);
+        }
+        button#close-panel {
+            background-color: $medium-faded-blue;
+            border: 0;
+            border-radius: 5px;
+            padding-bottom: 4px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: $ivory;
+            font-size: 20px;
+            margin-top: 5px;
+            position: relative;
+            .tiny-sc {
+                color: $ivory;
+                vertical-align: middle;
+                margin-left: 10px;
+            }
         }
         .monthly-rent {
             margin-top: 12px;
@@ -52,8 +68,8 @@
             padding-right: 15px;
             margin: 0;
             border-radius: 5px;
-            border-bottom-left-radius:0;
-            border-bottom-right-radius:0;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
             margin-top: 15px;
             display: -webkit-box;
             display: -moz-box;
