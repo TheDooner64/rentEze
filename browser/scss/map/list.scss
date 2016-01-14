@@ -51,12 +51,6 @@
         span.availability-label {
             vertical-align: top;
         }
-        .tiny-sc {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: lighten(black, 15%);
-            margin-bottom: -5px;
-        }
         .big-price {
             font-family: $header-font-stack;
             font-size: 24px;
@@ -99,6 +93,29 @@
             }
             h6.review-title {
                 margin-top: 0px;
+            }
+        }
+        .add-review-well {
+            border: 0;
+            background: $light-faded-yellow;
+            box-shadow: none;
+            label {
+                color: $space-dark-blue;
+                box-shadow: none;
+            }
+            input, textarea {
+                border: 1px solid $light-faded-yellow;
+                background: $ivory;
+                box-shadow: none;
+                &:focus {
+                    box-shadow: none;
+                    border: 1px solid darken($light-faded-yellow, 15%);
+                    outline: none;
+                }
+            }
+            button[disabled] {
+                background: darken($light-faded-yellow, 15%);
+                color: darken($light-faded-yellow, 35%);
             }
         }
     }

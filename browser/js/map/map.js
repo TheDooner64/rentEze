@@ -13,7 +13,8 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, apartments) {
+    $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps();
     $scope.apartments = apartments;
 
@@ -41,6 +42,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
 
     // Default to false so the side-panel is not displayed
     $scope.apartmentIsSelected = false;
+
+
 
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
@@ -97,8 +100,14 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
     addMarkersToMap($scope.apartments);
     // Function to retrieve apartments based on user filters
 
-    // This is just for testing the child state, delete later
-    // $scope.showChildState = () => {
-    // }
+    $scope.addReview = function() {
+        $scope.review.aptId =
+        ReviewFactory.addReview($scope.review)
+            .then((addedReview) => {
+                $scope.isCollapsed = true;
+                $scope.reviewPosted = true;
+                $scope.$digest();
+            });
+    };
 
 });
