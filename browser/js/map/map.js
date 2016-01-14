@@ -40,13 +40,19 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
     $scope.termOfLease = ["1 month", "3 months", "6 months", "1 year", "2 years"];
 
     // Default to false so the side-panel is not displayed
-    $scope.apartmentIsSelected = true;
+    $scope.apartmentIsSelected = false;
 
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
 
     $scope.selectApartment = function() {
+        console.log("This ran!");
+        $scope.apartmentIsSelected = true;
+        $scope.$apply();
+    }
 
+    $scope.closeApartmentSelectPanel = function() {
+        $scope.apartmentIsSelected = false;
     }
 
     // Function to add the markers to the map
