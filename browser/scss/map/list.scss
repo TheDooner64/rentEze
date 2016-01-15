@@ -39,14 +39,35 @@
             font-size: 20px;
             margin-top: 5px;
             position: relative;
+            z-index: 3000000;
             .tiny-sc {
                 color: $ivory;
                 vertical-align: middle;
                 margin-left: 10px;
             }
         }
+        .action-buttons {
+            margin-top: 15px;
+            button {
+                margin-right: 3px;
+                &#available {
+                    color: $ivory;
+                    background-color: green;
+                }
+                &#unavailable {
+                    color: $ivory;
+                    background-color: red;
+                }
+            }
+        }
         .monthly-rent {
             margin-top: 12px;
+            &.apt-info {
+                padding: 10px;
+                border: 1px solid $light-grey;
+                border-radius: 5px;
+                width: 125px;
+            }
         }
         span.availability-label {
             vertical-align: top;
