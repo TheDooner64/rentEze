@@ -1,4 +1,4 @@
-app.factory('FilterFactory', function($http) {
+app.factory('FilterFactory', function() {
 
     var FilterFactory = {};
 
