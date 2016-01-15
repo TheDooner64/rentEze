@@ -6,3 +6,4 @@ require('./review');
 require('./apartment');
 require('./neighborhood');
 require('./order');
+require('./favorite');
