@@ -1,5 +1,8 @@
 <div id="checkout" class="row">
-    <div class="col-md-offset-1 col-md-4">
+    <div ng-show="isLoading" class="col-md-offset-1 col-md-4">
+        <loader></loader>
+    </div>
+    <div ng-show="!isLoading" class="col-md-offset-1 col-md-4">
         <h2>Application form</h2>
 
         <form id="checkout-form" name="checkoutForm" ng-submit="checkoutForm.$valid && sendCheckout(checkout)">
@@ -7,7 +10,7 @@
             <br>
             <h4>Contact info</h4>
             <div class="form-group">
-                <input type="text" ng-model="checkout.name" class="form-control" id="name" placeholder="Enter full name">
+                <input type="text" ng-model="checkout.name" class="form-control" id="name" placeholder="Enter full name" required>
             </div>
             <div class="form-group">
                 <input type="text" ng-model="checkout.email" class="form-control" id="email" placeholder="Enter email" required>

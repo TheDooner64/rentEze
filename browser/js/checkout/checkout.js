@@ -14,7 +14,14 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('CheckoutCtrl', function ($scope, loggedInUser, CheckoutFactory) {
+    // Need to figure out the best way to get the user data to pre-load in the form
     console.log(loggedInUser);
 
-    $scope.sendCheckout = CheckoutFactory.sendCheckout;
+    $scope.isLoading = false;
+
+    $scope.sendCheckout = function(checkoutInfo) {
+        CheckoutFactory.sendCheckout(checkoutInfo);
+        $scope.isLoading = true;
+    }
+
 });
