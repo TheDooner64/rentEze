@@ -3,7 +3,6 @@ app.factory('MapFactory', function ($http) {
     var MapFactory = {};
     MapFactory.findCenter = function(center){
         center.replace(" ", "%20");
-        console.log(center);
         return $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=new%20york%22&components=locality:" + center + "&key=AIzaSyDG1T1ZvOqHtAqgmkjjjHtXZz5HvwrW_w0")
             .then(function(res){
                 var hoodInfo=res.data;
