@@ -3,10 +3,13 @@
         <div class="navbar-header">
             <h2><a ui-sref="home">RentEze</a></h2>
         </div>
+        <ul ng-show="user" ui-sref="favorites" class="list-inline pull-right">
+            <li><a><i class="glyphicon glyphicon-star"></i> Favorites</a></li>
+        </ul>
         <button ng-show="!user" ui-sref="login" class="btn login-button">Login</button>
         <button ng-show="!user" ui-sref="signup" class="btn signup-button">Signup</button>
         <div ng-show="user" class="welcome">
-            <span>Welcome, {{ user.email }}!</span>
+            <span>Welcome, {{ user.firstName }}!</span>
             <a ng-click="logout()">Logout</a>
         </div>
     </div>
