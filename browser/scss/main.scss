@@ -42,6 +42,12 @@ span {
     color: $deep-brown;
 }
 
+a {
+    &:visited {
+        text-decoration: none;
+    }
+}
+
 .tiny-sc {
     font-size: 11px;
     text-transform: uppercase;

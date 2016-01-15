@@ -15,4 +15,6 @@ app.config(function($stateProvider) {
 
 app.controller('FavoritesCtrl', function($scope, FavoritesFactory, allFavorites) {
 
+    if (allFavorites.length >= 1) $scope.favorites = allFavorites;
+
 });
