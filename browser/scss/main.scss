@@ -42,6 +42,13 @@ span {
     color: $deep-brown;
 }
 
+.tiny-sc {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: lighten(black, 15%);
+    margin-bottom: -5px;
+}
+
 
 /* Button styles */
 
@@ -51,6 +58,9 @@ button {
         border-radius: 4px;
         background: $bright-robin-egg-blue;
         color: $space-dark-blue;
+        &:hover {
+            background: lighten($bright-robin-egg-blue, 10%);
+        }
     }
 }
 
@@ -59,3 +69,5 @@ button {
 @import 'login/main';
 @import 'signup/main';
 @import 'map/main';
+@import 'checkout/main';
+@import 'favorites/main';

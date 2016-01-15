@@ -1,8 +1,17 @@
-app.factory('MapFactory', function () {
+app.factory('MapFactory', function ($http) {
 
     var MapFactory = {};
-
-    MapFactory.initialize_gmaps = function() {
+    MapFactory.findCenter = function(center){
+        center.replace(" ", "%20");
+        console.log(center);
+        return $http.get("https://maps.googleapis.com/maps/api/geocode/json?address=new%20york%22&components=locality:" + center + "&key=AIzaSyDG1T1ZvOqHtAqgmkjjjHtXZz5HvwrW_w0")
+            .then(function(res){
+                var hoodInfo=res.data;
+                if (hoodInfo.results.length < 1) return {lat:40.705189, lng:-74.009209}
+                return hoodInfo.results[0].geometry.location;
+            })
+    }
+    MapFactory.initialize_gmaps = function(center) {
 
         var styleArr = [{
             featureType: 'landscape',
@@ -35,7 +44,7 @@ app.factory('MapFactory', function () {
         }];
 
         // initialize new google maps LatLng object
-        var myLatlng = new google.maps.LatLng(40.705189, -74.009209);
+        var myLatlng = new google.maps.LatLng(center.lat, center.lng);
 
         // set the map options hash
         var mapOptions = {
