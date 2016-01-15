@@ -17,12 +17,11 @@ app.config(function($stateProvider) {
 });
 
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, apartments, center) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center, $q) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
-    console.log($scope.center);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -47,20 +46,21 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     // Default to false so the side-panel is not displayed
     $scope.apartmentIsSelected = false;
-
+    $scope.reviews;
 
 
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
 
-    $scope.selectApartment = function() {
-        console.log("This ran!");
+    $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
-        $scope.$apply();
+        console.log(apartment)
+        $scope.apartment=apartment;
     }
 
     $scope.closeApartmentSelectPanel = function() {
         $scope.apartmentIsSelected = false;
+        $scope.reviews = null;
     }
 
     // Function to add the markers to the map
@@ -70,10 +70,19 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
                     icon: "/assets/images/home.png"
                 });
-                createdMapMarker["apartmentId"] = apartment._id;
+                createdMapMarker.apartmentId = apartment._id;
 
                 // Add click event to marker
-                createdMapMarker.addListener("click", $scope.selectApartment);
+                // createdMapMarker.addListener("click", $scope.selectApartment);
+                createdMapMarker.addListener("click", function(){
+                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
+                    .then(function(results){
+                        console.log("results")
+                        $scope.reviews = results[1];
+                        console.log($scope.reviews)
+                        $scope.selectApartment(results[0]);
+                    }).then(null, console.log)
+                });
 
                 $scope.currentMarkers.push(createdMapMarker);
             }
@@ -96,7 +105,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                     return apartment._id;
                 });
                 $scope.currentMarkers.forEach(function(marker) {
-                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) marker.setMap(null);
+                    if (filteredIds.indexOf(marker.apartmentId) === -1) marker.setMap(null);
                     else marker.setMap($scope.map)
                 })
             });
@@ -106,13 +115,26 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     // Function to retrieve apartments based on user filters
 
     $scope.addReview = function() {
-        $scope.review.aptId =
-        ReviewFactory.addReview($scope.review)
+        $scope.review.aptId = $scope.apartment._id
+        ReviewFactory.addReview($scope.newReview)
             .then((addedReview) => {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
                 $scope.$digest();
             });
     };
-
+    $scope.getNumReviews = function(){
+        if (!$scope.reviews) return;
+        if ($scope.reviews.length < 1) return "No Reviews for this Address";
+        return $scope.reviews.length
+    }
+    $scope.displayTitle = function(){
+        if (!$scope.apartment) return;
+        var title = $scope.apartment.title.split(" ");
+        if (parseInt(title[0])===0) {
+            title.shift();
+            title[0]="Studio";
+        }
+        return title.join(" ");
+    }
 });
