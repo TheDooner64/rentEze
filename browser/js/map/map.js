@@ -75,11 +75,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 // Add click event to marker
                 // createdMapMarker.addListener("click", $scope.selectApartment);
                 createdMapMarker.addListener("click", function(){
+                    createdMapMarker.icon = "/assets/images/star-3.png";
                     $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
                     .then(function(results){
-                        console.log("results")
                         $scope.reviews = results[1];
-                        console.log($scope.reviews)
                         $scope.selectApartment(results[0]);
                     }).then(null, console.log)
                 });
@@ -133,7 +132,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         var title = $scope.apartment.title.split(" ");
         if (parseInt(title[0])===0) {
             title.shift();
-            title[0]="Studio";
+            title.shift();
+            title.shift();
+            var spotForAdj = title.indexOf("Apartment")
+            title.splice(spotForAdj,0, "Studio");
         }
         return title.join(" ");
     }
