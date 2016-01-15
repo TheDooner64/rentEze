@@ -102,10 +102,7 @@ schema.pre('save', function(next) {
             next();
         }).then(null, console.log)
 
-})
-
-
-
+});
 
 // NOTE: Need to change averageRating to a method
 schema.virtuals.averageRating = function() {
