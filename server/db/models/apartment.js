@@ -97,7 +97,7 @@ schema.pre('save', function(next) {
     rp(url)
         .then(function(res) {
             var info = JSON.parse(res);
-            if(info.results.length < 1) next();
+            if (info.results.length < 1) next();
             apartment.latLong = info.results[0].geometry.location;
             next();
         }).then(null, console.log)
@@ -105,6 +105,9 @@ schema.pre('save', function(next) {
 })
 
 
+
+
+// NOTE: Need to change averageRating to a method
 schema.virtuals.averageRating = function() {
     var apartment = this;
     Review.find({
@@ -116,7 +119,7 @@ schema.virtuals.averageRating = function() {
                 return a + b.rating;
             }, 0);
             return total / reviews.length;
-        }).then(null, console.log)
+        }).then(null, console.log);
 }
 
-mongoose.model('Apartment', schema)
+mongoose.model('Apartment', schema);
