@@ -134,7 +134,7 @@ describe('Apartment Endpoints', function () {
 
 
     describe('Search', function() {
-        xit('can find all available apartments', function(done) {
+        it('can find all available apartments', function(done) {
             guestAgent.get('/api/apartments')
                 .expect(200)
                 .end(function(err, res) {
@@ -144,7 +144,7 @@ describe('Apartment Endpoints', function () {
                     done();
                 });
         });
-        it('can filter by price', function(done) {
+        xit('can filter by price', function(done) {
             guestAgent.post('api/apartments/filter')
                 .send({
                     monthlyPrice: {$gt: 0, $lt: 1000},
