@@ -115,6 +115,11 @@
             });
         };
 
+        this.isAdmin = function() {
+            if (!Session.user) return false;
+            return Session.user.isAdmin;
+        }
+
     });
 
     app.service('Session', function($rootScope, AUTH_EVENTS) {
