@@ -5,6 +5,9 @@ app.factory('ReviewFactory', function($http) {
                 .then(review => review.data);
         }
     };
-
+    fac.getAllReviews = function(aptId){
+        return $http.get('/api/reviews/' + aptId)
+            .then(review => review.data);
+    };
     return fac;
 });

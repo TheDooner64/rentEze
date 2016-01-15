@@ -1,9 +1,59 @@
-<div class="row">
-    <!-- <div class="col-md-6">
+<div id="checkout" class="row">
+    <div ng-show="isLoading" class="col-md-offset-1 col-md-4">
+        <loader></loader>
+    </div>
+    <div ng-show="!isLoading" class="col-md-offset-1 col-md-4">
         <h2>Application form</h2>
-    </div> -->
 
-    <div id="checkout-and-list-area" class="clearfix">
+        <form id="checkout-form" name="checkoutForm" ng-submit="checkoutForm.$valid && sendCheckout(checkout)">
+
+            <br>
+            <h4>Contact info</h4>
+            <div class="form-group">
+                <input type="text" ng-model="checkout.name" class="form-control" id="name" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" ng-model="checkout.email" class="form-control" id="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" ng-model="checkout.phoneNumber" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+            </div>
+
+            <br>
+            <h4>Employment</h4>
+            <div class="form-group">
+                <input type="text" ng-model="checkout.occupation" class="form-control" id="occupation" placeholder="Enter current occupation">
+            </div>
+            <div class="form-group">
+                <input type="text" ng-model="checkout.employer" class="form-control" id="employer" placeholder="Enter current employer">
+            </div>
+            <div class="form-group">
+                <input type="number" ng-model="checkout.annualIncome" class="form-control" id="annualIncome" placeholder="Enter current annual income">
+            </div>
+
+            <br>
+            <h4>Residence</h4>
+            <div class="form-group">
+                <input type="text" ng-model="checkout.currentAddress" class="form-control" id="currentAddress" placeholder="Enter current address">
+            </div>
+            <div class="form-group">
+                <input type="email" ng-model="checkout.landlordEmail" class="form-control" id="landlordEmail" placeholder="Enter current landlord email address">
+            </div>
+            <div class="form-group">
+                <input type="tel" ng-model="checkout.landlordPhoneNumber" class="form-control" id="landlordPhoneNumber" placeholder="Enter current landlord phonbe number">
+            </div>
+
+            <button type="submit" class="btn btn-default" id="submit-button" ng-disabled="checkoutForm.$invalid">Submit</button>
+        </form>
+    </div>
+
+    <div class="col-md-offset-1 col-md-5">
+        <div class="container">
+            <h2>Apartment Summary</h2>
+        </div>
+    </div>
+
+<!--     <div id="checkout-and-list-area" class="clearfix">
         <div id="map-list" class="container">
             <div class="list-apartment">
                 <div class="clearfix">
@@ -62,5 +112,5 @@
                 <div class="spacer"></div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
