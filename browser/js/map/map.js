@@ -17,7 +17,7 @@ app.config(function($stateProvider) {
 });
 
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center, $q) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
@@ -46,7 +46,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     // Default to false so the side-panel is not displayed
     $scope.apartmentIsSelected = false;
-
+    $scope.reviews;
 
 
     // Place to store all of the currentMarkers, in case we need it
@@ -60,6 +60,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     $scope.closeApartmentSelectPanel = function() {
         $scope.apartmentIsSelected = false;
+        $scope.reviews = null;
     }
 
     // Function to add the markers to the map
@@ -74,10 +75,13 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 // Add click event to marker
                 // createdMapMarker.addListener("click", $scope.selectApartment);
                 createdMapMarker.addListener("click", function(){
-                    ApartmentFactory.getOneApartment(createdMapMarker.apartmentId)
-                    .then(function(apartment){
-                        $scope.selectApartment(apartment);
-                    })
+                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
+                    .then(function(results){
+                        console.log("results")
+                        $scope.reviews = results[1];
+                        console.log($scope.reviews)
+                        $scope.selectApartment(results[0]);
+                    }).then(null, console.log)
                 });
 
                 $scope.currentMarkers.push(createdMapMarker);
@@ -111,13 +115,26 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     // Function to retrieve apartments based on user filters
 
     $scope.addReview = function() {
-        $scope.review.aptId =
-        ReviewFactory.addReview($scope.review)
+        $scope.review.aptId = $scope.apartment._id
+        ReviewFactory.addReview($scope.newReview)
             .then((addedReview) => {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
                 $scope.$digest();
             });
     };
-
+    $scope.getNumReviews = function(){
+        if (!$scope.reviews) return;
+        if ($scope.reviews.length < 1) return "No Reviews for this Address";
+        return $scope.reviews.length
+    }
+    $scope.displayTitle = function(){
+        if (!$scope.apartment) return;
+        var title = $scope.apartment.title.split(" ");
+        if (parseInt(title[0])===0) {
+            title.shift();
+            title[0]="Studio";
+        }
+        return title.join(" ");
+    }
 });

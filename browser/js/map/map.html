@@ -51,15 +51,15 @@
             <div class="list-apartment">
                 <button id="close-panel" ng-click="closeApartmentSelectPanel()">x<span class="tiny-sc">Close</span></button>
                 <div class="clearfix">
-                    <h2 class="pull-left">{{apartment.title}} <span class="availability-label label label-success">Available</span></h2>
+                    <h2 class="pull-left">{{displayTitle()}} <span class="availability-label label label-success">Available</span></h2>
                     <div class="monthly-rent apt-info pull-right">
                         <span class="tiny-sc">Monthly Rent</span>
                         <br>
-                        <span class="big-price">$ 1,500</span>
+                        <span class="big-price">$ {{apartment.monthlyPrice}}</span>
                     </div>
                 </div>
                 <div class="address">
-                    <span class="tiny-sc">123 Address Lane</span>
+                    <span class="tiny-sc">{{apartment.streetAddress}}</span>
                     <br>
                     <span class="tiny-sc">New York, NY 10001</span>
                     <br>
@@ -68,17 +68,17 @@
                     <div class="apt-info">
                         <span class="tiny-sc">Bedrooms</span>
                         <br>
-                        <span class="medium-stat">1</span>
+                        <span class="medium-stat">{{apartment.numBedrooms}}</span>
                     </div>
                     <div class="apt-info">
                         <span class="tiny-sc">Bathrooms</span>
                         <br>
-                        <span class="medium-stat">3</span>
+                        <span class="medium-stat">{{apartment.numBathrooms}}</span>
                     </div>
                     <div class="apt-info">
                         <span class="tiny-sc">Square Footage</span>
                         <br>
-                        <span class="medium-stat">700</span>
+                        <span class="medium-stat">{{apartment.squareFootage}}</span>
                     </div>
                     <div class="apt-info">
                         <span class="tiny-sc">Star Rating</span>
@@ -87,26 +87,21 @@
                     </div>
                 </div>
                 <div class="pictures">
-                    <img src="http://inhabitat.com/nyc/wp-content/blogs.dir/2/files/2011/10/tony-hilary-ft-greene-apt-1-537x359.jpg">
+                    <img ng-src="{{apartment.pictureUrls[0]}}">
                 </div>
                 <div class="spacer"></div>
                 <div class="description">
                     <h5>Description</h5>
-                    <p>Radian's light-filled apartments and penthouses feature dramatic views of the Boston skyline and surrounding waterways. Studio, one-, two-, and three-bedroom floor plans have been designed to enhance livability with exceptional details, including over-sized windows, sleek modern finishes, Plyboo flooring and top of the line appliances. Radian has been designed with environmentally responsible materials and systems to achieve LEED certification. With original works of art throughout amenity spaces, luxuriously designed entertainment rooms, an innovative fitness center and personalized services provided by a 24/7 concierge, Radian creates a truly cosmopolitan atmosphere tailored for contemporary living. With nearby transportation hubs, all areas of Boston are easily accessible.</p>
+                    <p>{{apartment.description}}</p>
                 </div>
                 <div class="spacer"></div>
                 <div class="landlord">
-                    <h5>Landlord Info</h5>
-                    <span class="landlord-name">Mavis Beacon</span>
-                    <br>
-                    <span class="landlord-number">(917) 923-3955</span>
-                    <br>
-                    <span class="landlord-email">mbeacon@gmail.com</span>
+                    <a herf="#"><h5>Contact Landlord</h5></a>
                 </div>
                 <div class="spacer"></div>
                 <div class="reviews">
                     <div class="clearfix">
-                        <h5 class="pull-left">Reviews <span class="label label-default">3</span></h5>
+                        <h5 class="pull-left">Reviews <span class="label label-default">{{getNumReviews()}}</span></h5>
                         <button class="btn btn-sm pull-right" ng-click="isCollapsed = !isCollapsed">+ Add a review</button>
                     </div>
 
@@ -122,15 +117,15 @@
                             <form name="addReviewForm" ng-submit="addReview()" class="clearfix">
                                 <div class="form-group">
                                     <label class="tiny-sc">Review Title</label>
-                                    <input type="text" class="form-control" ng-model="review.reviewTitle" required>
+                                    <input type="text" class="form-control" ng-model="newReview.reviewTitle" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Choose a rating…</label><br>
-                                    <uib-rating ng-model="review.rating" max="5" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['one','two','three']" aria-labelledby="default-rating" required></uib-rating>
+                                    <uib-rating ng-model="newReview.rating" max="5" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['one','two','three']" aria-labelledby="default-rating" required></uib-rating>
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Write your review below…</label>
-                                    <textarea class="form-control" ng-model="review.reviewContent" rows="4" required></textarea>
+                                    <textarea class="form-control" ng-model="newReview.reviewContent" rows="4" required></textarea>
                                 </div>
                                 <button type="submit" ng-disabled="addReviewForm.$invalid" class="post-review-btn btn pull-right">Post your review</button>
                             </form>
@@ -138,26 +133,12 @@
                     </div>
 
 
-                    <div class="review well">
+                    <div class="review well" ng-repeat="review in reviews">
                         <div class="clearfix">
-                            <h6 class="review-title pull-left">Review Title</h6>
-                            <span class="tiny-sc pull-right">Posted by Reviewer Name</span>
+                            <h6 class="review-title pull-left">{{review.reviewTitle}}</h6>
+                            <span class="tiny-sc pull-right">by {{review.reviewerId.email}}</span>
                         </div>
-                        <p class="review-content">The uibDateParser is what the uib-datepicker uses internally to parse the dates. You can use it standalone by injecting the uibDateParser service where you need it. The public API for the dateParser is a single method called parse. Certain format codes support i18n. Check this guide for more information.</p>
-                    </div>
-                    <div class="review well">
-                        <div class="clearfix">
-                            <h6 class="review-title pull-left">Review Title</h6>
-                            <span class="tiny-sc pull-right">Posted by Reviewer Name</span>
-                        </div>
-                        <p class="review-content">The uibDateParser is what the uib-datepicker uses internally to parse the dates. You can use it standalone by injecting the uibDateParser service where you need it. The public API for the dateParser is a single method called parse. Certain format codes support i18n. Check this guide for more information.</p>
-                    </div>
-                    <div class="review well">
-                        <div class="clearfix">
-                            <h6 class="review-title pull-left">Review Title</h6>
-                            <span class="tiny-sc pull-right">Posted by Reviewer Name</span>
-                        </div>
-                        <p class="review-content">The uibDateParser is what the uib-datepicker uses internally to parse the dates. You can use it standalone by injecting the uibDateParser service where you need it. The public API for the dateParser is a single method called parse. Certain format codes support i18n. Check this guide for more information.</p>
+                        <p class="review-content">{{review.reviewContent}}</p>
                     </div>
                 </div>
             </div>
