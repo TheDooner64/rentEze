@@ -8,16 +8,10 @@ var schema = new mongoose.Schema({
         ref: 'Apartment',
         required: true
     },
-    buyerId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
-    priceAtTimeOfSale: {
-        type: Number
-    },
-    dateSold: {
-        type: Date
     }
 });
 
-mongoose.model('Order', schema);
+mongoose.model('Favorite', schema);

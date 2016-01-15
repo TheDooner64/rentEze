@@ -1,22 +1,28 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('map', {
-        url: '/map',
+        url: '/map/:query',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl',
         resolve: {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
+            },
+            center: function(MapFactory, $stateParams){
+                return MapFactory.findCenter($stateParams.query)
             }
         }
     });
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments) {
-    $scope.map = MapFactory.initialize_gmaps();
-    $scope.apartments = apartments;
 
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, apartments, center) {
+    $scope.center = center;
+    $scope.isCollapsed = true;
+    $scope.map = MapFactory.initialize_gmaps($scope.center);
+    $scope.apartments = apartments;
+    console.log($scope.center);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -41,6 +47,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
 
     // Default to false so the side-panel is not displayed
     $scope.apartmentIsSelected = false;
+
+
 
     // Place to store all of the currentMarkers, in case we need it
     $scope.currentMarkers = [];
@@ -88,9 +96,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
                     return apartment._id;
                 });
                 $scope.currentMarkers.forEach(function(marker) {
-                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) {
-                        marker.setMap(null);
-                    }
+                    if (filteredIds.indexOf(marker["apartmentId"]) === -1) marker.setMap(null);
+                    else marker.setMap($scope.map)
                 })
             });
     }
@@ -98,8 +105,14 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, apartments
     addMarkersToMap($scope.apartments);
     // Function to retrieve apartments based on user filters
 
-    // This is just for testing the child state, delete later
-    // $scope.showChildState = () => {
-    // }
+    $scope.addReview = function() {
+        $scope.review.aptId =
+        ReviewFactory.addReview($scope.review)
+            .then((addedReview) => {
+                $scope.isCollapsed = true;
+                $scope.reviewPosted = true;
+                $scope.$digest();
+            });
+    };
 
 });

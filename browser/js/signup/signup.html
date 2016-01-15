@@ -6,7 +6,7 @@
 
     <div class="form-group">
         <label for="email">Email address</label>
-        <input type="text" ng-model="signup.email" class="form-control" id="email" placeholder="Enter email">
+        <input type="text" ng-model="signup.email" class="form-control" id="email" placeholder="Enter email" required>
     </div>
     <div class="form-group">
         <label for="firstName">First name</label>
@@ -17,12 +17,12 @@
         <input type="text" ng-model="signup.lastName" class="form-control" id="name" placeholder="Enter last name">
     </div>
     <div class="form-group">
-        <label for="login-password">Password</label>
-        <input type="password" ng-model="signup.password" class="form-control" id="signup-password" placeholder="Enter password">
+        <label for="signup-password">Password</label>
+        <input type="password" ng-model="signup.password" class="form-control" id="signup-password" placeholder="Enter password" ng-minlength="4" required>
     </div>
     <div class="form-group">
-        <label for="login-password">Confirm password</label>
-        <input type="password" ng-model="signup.confirmPassword" class="form-control" id="signup-password" placeholder="Re-enter password">
+        <label for="signup-passwordConfirm">Confirm password</label>
+        <input type="password" class="form-control" id="signup-password" placeholder="Re-enter password" required>
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default" ng-disabled="signupForm.$invalid">Submit</button>
 </form>

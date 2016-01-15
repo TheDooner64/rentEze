@@ -6,15 +6,28 @@ var Apartment = mongoose.model('Apartment');
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
+router.get('/neighborhoods', function(req, res, next){
+    var neighborhoods={};
+    Apartment.find({}).exec()
+        .then(function(apartments){
+            apartments.forEach(function(apartment){
+                if (!neighborhoods[apartment.neighborhood]) neighborhoods[apartment.neighborhood] = apartment.neighborhood
+            })
+        var neighborhoodArray = Object.keys(neighborhoods).map(function(key){
+                return neighborhoods[key]
+            })
+            res.status(200).json(neighborhoodArray)
+        })
+})
 
 router.get('/', function(req, res, next){
-    Apartment.find({availability:"available"}).exec().
-    then(function(apartments){
-        res.json(apartments);
-    }).then(null, function(err){
-        throw new Error("Something went wrong when finding apartments!");
-        next(err);
-    })
+    Apartment.find({availability:"available"}).exec()
+        .then(function(apartments){
+            res.json(apartments);
+        }).then(null, function(err){
+            throw new Error("Something went wrong when finding apartments!");
+            next(err);
+        })
 })
 
 router.post('/filter', function(req, res, next) {
@@ -24,15 +37,14 @@ router.post('/filter', function(req, res, next) {
     // Create MongoDB search object
     // Need to figure out how to populate averageRating virtual field
     var cleanFilterCriteria = {
-        numBedrooms: rawFilterCriteria.numBedrooms.val,
-        monthlyPrice: {
-            $gt: parseInt(rawFilterCriteria.monthlyPriceMin),
-            $lt: parseInt(rawFilterCriteria.monthlyPriceMax)
-        },
-        // averageRating: rawFilterCriteria.averageRating,
-        termOfLease: rawFilterCriteria.termOfLease
+        monthlyPrice:{}
     };
 
+    if (rawFilterCriteria.numBedrooms) cleanFilterCriteria.numBedrooms = rawFilterCriteria.numBedrooms.val;
+    if (rawFilterCriteria.monthlyPriceMin) cleanFilterCriteria.monthlyPrice.$gt = parseInt(rawFilterCriteria.monthlyPriceMin);
+    if (rawFilterCriteria.monthlyPriceMax) cleanFilterCriteria.monthlyPrice.$lt = parseInt(rawFilterCriteria.monthlyPriceMax);
+    if (rawFilterCriteria.termOfLease) cleanFilterCriteria.termOfLease = rawFilterCriteria.termOfLease;
+    console.log(cleanFilterCriteria)
     Apartment.find(cleanFilterCriteria)
         .then(function(apartments) {
             console.log("Apt found in DB: ", apartments);
@@ -48,9 +60,21 @@ router.post('/filter', function(req, res, next) {
 router.post('/', function(req, res, next) {
     Apartment.create(req.body)
         .then(function(apartment) {
-            res.json(apartment);
+            res.status(201).json(apartment);
         }).then(null, function(err) {
             throw new Error("Apartment was not created!");
+            next(err);
+        });
+});
+
+router.get("/:aptId", function(req, res, next){
+    Apartment.findOne({
+        _id: req.params.aptId
+    }).exec()
+    .then(function(apartment){
+        res.status(200).json(apartment);
+    }).then(null, function(err) {
+            throw new Error("Apartment was not successfully saved :(");
             next(err);
         });
 });
@@ -66,7 +90,7 @@ router.put('/:aptId', function(req, res, next) {
             apartment = req.body;
             return apartment.save();
         }).then(function(savedApt) {
-            res.json(savedApt);
+            res.status(200).json(savedApt);
         }).then(null, function(err) {
             throw new Error("Apartment was not successfully saved :(");
             next(err);
