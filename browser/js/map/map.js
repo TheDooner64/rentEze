@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
             },
-            center: function(MapFactory, $stateParams){
+            center: function(MapFactory, $stateParams) {
                 return MapFactory.findCenter($stateParams.query)
             }
         }
@@ -17,7 +17,7 @@ app.config(function($stateProvider) {
 });
 
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center, $q) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, center, $q, localStorageService) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
@@ -54,8 +54,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
-        console.log(apartment)
-        $scope.apartment=apartment;
+        console.log(apartment);
+        $scope.apartment = apartment;
     }
 
     $scope.closeApartmentSelectPanel = function() {
@@ -74,27 +74,19 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
                 // Add click event to marker
                 // createdMapMarker.addListener("click", $scope.selectApartment);
-                createdMapMarker.addListener("click", function(){
+                createdMapMarker.addListener("click", function() {
                     $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
-                    .then(function(results){
-                        console.log("results")
-                        $scope.reviews = results[1];
-                        console.log($scope.reviews)
-                        $scope.selectApartment(results[0]);
-                    }).then(null, console.log)
+                        .then(function(results) {
+                            console.log("results")
+                            $scope.reviews = results[1];
+                            console.log($scope.reviews)
+                            $scope.selectApartment(results[0]);
+                        }).then(null, console.log)
                 });
 
                 $scope.currentMarkers.push(createdMapMarker);
             }
         });
-    }
-
-    var removeHalf = function() {
-        for (var i = 0; i < $scope.currentMarkers.length; i++) {
-            if (i < $scope.currentMarkers.length / 2) {
-                $scope.currentMarkers[i].setMap(null);
-            }
-        }
     }
 
     $scope.filterResults = function() {
@@ -117,24 +109,34 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.addReview = function() {
         $scope.review.aptId = $scope.apartment._id
         ReviewFactory.addReview($scope.newReview)
-            .then((addedReview) => {
+            .then(function(addedReview) {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
                 $scope.$digest();
             });
     };
-    $scope.getNumReviews = function(){
+
+    $scope.getNumReviews = function() {
         if (!$scope.reviews) return;
-        if ($scope.reviews.length < 1) return "No Reviews for this Address";
-        return $scope.reviews.length
-    }
-    $scope.displayTitle = function(){
+        if ($scope.reviews.length < 1) return "No Reviews";
+        return $scope.reviews.length;
+    };
+
+    $scope.displayTitle = function() {
         if (!$scope.apartment) return;
         var title = $scope.apartment.title.split(" ");
-        if (parseInt(title[0])===0) {
+        if (parseInt(title[0]) === 0) {
             title.shift();
-            title[0]="Studio";
+            title[0] = "Studio";
         }
         return title.join(" ");
     }
+
+    $scope.addToFavorites = function() {
+        FavoritesFactory.addFavorite($scope.apartment);
+    };
+
+    //Just for testing. Remove later..
+    localStorageService.remove('favorites');
+
 });

@@ -51,12 +51,25 @@
             button {
                 margin-right: 3px;
                 &#available {
-                    color: $ivory;
-                    background-color: green;
+                    color: green;
+                    background: none;
                 }
                 &#unavailable {
-                    color: $ivory;
-                    background-color: red;
+                    color: red;
+                    background: none;
+                }
+                &#add-to-favorites {
+                    &:hover {
+                        color: black;
+                    }
+                    &:focus {
+                        background-color: $bright-robin-egg-blue;
+                        color: black;
+                    }
+                    &:visited {
+                        background-color: $bright-robin-egg-blue;
+                        color: black;
+                    }
                 }
             }
         }
@@ -105,7 +118,7 @@
                 width: 100%;
             }
         }
-        .reviews {
+        .review {
             h5 {
                 span {
                     margin-left: 5px;
@@ -114,6 +127,10 @@
             }
             h6.review-title {
                 margin-top: 0px;
+                margin-bottom: 5px;
+            }
+            .review-stars {
+                margin-bottom: 10px;
             }
         }
         .add-review-well {

@@ -20,7 +20,9 @@ app.factory('FilterFactory', function($http) {
     FilterFactory.filterResults = function(filterCriteria) {
         console.log(filterCriteria);
         return $http.post("/api/apartments/filter", filterCriteria)
-            .then(response => response.data)
+            .then(function(response) {
+                return response.data;
+            })
             .then(null, console.error);
     }
 
