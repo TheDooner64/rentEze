@@ -1,13 +1,15 @@
 app.factory('ReviewFactory', function($http) {
-    var fac = {
-        addReview: function(review) {
-            return $http.post('/api/reviews', review)
-                .then(review => review.data);
-        }
-    };
-    fac.getAllReviews = function(aptId){
+    var ReviewFactory = {};
+
+    ReviewFactory.addReview = function(review) {
+        return $http.post('/api/reviews', review)
+            .then(response => response.data);
+    }
+
+    ReviewFactory.getAllReviews = function(aptId) {
         return $http.get('/api/reviews/' + aptId)
-            .then(review => review.data);
+            .then(response => response.data);
     };
-    return fac;
+
+    return ReviewFactory;
 });

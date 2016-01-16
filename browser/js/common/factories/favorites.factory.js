@@ -27,7 +27,7 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
     }
 
     FavoritesFactory.addFavorite = function() {
-        loggedInUser.then(function(user) {
+        AuthService.loggedInUser.then(function(user) {
             // Need to add route to add a favorite
         });
     }
