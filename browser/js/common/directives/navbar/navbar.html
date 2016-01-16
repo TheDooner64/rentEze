@@ -14,6 +14,7 @@
         <ul class="list nav list-inline pull-left">
             <li><a ui-sref="map"><i class="glyphicon glyphicon-search"></i>Browse Apartments</a></li>
             <li><a ui-sref="favorites"><i class="glyphicon glyphicon-star"></i>Favorites</a></li>
+            <li><a ng-show="user.isAdmin" ui-sref="admin"><i class="glyphicon glyphicon-cog"></i>Manage Apartments</a></li>
         </ul>
     </div>
 </nav>
