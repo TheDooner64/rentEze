@@ -72,7 +72,16 @@ router.get("/:aptId", function(req, res, next){
         _id: req.params.aptId
     }).exec()
     .then(function(apartment){
-        res.status(200).json(apartment);
+        apartment.averageRating()
+        .then(function(rating){
+            apartment = apartment.toJSON();
+            apartment.rating = rating;
+            res.status(200).json(apartment);
+        }).then(null, function(err) {
+            err.message = "Apartment was not successfully found";
+            next(err);
+        });
+
     }).then(null, function(err) {
             err.message = "Apartment was not successfully found";
             next(err);

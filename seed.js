@@ -29,7 +29,7 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 80;
+var numApts = 5;
 var numUsers = 50;
 var numReviews = 100;
 var userIds;
@@ -88,13 +88,13 @@ var randApt = function() {
             var neighborhood = addressComponents.filter(function(component) {
                 return component.types.indexOf('neighborhood') > -1
             })[0];
-
+            console.log(neighborhood, latLong)
             return {
                 streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
                 city: city.long_name,
                 state: state.long_name,
                 zipCode: zip.long_name,
-                neighborhood: neighborhood.long_name,
+                neighborhoodString: neighborhood.long_name,
                 title: numBed + "  Bed" + adjectives[chance.integer({
                     min: 0,
                     max: adjectives.length - 1
@@ -134,10 +134,8 @@ var randApt = function() {
 
 var seedApartments = function() {
     var aptPromises = _.times(numApts, randApt)
-        // console.log(aptPromises);
     return Promise.all(aptPromises)
         .then(function(apartmentArray) {
-            // console.log(apartmentArray);
             return Apartment.createAsync(apartmentArray);
         }).then(null, console.log)
 }
@@ -199,31 +197,32 @@ var randReview = function() {
     }
 }
 
-
-
 var seedReviews = function() {
     return Review.createAsync(_.times(numReviews, randReview));
 }
 
 connectToDb.then(function() {
-    User.findAsync({}).then(function(users) {
-            // if (users.length === 0) {
-            return seedUsers();
-            // } else {
-            //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
-            //     process.kill(0);
-            // }
-        }).then(function(createdUsers) {
-            userIds = createdUsers.map(function(user) {
-                return user._id
-            });
-            return seedApartments() //here we create the apartments
-        }).then(function(createdApartments) {
-            aptIds = createdApartments.map(function(apt) {
-                return apt._id
-            });
-            return seedReviews()
-        })
+
+    // User.findAsync({})
+    // .then(function(users) {
+    //         // if (users.length === 0) {
+    //         return seedUsers();
+    //         // } else {
+    //         //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
+    //         //     process.kill(0);
+    //         // }
+    //     }).then(function(createdUsers) {
+    //         userIds = createdUsers.map(function(user) {
+    //             return user._id
+    //         });
+    //         return
+        seedApartments() //here we create the apartments
+        // }).then(function(createdApartments) {
+        //     aptIds = createdApartments.map(function(apt) {
+        //         return apt._id
+        //     });
+        //     return seedReviews()
+        // })
         .then(function() {
             console.log(chalk.green('Seed successful!'));
             process.kill(0);

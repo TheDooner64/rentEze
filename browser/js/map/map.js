@@ -54,8 +54,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
-        console.log(apartment)
         $scope.apartment=apartment;
+        // console.log($scope.apartment)
     }
 
     $scope.closeApartmentSelectPanel = function() {
@@ -77,9 +77,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 createdMapMarker.addListener("click", function(){
                     $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
                     .then(function(results){
-                        console.log("results")
+                        console.log(results)
                         $scope.reviews = results[1];
-                        console.log($scope.reviews)
                         $scope.selectApartment(results[0]);
                     }).then(null, console.log)
                 });
@@ -89,18 +88,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         });
     }
 
-    var removeHalf = function() {
-        for (var i = 0; i < $scope.currentMarkers.length; i++) {
-            if (i < $scope.currentMarkers.length / 2) {
-                $scope.currentMarkers[i].setMap(null);
-            }
-        }
-    }
-
     $scope.filterResults = function() {
         FilterFactory.filterResults($scope.filterCriteria)
             .then(function(apartments) {
-                console.log("Apartments found: ", apartments);
+                // console.log("Apartments found: ", apartments);
                 var filteredIds = apartments.map(function(apartment) {
                     return apartment._id;
                 });
