@@ -6,7 +6,7 @@ app.config(function($stateProvider) {
         controller: 'FavoritesCtrl',
         resolve: {
             loggedInUser: function(AuthService) {
-                return AuthService.getLoggedInUser();
+                if (AuthService.isAuthenticated()) return AuthService.getLoggedInUser();
             },
             allFavorites: function(FavoritesFactory) {
                 return FavoritesFactory.getAllFavorites();
@@ -31,7 +31,7 @@ app.controller('FavoritesCtrl', function($scope, FavoritesFactory, localStorageS
         console.log("This is the favorite we want to remove");
         console.log(favorite);
         if (loggedInUser) {
-            console.log("Getting here too!");
+            console.log("Removing it from the database now…");
             FavoritesFactory.removeFavorite(favorite)
                 .then(function() {
                     return FavoritesFactory.getAllFavorites();
@@ -39,6 +39,7 @@ app.controller('FavoritesCtrl', function($scope, FavoritesFactory, localStorageS
                     $scope.favorites = allFaves;
                 }).then(null, console.error);
         } else {
+            console.log("Removing it from localStorage now…");
             FavoritesFactory.removeFavorite(favorite);
             $scope.favorites = localStorageService.get('favorites');
         }
