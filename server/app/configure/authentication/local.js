@@ -63,15 +63,16 @@ module.exports = function(app) {
     app.post('/signup', function(req, res, next) {
         User.create(req.body)
             .then(function(user) {
-                console.log("Before: ", user);
-                console.log("After: ", user.sanitize());
                 req.logIn(user, function(loginErr) {
                     if (loginErr) return next(loginErr);
                     else res.status(201).send({
                         user: user.sanitize()
                     });
                 });
-            }).then(null, next);
+            }).then(null, function(err) {
+                console.log("Signup error: ", err);
+                next(err);
+            });
     });
 
 };
