@@ -3,12 +3,12 @@ var mongoose = require('mongoose');
 
 
 var schema = new mongoose.Schema({
-    aptId: {
+    apartment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Apartment',
         required: true
     },
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

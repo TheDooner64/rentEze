@@ -16,7 +16,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center, $q) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, center, $q, localStorageService) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
@@ -137,15 +137,6 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         });
     }
 
-    // BOBBY NOTE: What is this function doing? Do we need it?
-    // var removeHalf = function() {
-    //     for (var i = 0; i < $scope.currentMarkers.length; i++) {
-    //         if (i < $scope.currentMarkers.length / 2) {
-    //             $scope.currentMarkers[i].setMap(null);
-    //         }
-    //     }
-    // }
-
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
         $scope.apartment = apartment;
@@ -159,17 +150,19 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.addReview = function() {
         $scope.review.aptId = $scope.apartment._id
         ReviewFactory.addReview($scope.newReview)
-            .then((addedReview) => {
+            .then(function(addedReview) {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
                 $scope.$digest();
             });
     };
+
     $scope.getNumReviews = function() {
         if (!$scope.reviews) return;
-        if ($scope.reviews.length < 1) return "No Reviews for this Address";
-        return $scope.reviews.length
-    }
+        if ($scope.reviews.length < 1) return "No Reviews";
+        return $scope.reviews.length;
+    };
+
     $scope.displayTitle = function() {
         if (!$scope.apartment) return;
         var title = $scope.apartment.title.split(" ");
@@ -179,4 +172,9 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         }
         return title.join(" ");
     }
+
+    $scope.addToFavorites = function() {
+        FavoritesFactory.addFavorite($scope.apartment);
+    };
+
 });
