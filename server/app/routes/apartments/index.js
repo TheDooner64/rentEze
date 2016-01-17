@@ -82,14 +82,9 @@ router.get("/:aptId", function(req, res, next){
 // Updating an apartment
 // PUT /api/apartments/:aptId
 router.put('/:aptId', function(req, res, next) {
-    Apartment.findOne({
-            _id: req.params.aptId
-        }).exec()
-        .then(function(apartment) {
-            // req.body needs to be the entire apartment object
-            apartment = req.body;
-            return apartment.save();
-        }).then(function(savedApt) {
+    var id = req.params.aptId
+    Apartment.findByIdAndUpdate(id, { $set: req.body }).exec()
+        .then(function(savedApt) {
             res.status(200).json(savedApt);
         }).then(null, function(err) {
             err.message = "Apartment was not successfully saved";
