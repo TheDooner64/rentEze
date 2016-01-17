@@ -1,7 +1,8 @@
 <div id="admin">
     <div class="container">
         <h2>Apartments Managed</h2>
-
+        <button type="button" name="add-apt" ng-click="toggleAdd()">Add New Apartment</button>
+        <br>
         <!-- Apartment list -->
         <div class="col-xs-4">
             <div ng-repeat="apartment in apartments">
@@ -16,6 +17,77 @@
             </div>
         </div>
         <!-- End apartment list -->
+
+        <!-- Create apartment form -->
+        <div class="col-xs-4" ng-show="add">
+            <h2>Create Apartment</h2>
+            <form id="apt-form" name="addAptForm" ng-submit="addAptForm.$valid && submitNewApartment(apt)">
+
+                <uib-alert type="danger" ng-show="error">
+                    {{ error }}
+                </uib-alert>
+
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" ng-model="apt.title" class="form-control"
+                        id="title" placeholder="Enter title" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Street address</label>
+                    <input type="text" ng-model="apt.streetAddress" class="form-control"
+                        id="apt-address" placeholder="Enter street address" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" ng-model="apt.city" class="form-control"
+                        id="apt-city" placeholder="Enter City" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" ng-model="apt.state" class="form-control"
+                        id="apt-state" placeholder="Enter state" required>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode">Zip Code</label>
+                    <input type="text" ng-model="apt.zipCode" class="form-control"
+                        id="apt-zipcode" placeholder="Enter zip code" required>
+                </div>
+                <div class="form-group">
+                    <label for="neighborhood">Neighborhood</label>
+                    <input type="text" ng-model="apt.neighborhood" class="form-control"
+                        id="apt-neighborhood" placeholder="Enter neighborhood" required>
+                </div>
+                <div class="form-group">
+                    <label for="monthlyPrice">Monthly price</label>
+                    <input type="number" ng-model="apt.monthlyPrice" class="form-control"
+                        id="apt-monthlyprice" placeholder="Enter monthly price" required>
+                </div>
+                <div class="form-group">
+                    <label for="squareFootage">Square footage</label>
+                    <input type="number" ng-model="apt.squareFootage" class="form-control"
+                        id="apt-squareft" placeholder="Enter square footage" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea type="text" ng-model="apt.description" class="form-control"
+                        id="apt-description" placeholder="Enter square footage" required>
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="termOfLease">Term of Lease</label>
+                    <input type="text" ng-model="apt.termOfLease" class="form-control"
+                        id="apt-lease" placeholder="Enter term of lease" required>
+                </div>
+                <div class="form-group">
+                    <label for="availability">Availability</label>
+                    <input type="text" ng-model="apt.availability" class="form-control"
+                        id="apt-availability" placeholder="Enter availability" required>
+                </div>
+
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <!-- End create apartment form -->
 
     </div>
 </div>
