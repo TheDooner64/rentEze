@@ -6,11 +6,17 @@ app.config(function ($stateProvider) {
         controller: 'AdminAptCtrl',
         data: {
             isAdmin: true
+        },
+        resolve: {
+            apartments: function(ApartmentFactory) {
+                return ApartmentFactory.getAllApartments();
+            }
         }
     });
 
 });
 
-app.controller('AdminAptCtrl', function ($scope, AuthService, $state, AdminFactory) {
+app.controller('AdminAptCtrl', function ($scope, AuthService, $state, apartments, AdminFactory) {
+    $scope.apartments = apartments;
 
 });

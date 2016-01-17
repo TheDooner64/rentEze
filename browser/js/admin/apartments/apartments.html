@@ -2,5 +2,20 @@
     <div class="container">
         <h2>Apartments Managed</h2>
 
+        <!-- Apartment list -->
+        <div class="col-xs-4">
+            <div ng-repeat="apartment in apartments">
+                <div>
+                    <img height="100px" ng-src="{{apartment.pictureUrls[0]}}">
+                </div>
+                <div class="apt-info">
+                    <span class="tiny-sc">Address</span>
+                    <br>
+                    <span class="medium-stat">{{apartment.streetAddress}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- End apartment list -->
+
     </div>
 </div>
