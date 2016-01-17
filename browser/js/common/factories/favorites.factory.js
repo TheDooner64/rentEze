@@ -65,7 +65,9 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
         } else {
             var allCurrentFavorites = localStorageService.get('favorites');
             // If there are no favorites saved yet
-            if (allCurrentFavorites === null) {
+            // The second condition here (checking if allCurrentFavorites[0] contains null
+            // is just for weird buggy behavior that happens from time to time)
+            if (allCurrentFavorites === null || allCurrentFavorites[0] === null ) {
                 var arr = new Array(aptToSendToDb);
                 localStorageService.set('favorites', arr);
             } else {
