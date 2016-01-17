@@ -7,13 +7,13 @@ module.exports = {
     "callbackUrl": "INSERT_TWITTER_CALLBACK_HERE"
   },
   "FACEBOOK": {
-    "clientID": "INSERT_FACEBOOK_CLIENTID_HERE",
-    "clientSecret": "INSERT_FACEBOOK_CLIENT_SECRET_HERE",
-    "callbackURL": "INSERT_FACEBOOK_CALLBACK_HERE"
+    "clientID": "1036888069704740",
+    "clientSecret": "8e80c79a0047b2bd81ce328941c88b5b",
+    "callbackURL": "http://localhost:1337/auth/facebook/callback"
   },
   "GOOGLE": {
-    "clientID": "INSERT_GOOGLE_CLIENTID_HERE",
-    "clientSecret": "INSERT_GOOGLE_CLIENT_SECRET_HERE",
-    "callbackURL": "INSERT_GOOGLE_CALLBACK_HERE"
+    "clientID": "51169429910-l9ptef6dqetcur89diea75g6n2tcv8b5.apps.googleusercontent.com",
+    "clientSecret": "GsF_SC8tBFwz3yVWDUOwdChN",
+    "callbackURL": "http://localhost:1337/auth/google/callback"
   }
 };
