@@ -1,0 +1,25 @@
+@import '../variables';
+.favorite {
+    display: block;
+    background: $light-grey;
+    padding: 20px;
+    margin-bottom: 15px;
+    img {
+        height: 150px;
+    }
+    .favorite-details {
+        margin-left: 15px;
+    }
+    .favorite-actions {
+        button {
+            margin-bottom: 4px;
+            width: 200px;
+            &.remove-favorite {
+                background: darken($light-grey, 20%);
+                &:hover {
+                    background: darken($light-grey, 10%);
+                }
+            }
+        }
+    }
+}

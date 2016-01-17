@@ -136,7 +136,4 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         FavoritesFactory.addFavorite($scope.apartment);
     };
 
-    //Just for testing. Remove later..
-    localStorageService.remove('favorites');
-
 });

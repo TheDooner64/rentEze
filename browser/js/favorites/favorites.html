@@ -1,19 +1,26 @@
 <div class="container">
     <div class="row">
-        <div class="spacer"></div>
+        <div class="big-spacer"></div>
         <h3>Your Favorites</h3>
     </div>
-    <!-- <div class="row" ng-hide="!favorites">
-        <div class="favorite" ng-repeat="favorite in favorites">
-            <img src="{{ favorite.aptId.pictureUrls[0] }}">
-            <h5>{{ favorite.title }}</h5>
-            <span class="num bedrooms">{{ favorite.aptId.numBedrooms }} bedrooms</span><br>
-            <span class="num bathrooms">{{ favorite.aptId.numBathrooms }} bathrooms</span><br>
-            <span class="favorite-price">{{ favorite.aptId.monthlyPrice }}</span><br>
-            <button class="btn">Rent this apartment</button>
+    <div class="spacer"></div>
+    <div class="row" ng-hide="!favorites">
+        <div class="favorite clearfix" ng-repeat="favorite in favorites">
+            <img ng-src="{{ favorite.apartment.pictureUrls[0] }}" class="pull-left">
+            <div class="favorite-details pull-left">
+                <h4>{{ favorite.apartment.title }}</h4>
+                <span class="num bedrooms">{{ favorite.apartment.numBedrooms }} bedrooms</span>,
+                <span class="num bathrooms">{{ favorite.apartment.numBathrooms }} bathrooms</span><br>
+                <span class="favorite-price">{{ favorite.apartment.monthlyPrice | currency }}/month</span><br>
+                <button id="available" class="btn btn-primary btn-md" ng-show="favorite.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+            </div>
+            <div class="favorite-actions pull-right">
+                <button class="btn pull-right">Rent this apartment</button><br>
+                <button class="btn remove-favorite pull-right" ng-click="removeFavorite(favorite)"><i class="glyphicon glyphicon-remove"></i> Remove from favorites</button>
+            </div>
         </div>
-    </div> -->
-    <div class="row" ng-show="!favorites">
+    </div>
+    <div class="row" ng-show="!favorites || favorites.length === 0">
         <div class="well well-lg">
             <p class="text-center">It looks like you haven't added any Favorites! Why not <a ui-sref="map">add some now</a>?</p>
         </div>
