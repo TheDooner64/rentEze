@@ -63,7 +63,15 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         $scope.reviews = null;
     }
 
-    // Function to add the markers to the map
+    function changeSelectedMarker(marker) {
+        if ($scope.currentMarker)
+            $scope.currentMarker.setIcon("/assets/images/home.png")
+        $scope.currentMarker = marker;
+        $scope.currentMarker.setIcon("/assets/images/star-3.png");
+        $scope.map.setCenter({lat:$scope.currentMarker.map.center.lat(),
+            lng:$scope.currentMarker.map.center.lng()})
+    }
+
     var addMarkersToMap = function(apartments) {
         apartments.forEach(function(apartment) {
             if (apartment.latLong) {
@@ -75,7 +83,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                 // Add click event to marker
                 // createdMapMarker.addListener("click", $scope.selectApartment);
                 createdMapMarker.addListener("click", function(){
-                    createdMapMarker.icon = "/assets/images/star-3.png";
+                    changeSelectedMarker(createdMapMarker);
+
                     $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
                     .then(function(results){
                         $scope.reviews = results[1];
