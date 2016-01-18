@@ -1,27 +1,28 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('map', {
-        url: '/map/:lat/:lng',
+        url: '/map/:neighborhood/:lat/:lng',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl',
         resolve: {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
             },
-            center: function($stateParams) {
-                return {lat:$stateParams.lat, lng:$stateParams.lng}
+            user: function(AuthService){
+                return AuthService.getLoggedInUser();
             }
         }
     });
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, center, $q, localStorageService) {
-    $scope.center = center;
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, $q, localStorageService, $stateParams, user) {
+    $scope.center = {lat:$stateParams.lat, lng:$stateParams.lng};
+    $scope.neighborhood = $stateParams.neighborhood;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
-
+    $scope.recommended = FilterFactory.recommendApartments(apartments, user);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -89,45 +90,6 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         addMarkerToMap(apartment);
     });
 
-    // Function to check all filter criteria
-    var checkAllCriteria = function(apartmentToCheck) {
-
-        // Helper functions to check each criteria
-        var checkBedrooms = function() {
-            if (!$scope.filterCriteria.numBedrooms) return true;
-            if ($scope.filterCriteria.numBedrooms.val === apartmentToCheck.numBedrooms) return true;
-            return false;
-        }
-
-        var checkRent = function() {
-            var minRent = $scope.filterCriteria.monthlyPriceMin ? $scope.filterCriteria.monthlyPriceMin : 0;
-            var maxRent = $scope.filterCriteria.monthlyPriceMax ? $scope.filterCriteria.monthlyPriceMax : 1000000000;
-
-            if (apartmentToCheck.monthlyPrice >= minRent && apartmentToCheck.monthlyPrice <= maxRent) return true;
-            return false;
-        }
-
-        var checkTerm = function() {
-            if (!$scope.filterCriteria.termOfLease) return true;
-            if ($scope.filterCriteria.termOfLease === apartmentToCheck.termOfLease) return true;
-            return false;
-        }
-
-        // NOTE: Rating currently doesn't work
-        // var checkRating = function() {
-        //     if (!$scope.filterCriteria.averageRating) return true;
-        //     if (apartmentToCheck.averageRating >= $scope.filterCriteria.averageRating - 0.5) return true;
-        //     return false;
-        // }
-
-        if (!checkBedrooms()) return false;
-        if (!checkRent()) return false;
-        if (!checkTerm()) return false;
-        // if (!checkRating()) return false;
-
-        return true;
-    }
-
     // Filter results based on the criteria the users submits
     $scope.filterResults = function() {
         // Reset all of the map markers. Not sure if there's a better way to do this
@@ -135,11 +97,12 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
             mapMarker.setMap(null);
         });
         $scope.currentMarkers = [];
-
+        // $FilterFactory.updateAverages($scope.filterCriteria);
         // Loop over each apartment and check if a marker should be added
         $scope.apartments.forEach(function(apartmentToCheck) {
-            if (checkAllCriteria(apartmentToCheck)) addMarkerToMap(apartmentToCheck);
+            if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck);
         });
+        FilterFactory.updateAverages($scope.filterCriteria)
     }
 
     $scope.selectApartment = function(apartment) {
