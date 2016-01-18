@@ -18,7 +18,7 @@ var Favorite = mongoose.model('Favorite');
 // Get all of one user's favorites
 // GET /api/users/:userId/favorites/
 router.get('/:userId/favorites', function(req, res, next) {
-    Favorite.find({ userId: req.params.userId }).populate("aptId")
+    Favorite.find({ user: req.params.userId }).populate("apartment")
         .then(function(favorites) {
             console.log("here are the user's favorites…")
             console.log(favorites);
@@ -33,7 +33,7 @@ router.get('/:userId/favorites', function(req, res, next) {
 // Create a favorite for a user
 // POST /api/users/:userId/favorites/
 router.post('/:userId/favorites', function(req, res, next) {
-    Favorite.create(req.body).exec()
+    Favorite.create(req.body)
         .then(function(favorite) {
             console.log("here is the favorite you added…")
             console.log(favorite);
@@ -45,10 +45,10 @@ router.post('/:userId/favorites', function(req, res, next) {
 // Delete a favorite
 // DELETE /api/users/:userId/favorites/:favoriteId
 router.delete('/:userId/favorites/:favoriteId', function(req, res, next) {
-    Favorite.remove({ _id: req.params.favoriteId }).exec()
+    Favorite.remove({ _id: req.params.favoriteId})
         .then(function(removedFavorite) {
-            console.log("you deleted this favorite…");
+            console.log("Favorite removed…");
             console.log(removedFavorite);
-            res.status(200).json(removedFavorite);
+            res.status(200).send();
         }).then(null, next);
 });
