@@ -19,6 +19,7 @@ var schema = new mongoose.Schema({
         type: Date
     },
     status:{
+        // "created", "processing", "cancelled", "completed"
         type: String
     }
 });

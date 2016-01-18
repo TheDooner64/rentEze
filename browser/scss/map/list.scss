@@ -50,10 +50,6 @@
             margin-top: 15px;
             button {
                 margin-right: 3px;
-                &#unavailable {
-                    color: red;
-                    background: none;
-                }
                 &#add-to-favorites {
                     &:hover {
                         color: black;
