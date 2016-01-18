@@ -3,6 +3,7 @@ var router = require('express').Router();
 module.exports = router;
 var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
+var _ = require('lodash');
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
@@ -77,12 +78,17 @@ router.get("/:aptId", function(req, res, next){
 // Updating an apartment
 // PUT /api/apartments/:aptId
 router.put('/:aptId', function(req, res, next) {
-    Apartment.findOne({
-            _id: req.params.aptId
-        }).exec()
+    console.log("Here's the req.body…");
+    console.log(req.body);
+    Apartment.findById(req.params.aptId)
         .then(function(apartment) {
             // req.body needs to be the entire apartment object
-            apartment = req.body;
+            // console.log("Here's what the apartment looks like, before it's updated…");
+            // console.log(apartment);
+            // apartment = req.body;
+            _.extend(apartment, req.body);
+            console.log("Here is the apartment after the _ method");
+            console.log(apartment);
             return apartment.save();
         }).then(function(savedApt) {
             res.status(200).json(savedApt);

@@ -15,7 +15,7 @@
                 <button id="available" class="btn btn-primary btn-md" ng-show="favorite.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
             </div>
             <div class="favorite-actions pull-right">
-                <button class="btn pull-right">Rent this apartment</button><br>
+                <button class="btn pull-right" ui-sref="checkout({aptId: favorite.apartment._id})">Rent this apartment</button><br>
                 <button class="btn remove-favorite pull-right" ng-click="removeFavorite(favorite)"><i class="glyphicon glyphicon-remove"></i> Remove from favorites</button>
             </div>
         </div>

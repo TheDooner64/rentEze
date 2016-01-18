@@ -1,3 +1,5 @@
+@import '../variables';
+
 #checkout {
     margin-top: 20px;
 }
@@ -10,4 +12,36 @@
 
 .checkout-and-list-area {
 
+}
+
+.checkout-summary {
+    display: block;
+    background: $light-grey;
+    padding: 15px;
+
+    h2{
+        margin-top: 5px;
+    }
+
+    .apt-img {
+        width: 300px;
+        img {
+            width: 100%;
+        }
+    }
+
+    .apt-details {
+        p.detail-title {
+            margin-top: 15px;
+            margin-bottom: 3px;
+            font-weight: 900;
+        }
+    }
+}
+
+.final-page {
+    i {
+        font-size: 50px;
+        color: green;
+    }
 }
