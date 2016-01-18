@@ -78,8 +78,6 @@ router.get("/:aptId", function(req, res, next){
 // Updating an apartment
 // PUT /api/apartments/:aptId
 router.put('/:aptId', function(req, res, next) {
-    console.log("Here's the req.body…");
-    console.log(req.body);
     Apartment.findById(req.params.aptId)
         .then(function(apartment) {
             // req.body needs to be the entire apartment object
@@ -87,8 +85,6 @@ router.put('/:aptId', function(req, res, next) {
             // console.log(apartment);
             // apartment = req.body;
             _.extend(apartment, req.body);
-            console.log("Here is the apartment after the _ method");
-            console.log(apartment);
             return apartment.save();
         }).then(function(savedApt) {
             res.status(200).json(savedApt);
