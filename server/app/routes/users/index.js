@@ -20,8 +20,6 @@ var Favorite = mongoose.model('Favorite');
 router.get('/:userId/favorites', function(req, res, next) {
     Favorite.find({ user: req.params.userId }).populate("apartment")
         .then(function(favorites) {
-            console.log("here are the user's favorites…")
-            console.log(favorites);
             res.status(200).json(favorites);
         }).then(null, (err) => {
             // The user might not be logged in
@@ -35,8 +33,6 @@ router.get('/:userId/favorites', function(req, res, next) {
 router.post('/:userId/favorites', function(req, res, next) {
     Favorite.findOrCreate(req.body)
     .then(function(favorite) {
-            console.log("here is the favorite you added…")
-            console.log(favorite);
             res.status(201).json(favorite);
         }).then(null, next);
 });
@@ -47,8 +43,6 @@ router.post('/:userId/favorites', function(req, res, next) {
 router.delete('/:userId/favorites/:favoriteId', function(req, res, next) {
     Favorite.remove({ _id: req.params.favoriteId})
         .then(function(removedFavorite) {
-            console.log("Favorite removed…");
-            console.log(removedFavorite);
             res.status(200).send();
         }).then(null, next);
 });

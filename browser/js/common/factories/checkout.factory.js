@@ -15,8 +15,9 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                     return $http.post('/api/orders/', orderToSendToDb);
                 }).then(function(savedOrder) {
                     console.log("Ok! Your order was saved!");
-                    var updates;
+                    var updates = {};
                     updates.availability = "pending";
+                    console.log("Here are the updates: ", updates);
                     return $http.put('/api/apartments/' + apartment._id, updates);
                 }).then(function(savedApt) {
                     console.log("The following apartment is no longer available on the market…");
@@ -27,13 +28,14 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                 apartment: apartment._id,
                 priceAtTimeOfSale: apartment.monthlyPrice,
                 dateSold: Date.now(),
-                status: "Processing"
+                status: "processing"
             };
             $http.post('/api/orders/', orderToSendToDb)
                 .then(function(savedOrder) {
                     console.log("Ok! Your order was saved!");
-                    var updates;
+                    var updates = {};
                     updates.availability = "pending";
+                    console.log("Here are the updates: ", updates);
                     return $http.put('/api/apartments/' + apartment._id, updates);
                 }).then(function(savedApt) {
                     console.log("The following apartment is no longer available on the market…");
