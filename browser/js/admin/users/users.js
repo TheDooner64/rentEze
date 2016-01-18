@@ -2,7 +2,7 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('adminUser', {
         url: '/admin/users',
-        templateUrl: 'js/admin/users.html',
+        templateUrl: 'js/admin/users/users.html',
         controller: 'AdminUserCtrl',
         data: {
             isAdmin: true
