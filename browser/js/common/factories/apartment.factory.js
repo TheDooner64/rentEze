@@ -6,7 +6,9 @@ app.factory('ApartmentFactory', function($http){
     }
     ApartmentFactory.getOneApartment = function(aptId){
         return $http.get('/api/apartments/'+ aptId)
-        .then(function(response){return response.data}).then(null, console.log);
+        .then(function(response){
+            return response.data;
+        }).then(null, console.log);
     }
     return ApartmentFactory;
 })

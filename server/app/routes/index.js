@@ -14,6 +14,7 @@ router.use('/apartments', require('./apartments'));
 // /api/reviews
 router.use('/reviews', require('./reviews'));
 
+router.use('/neighborhoods', require('./neighborhoods'))
 // Make sure this is after all of
 // the registered routes!
 router.use(function (req, res) {
