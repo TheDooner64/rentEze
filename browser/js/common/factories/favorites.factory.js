@@ -34,34 +34,19 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
         if (AuthService.isAuthenticated()) {
             var user;
             return AuthService.getLoggedInUser()
-                .then(function(loggedInUser) {
-                    user = loggedInUser;
-                    return $http.get('/api/users/' + user._id + '/favorites/');
-                }).then(function(response) {
-                    return response.data;
-                }).then(function(usersFavorites) {
-                    console.log("Has this favorite already been saved to db?");
-                    var aptIsAlreadySaved = usersFavorites.filter(function(favorite) {
-                        if (favorite.apartment._id === apartment._id) {
-                            return true;
-                        }
-                    }).length;
+            .then(function(loggedInUser) {
+                user = loggedInUser;
+                var aptToSendToDb = {
+                    apartment: apartment._id,
+                    user: user._id
+                };
 
-                    if (aptIsAlreadySaved > 0) {
-                        console.log("Yup, it's already been saved! My work is done here.");
-                    } else {
-                        console.log("Nope, it hasn't already been saved. I'll save it now!");
-                        var aptToSendToDb = {
-                            apartment: apartment._id,
-                            user: user._id
-                        };
-                        return $http.post('/api/users/' + user._id + '/favorites/', aptToSendToDb)
-                            .then(function(response) {
-                                console.log("Ok! Apartment saved!")
-                                return response.data;
-                            });
-                    }
-                }).then(null, console.error);
+                return $http.post('/api/users/' + user._id + '/favorites/', aptToSendToDb);
+
+            }).then(function(response) {
+                console.log("Ok! Apartment saved!")
+                return response.data;
+            }).then(null, console.error);
         } else {
             var allCurrentFavorites = localStorageService.get('favorites');
             var aptToSendToDb = {
@@ -70,7 +55,7 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
             // If there are no favorites saved yet
             // The second condition here (checking if allCurrentFavorites[0] contains null
             // is just for weird buggy behavior that happens from time to time)
-            if (allCurrentFavorites === null || allCurrentFavorites[0] === null ) {
+            if (allCurrentFavorites === null || allCurrentFavorites[0] === null) {
                 var arr = new Array(aptToSendToDb);
                 localStorageService.set('favorites', arr);
             } else {
