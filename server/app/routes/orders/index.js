@@ -7,7 +7,7 @@ var Order = mongoose.model('Order');
 // get all orders
 // GET /api/orders
 router.get('/', function(req, res, next) {
-    Order.find({}).populate('aptId').populate('buyerId').exec()
+    Order.find({}).populate('apartment buyer').exec()
     .then(function(orders) {
         res.status(200).json(orders);
     }).then(null, next);
