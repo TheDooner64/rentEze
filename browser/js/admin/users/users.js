@@ -8,14 +8,14 @@ app.config(function ($stateProvider) {
             isAdmin: true
         },
         resolve: {
-            user: function(AuthService) {
-                return AuthService.getLoggedInUser();
+            users: function(UserFactory) {
+                return UserFactory.getAllUsers();
             }
         }
     });
 
 });
 
-app.controller('AdminUserCtrl', function ($scope, AuthService, $state, user, apartments) {
-    $scope.user = user;
+app.controller('AdminUserCtrl', function ($scope, AuthService, $state, users) {
+    $scope.users = users;
 });
