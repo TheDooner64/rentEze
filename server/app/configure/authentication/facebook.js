@@ -19,13 +19,20 @@ module.exports = function (app) {
         UserModel.findOne({ 'facebook.id': profile.id }).exec()
             .then(function (user) {
 
+                // Convert facebook's display name into first and last names
+                var facebookNames = profile.displayName.split(" ");
+
                 if (user) {
                     return user;
                 } else {
                     return UserModel.create({
                         facebook: {
                             id: profile.id
-                        }
+                        },
+                        firstName: facebookNames[0],
+                        lastName: facebookNames[1],
+                        classification: "tenant",
+                        isAdmin: false
                     });
                 }
 

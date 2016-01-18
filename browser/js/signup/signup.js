@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('SignupCtrl', function($scope, AuthService, $state) {
+app.controller('SignupCtrl', function($scope, AuthService, $state, FavoritesFactory) {
 
     $scope.signup = {};
     $scope.error = null;
@@ -19,6 +19,8 @@ app.controller('SignupCtrl', function($scope, AuthService, $state) {
         $scope.error = null;
 
         AuthService.signup(signupInfo).then(function() {
+            return FavoritesFactory.moveFavoritesToUser();
+        }).then(function() {
             $state.go('home');
         }).catch(function() {
             $scope.error = 'Invalid signup credentials.';
