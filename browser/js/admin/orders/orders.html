@@ -1,5 +1,25 @@
 <div id="admin">
     <div class="container">
         <h2>Orders Managed</h2>
+        <div class="row">
+            <div class="favorite clearfix" ng-repeat="order in orders">
+                <img ng-src="{{ order.apartment.pictureUrls[0] }}" class="pull-left">
+                <div class="favorite-details pull-left">
+                    <h4>{{ order.apartment.title }}</h4>
+                    <span>Reserved by user:</span><br>
+                    <span>{{ order.buyer.firstName }}</span>
+                    <span>{{ order.buyer.lastName }}</span>,
+                    <span>{{ order.buyer.email }}</span><br>
+                    <span>Status: </span><br>
+                    <button id="available" class="btn btn-primary btn-md" ng-show="order.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Created</button>
+                    <button id="available" class="btn btn-primary btn-md" ng-show="order.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Processing</button>
+                    <button id="available" class="btn btn-primary btn-md" ng-show="order.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Complete</button>
+                    <button id="available" class="btn btn-primary btn-md" ng-show="order.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Cancelled</button>
+                </div>
+                <div class="favorite-actions pull-right">
+                    <button class="btn pull-right" ng-click="editApartment(apartment)"><i class="glyphicon glyphicon-pencil"></i> Update order</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
