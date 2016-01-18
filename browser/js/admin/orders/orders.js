@@ -6,11 +6,17 @@ app.config(function ($stateProvider) {
         controller: 'AdminOrderCtrl',
         data: {
             isAdmin: true
+        },
+        resolve: {
+            orders: function(OrderFactory) {
+                return OrderFactory.getAllOrders();
+            }
         }
     });
 
 });
 
-app.controller('AdminOrderCtrl', function ($scope, AuthService, $state, AdminFactory) {
-    
+app.controller('AdminOrderCtrl', function ($scope, AuthService, $state, AdminFactory, orders) {
+    $scope.orders = orders;
+
 });
