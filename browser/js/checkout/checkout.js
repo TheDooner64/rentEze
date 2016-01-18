@@ -34,7 +34,7 @@ app.controller('CheckoutCtrl', function($scope, loggedInUser, CheckoutFactory, s
                     $scope.showFinalPage = true;
                     $scope.$apply();
                 }
-            }, 1000 * index);
+            }, Math.floor(Math.random() * 3000));
         });
     };
 

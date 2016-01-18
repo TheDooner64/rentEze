@@ -76,6 +76,14 @@ button {
         color: green;
         background: none;
     }
+    &#unavailable {
+        color: red;
+        background: none;
+    }
+    &#pending {
+        color: darken(gold, 10%);
+        background: none;
+    }
 }
 
 @import 'directives/main';
