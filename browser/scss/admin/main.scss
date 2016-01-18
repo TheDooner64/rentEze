@@ -1,0 +1,50 @@
+@import '../variables';
+
+p.admin-welcome {
+    font-family: $header-font-stack;
+    font-size: 28px;
+    vertical-align: bottom;
+}
+
+.admin-panel {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.manage-box {
+    background: $light-grey;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-radius: 5px;
+    &:hover {
+        background: lighten($light-grey, 3%);
+        cursor: pointer;
+    }
+
+    i {
+        display: block;
+        font-size: 80px;
+    }
+
+    .manage-title {
+        display: block;
+        margin-top: 10px;
+        font-size: 20px;
+    }
+}
+
+.user {
+    background: $light-grey;
+    padding: 15px;
+    margin-bottom: 30px;
+    .user-actions {
+        display: block;
+        margin-top: 10px;
+    }
+    i {
+        padding-right: 4px;
+    }
+    ul > li > a {
+        color: darken($bright-robin-egg-blue, 20%);
+    }
+}

@@ -164,10 +164,10 @@ var seedUsers = function() {
         classification: 'tenant'
     });
     users.push({
-        email: 'obama@gmail.com',
-        password: 'potus',
-        firstName: "Barack",
-        lastName: "Obama",
+        email: 'donald@trump.com',
+        password: 'america',
+        firstName: "Donald",
+        lastName: "Trump",
         isAdmin: true,
         classification: 'landlord'
     });

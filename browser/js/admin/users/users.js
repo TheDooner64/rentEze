@@ -18,4 +18,8 @@ app.config(function ($stateProvider) {
 
 app.controller('AdminUserCtrl', function ($scope, AuthService, $state, users) {
     $scope.users = users;
+
+    $scope.makeAdmin = function(user) {
+        // Function that makes the passed in user into an admin
+    };
 });

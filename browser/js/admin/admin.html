@@ -1,4 +1,4 @@
-<p>
+<!-- <p>
     THIS IS FOR ADMIN ONLY
 </p>
 <p>
@@ -9,4 +9,35 @@
 </p>
 <p>
     <a ui-sref="adminUser">CLICK HERE FOR USER MANAGER</a>
-</p>
+</p> -->
+
+<div class="container">
+    <div class="row">
+        <div class="big-spacer"></div>
+        <div class="col-md-12 clearfix">
+            <p class="admin-welcome pull-left">Hi, {{ user.firstName }}!</p>
+            <span class="admin-panel pull-right">Admin Panel</span>
+        </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="manage-box text-center" ui-sref="adminApt">
+                <i class="fa fa-building"></i><br>
+                <span class="manage-title">Manage Apartments</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="manage-box text-center" ui-sref="adminOrder">
+                <i class="fa fa-folder-open"></i><br>
+                <span class="manage-title">Manage Orders</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="manage-box text-center" ui-sref="adminUser">
+                <i class="fa fa-group"></i><br>
+                <span class="manage-title">Manage Users</span>
+            </div>
+        </div>
+    </div>
+</div>

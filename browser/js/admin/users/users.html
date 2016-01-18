@@ -1,20 +1,27 @@
 <div id="admin">
     <div class="container">
-        <h2>Users Managed</h2>
+        <div class="big-spacer"></div>
+        <div class="col-xs-12">
+            <h2>Users Managed</h2>
+            <div class="spacer"></div>
+        </div>
         <!-- User list -->
-        <div class="col-xs-4">
-            <div class="favorite clearfix" ng-repeat="user in users">
-                <img ng-src="{{ user.pictureUrls[0] }}" class="pull-left">
-                <div class="favorite-details pull-left">
+        <div class="col-xs-4" ng-repeat="user in users">
+            <div class="user clearfix">
+                <!-- <img ng-src="{{ user.pictureUrls[0] }}"> -->
+                <div class="user-details">
                     <h4>{{ user.firstName }} {{ user.lastName }}</h4>
-                    <span class="num bedrooms">Email: {{ user.email }}</span>
-                    <!-- <span class="num bathrooms">{{ user.numBathrooms }} bathrooms</span><br>
-                    <span class="favorite-price">{{ user.monthlyPrice | currency }}/month</span><br> -->
-                    <button id="available" class="btn btn-primary btn-md" ng-show="user.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+                    <span class="user-detail">Email: {{ user.email }}</span>
+                    <br>
                 </div>
-                <!-- <div class="favorite-actions pull-right">
-                    <button class="btn pull-right" ng-click="editApartment(user)"><i class="glyphicon glyphicon-pencil"></i> Edit apartment</button>
-                </div> -->
+                <div class="user-actions clearfix">
+                    <h6>Actions</h6>
+                    <ul class="list list-unstyled">
+                        <li><a ng-click="makeAdmin(user)"><i class="fa fa-level-up"></i> Make Admin</a></li>
+                        <li><a ng-click="deleteUser(user)"><i class="fa fa-trash"></i> Delete User</a></li>
+                        <li><a ng-click="triggerPasswordReset(user)"><i class="fa fa-lock"></i> Trigger Password Reset</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <!-- End user list -->
