@@ -12,6 +12,7 @@
                     <span class="num bedrooms">{{ apartment.numBedrooms }} bedrooms</span>,
                     <span class="num bathrooms">{{ apartment.numBathrooms }} bathrooms</span><br>
                     <span class="favorite-price">{{ apartment.monthlyPrice | currency }}/month</span><br>
+                    <!-- TODO: make available an on/off switch -->
                     <button id="available" class="btn btn-primary btn-md" ng-show="apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
                 </div>
                 <div class="favorite-actions pull-right">
@@ -24,7 +25,7 @@
         <!-- Create apartment form -->
         <div class="col-xs-4" ng-show="add">
             <h2>Create Apartment</h2>
-            <form id="apt-form" name="addAptForm" ng-submit="addAptForm.$valid && submitNewApartment(apt)">
+            <form id="newapt-form" name="addAptForm" ng-submit="addAptForm.$valid && submitNewApartment(apt)">
 
                 <uib-alert type="danger" ng-show="error">
                     {{ error }}
@@ -33,58 +34,58 @@
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" ng-model="apt.title" class="form-control"
-                        id="title" placeholder="Enter title" required>
+                        id="newaitle" placeholder="Enter title" required>
                 </div>
                 <div class="form-group">
                     <label for="address">Street address</label>
                     <input type="text" ng-model="apt.streetAddress" class="form-control"
-                        id="apt-address" placeholder="Enter street address" required>
+                        id="newapt-address" placeholder="Enter street address" required>
                 </div>
                 <div class="form-group">
                     <label for="city">City</label>
                     <input type="text" ng-model="apt.city" class="form-control"
-                        id="apt-city" placeholder="Enter City" required>
+                        id="newapt-city" placeholder="Enter City" required>
                 </div>
                 <div class="form-group">
                     <label for="state">State</label>
                     <input type="text" ng-model="apt.state" class="form-control"
-                        id="apt-state" placeholder="Enter state" required>
+                        id="newapt-state" placeholder="Enter state" required>
                 </div>
                 <div class="form-group">
                     <label for="zipCode">Zip Code</label>
                     <input type="text" ng-model="apt.zipCode" class="form-control"
-                        id="apt-zipcode" placeholder="Enter zip code" required>
+                        id="newapt-zipcode" placeholder="Enter zip code" required>
                 </div>
                 <div class="form-group">
                     <label for="neighborhood">Neighborhood</label>
                     <input type="text" ng-model="apt.neighborhood" class="form-control"
-                        id="apt-neighborhood" placeholder="Enter neighborhood" required>
+                        id="newapt-neighborhood" placeholder="Enter neighborhood" required>
                 </div>
                 <div class="form-group">
                     <label for="monthlyPrice">Monthly price</label>
                     <input type="number" ng-model="apt.monthlyPrice" class="form-control"
-                        id="apt-monthlyprice" placeholder="Enter monthly price" required>
+                        id="newapt-monthlyprice" placeholder="Enter monthly price" required>
                 </div>
                 <div class="form-group">
                     <label for="squareFootage">Square footage</label>
                     <input type="number" ng-model="apt.squareFootage" class="form-control"
-                        id="apt-squareft" placeholder="Enter square footage" required>
+                        id="newapt-squareft" placeholder="Enter square footage" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea type="text" ng-model="apt.description" class="form-control"
-                        id="apt-description" placeholder="Enter square footage" required>
+                        id="newapt-description" placeholder="Enter square footage" required>
                     </textarea>
                 </div>
                 <div class="form-group">
                     <label for="termOfLease">Term of Lease</label>
                     <input type="text" ng-model="apt.termOfLease" class="form-control"
-                        id="apt-lease" placeholder="Enter term of lease" required>
+                        id="newapt-lease" placeholder="Enter term of lease" required>
                 </div>
                 <div class="form-group">
                     <label for="availability">Availability</label>
                     <input type="text" ng-model="apt.availability" class="form-control"
-                        id="apt-availability" placeholder="Enter availability" required>
+                        id="newapt-availability" placeholder="Enter availability" required>
                 </div>
 
                 <button type="submit" class="btn btn-default">Submit</button>
