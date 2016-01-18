@@ -4,6 +4,7 @@ module.exports = router;
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Favorite = mongoose.model('Favorite');
+var Order = mongoose.model('Order');
 
 // router.param('/:userId', function(req, res, next, id) {
 //     User.findOne(id).exec()
@@ -45,4 +46,13 @@ router.delete('/:userId/favorites/:favoriteId', function(req, res, next) {
         .then(function(removedFavorite) {
             res.status(200).send();
         }).then(null, next);
+});
+
+// Get all of one user's orders
+// GET /api/users/:userId/orders
+router.get('/:userId/orders', function(req, res, next) {
+    Order.find({ buyer: req.params.userId }).populate('apartment buyer')
+    .then(function(orders) {
+        res.status(200).json(orders);
+    }).then(null, next);
 });

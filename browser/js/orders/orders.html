@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="big-spacer"></div>
+        <h3>Your Orders</h3>
+    </div>
+    <div class="spacer"></div>
+    <div class="row" ng-hide="!orders">
+        <div class="order clearfix" ng-repeat="order in orders">
+            <img ng-src="{{ order.apartment.pictureUrls[0] }}" class="pull-left">
+            <div class="order-details pull-left">
+                <h4>{{ order.apartment.title }}</h4>
+                <span class="address">{{ order.apartment.streetAddress }}<br>{{ order.apartment.city }}, {{ order.apartment.state }} {{ order.apartment.zipCode }}</span><br><br>
+                <span class="order-price">Price agreed upon:  {{ order.priceAtTimeOfSale | currency }}/month</span><br>
+                <span class="date">Date:  {{ order.dateSold | date: 'M/d/yyyy' }}</span><br>
+                <span class="status">Status:  {{ order.status }}</span><br>
+                <button id="available" class="btn btn-primary btn-md" ng-show="order.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+            </div>
+            <div class="order-actions pull-right">
+                <button class="btn remove-order pull-right" ng-show="order.status === 'processing'" ng-click="cancelOrder(order)"><i class="glyphicon glyphicon-remove"></i> Cancel application</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="!orders || orders.length === 0">
+        <div class="well well-lg">
+            <p class="text-center">It looks like you haven't made any orders! Why not <a ui-sref="map">make one now</a>?</p>
+        </div>
+    </div>
+</div>
