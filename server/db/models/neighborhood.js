@@ -42,13 +42,13 @@ schema.pre('save', function(next){
         }).then(null, console.log)
 })
 
-schema.statics.findOrCreateByName = function (name) {
+schema.statics.findOrCreate = function (query) {
     var Neighborhood = this;
-    return Neighborhood.findOne({name:name}).exec()
+    return Neighborhood.findOne(query).exec()
     .then(function(found){
         if (found) return found;
         var newHood = new Neighborhood({
-            name:name,
+            name:query.name,
             description: chance.paragraph()
         });
         return newHood.save()

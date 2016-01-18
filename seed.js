@@ -29,7 +29,7 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 5;
+var numApts = 80;
 var numUsers = 50;
 var numReviews = 100;
 var userIds;
@@ -203,26 +203,25 @@ var seedReviews = function() {
 
 connectToDb.then(function() {
 
-    // User.findAsync({})
-    // .then(function(users) {
-    //         // if (users.length === 0) {
-    //         return seedUsers();
-    //         // } else {
-    //         //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
-    //         //     process.kill(0);
-    //         // }
-    //     }).then(function(createdUsers) {
-    //         userIds = createdUsers.map(function(user) {
-    //             return user._id
-    //         });
-    //         return
-        seedApartments() //here we create the apartments
-        // }).then(function(createdApartments) {
-        //     aptIds = createdApartments.map(function(apt) {
-        //         return apt._id
-        //     });
-        //     return seedReviews()
-        // })
+    User.findAsync({})
+    .then(function(users) {
+            // if (users.length === 0) {
+            return seedUsers();
+            // } else {
+            //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
+            //     process.kill(0);
+            // }
+        }).then(function(createdUsers) {
+            userIds = createdUsers.map(function(user) {
+                return user._id
+            });
+            return seedApartments() //here we create the apartments
+        }).then(function(createdApartments) {
+            aptIds = createdApartments.map(function(apt) {
+                return apt._id
+            });
+            return seedReviews()
+        })
         .then(function() {
             console.log(chalk.green('Seed successful!'));
             process.kill(0);

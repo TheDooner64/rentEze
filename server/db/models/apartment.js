@@ -68,6 +68,9 @@ var schema = new mongoose.Schema({
     },
     availability: {
         type: String
+    },
+    neighborhoodString :{
+        type: String
     }
     // },
     // toObject: {
@@ -106,10 +109,11 @@ schema.pre('save', function(next) {
 
 });
 
-schema.pre('save', function(next){
+schema.pre('validate', function(next){
     var apartment = this;
+    console.log(apartment)
     if (!apartment.neighborhoodString) next();
-    Neighborhood.findOrCreateByName(apartment.neighborhoodString)
+    Neighborhood.findOrCreate({name:apartment.neighborhoodString})
         .then(function(neighborhood){
             apartment.neighborhood = neighborhood._id;
             console.log(apartment)
