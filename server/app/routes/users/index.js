@@ -33,8 +33,8 @@ router.get('/:userId/favorites', function(req, res, next) {
 // Create a favorite for a user
 // POST /api/users/:userId/favorites/
 router.post('/:userId/favorites', function(req, res, next) {
-    Favorite.create(req.body)
-        .then(function(favorite) {
+    Favorite.findOrCreate(req.body)
+    .then(function(favorite) {
             console.log("here is the favorite you added…")
             console.log(favorite);
             res.status(201).json(favorite);
