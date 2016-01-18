@@ -1,5 +1,5 @@
 'use strict';
-window.app = angular.module('FullstackGeneratedApp', ['oi.select','fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'LocalStorageModule']);
+window.app = angular.module('FullstackGeneratedApp', ['oi.select','fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'LocalStorageModule', 'validation.match']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
