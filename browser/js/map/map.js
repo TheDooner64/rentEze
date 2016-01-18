@@ -1,15 +1,15 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('map', {
-        url: '/map/:query',
+        url: '/map/:lat/:lng',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl',
         resolve: {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
             },
-            center: function(MapFactory, $stateParams) {
-                return MapFactory.findCenter($stateParams.query)
+            center: function($stateParams) {
+                return {lat:$stateParams.lat, lng:$stateParams.lng}
             }
         }
     });
@@ -153,7 +153,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     }
 
     $scope.addReview = function() {
-        $scope.review.aptId = $scope.apartment._id
+        $scope.review.apartment = $scope.apartment._id
         ReviewFactory.addReview($scope.newReview)
             .then(function(addedReview) {
                 $scope.isCollapsed = true;

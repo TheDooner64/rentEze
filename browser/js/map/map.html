@@ -92,7 +92,7 @@
                     <div class="apt-info">
                         <span class="tiny-sc">Star Rating</span>
                         <br>
-                        <span class="medium-stat">4.2</span>
+                        <span class="medium-stat">{{apartment.rating}}</span>
                     </div>
                 </div>
                 <div class="pictures">
@@ -144,13 +144,13 @@
 
                     <div class="review well" ng-repeat="review in reviews">
                         <div class="review-info clearfix">
-                            <h6 class="review-title pull-left">{{review.reviewTitle}}</h6>
-                            <span class="tiny-sc pull-right">by {{review.reviewerId.email}}</span>
+                            <h6 class="review-title pull-left">{{review.title}}</h6>
+                            <span class="tiny-sc pull-right">by {{review.reviewer.email}}</span>
                         </div>
                         <div class="review-stars">
                             <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating"></uib-rating>
                         </div>
-                        <p class="review-content">{{review.reviewContent}}</p>
+                        <p class="review-content">{{review.content}}</p>
                     </div>
                 </div>
             </div>

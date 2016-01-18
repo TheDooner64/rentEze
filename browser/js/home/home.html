@@ -9,7 +9,7 @@
                     <div class="input-group">
                         <!-- Just a test to see if localStorage works -->
                         <!-- <button ng-click="showStorage()">SHOW ME</button> -->
-                        <oi-select oi-options="neighborhood for neighborhood in neighborhoods" ng-model="query" placeholder="Search for an apartment..."></oi-select>
+                        <oi-select oi-options="neighborhood.name for neighborhood in neighborhoods" ng-model="query" placeholder="Search for an apartment..."></oi-select>
                         <span class="input-group-btn">
                             <button class="btn btn-primary btn-lg" type="button submit">Search!</button>
                         </span>

@@ -6,20 +6,6 @@ var Apartment = mongoose.model('Apartment');
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
-router.get('/neighborhoods', function(req, res, next){
-    var neighborhoods={};
-    Apartment.find({}).exec()
-        .then(function(apartments){
-            apartments.forEach(function(apartment){
-                if (!neighborhoods[apartment.neighborhood]) neighborhoods[apartment.neighborhood] = apartment.neighborhood
-            })
-        var neighborhoodArray = Object.keys(neighborhoods).map(function(key){
-                return neighborhoods[key]
-            })
-            res.status(200).json(neighborhoodArray)
-        })
-})
-
 router.get('/', function(req, res, next){
     Apartment.find({availability:"available"}).exec()
         .then(function(apartments){
@@ -72,7 +58,16 @@ router.get("/:aptId", function(req, res, next){
         _id: req.params.aptId
     }).exec()
     .then(function(apartment){
-        res.status(200).json(apartment);
+        apartment.averageRating()
+        .then(function(rating){
+            apartment = apartment.toJSON();
+            apartment.rating = rating;
+            res.status(200).json(apartment);
+        }).then(null, function(err) {
+            err.message = "Apartment was not successfully found";
+            next(err);
+        });
+
     }).then(null, function(err) {
             err.message = "Apartment was not successfully found";
             next(err);

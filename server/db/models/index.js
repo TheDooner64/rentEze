@@ -3,7 +3,7 @@
 // anywhere the User model needs to be used.
 require('./user');
 require('./review');
-require('./apartment');
 require('./neighborhood');
+require('./apartment');
 require('./order');
 require('./favorite');
