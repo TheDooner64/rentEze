@@ -15,6 +15,15 @@ var Favorite = mongoose.model('Favorite');
 //         }).then(null, next);
 // });
 
+// Get all users
+// GET /api/users
+router.get('/', function(req, res, next) {
+    User.find({}).exec()
+    .then(function(users) {
+        res.status(200).json(users);
+    }).then(null, next);
+});
+
 // Get all of one user's favorites
 // GET /api/users/:userId/favorites/
 router.get('/:userId/favorites', function(req, res, next) {
