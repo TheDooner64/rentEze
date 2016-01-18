@@ -19,12 +19,12 @@
     background: $light-grey;
     padding: 15px;
 
-    h2{
+    h3{
         margin-top: 5px;
     }
 
     .apt-img {
-        width: 300px;
+        width: 100%;
         img {
             width: 100%;
         }
@@ -35,6 +35,13 @@
             margin-top: 15px;
             margin-bottom: 3px;
             font-weight: 900;
+            color: darken($light-grey, 25%);
+        }
+        hr {
+            margin-top: 3px;
+            margin-bottom: 10px;
+            height: 1px;
+            background: darken($light-grey, 25%);
         }
     }
 }
