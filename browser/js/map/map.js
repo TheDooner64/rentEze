@@ -57,8 +57,6 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
             $scope.currentMarker.setIcon("/assets/images/home.png")
         $scope.currentMarker = marker;
         $scope.currentMarker.setIcon("/assets/images/star-3.png");
-        $scope.map.setCenter({lat:$scope.currentMarker.map.center.lat(),
-            lng:$scope.currentMarker.map.center.lng()})
     }
 
     var addMarkerToMap = function(apartment) {
