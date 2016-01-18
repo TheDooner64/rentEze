@@ -29,9 +29,9 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 80;
-var numUsers = 50;
-var numReviews = 100;
+var numApts = 8;
+var numUsers = 5;
+var numReviews = 10;
 var userIds;
 var aptIds;
 
@@ -54,7 +54,7 @@ var randApt = function() {
 
     var termOfLease = ["1 month", "3 months", "3 months", "3 months", "6 months", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "2 years"];
     var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latLong + '&key=' + apiKey;
-    var availability = ["available", "available", "available", "available", "available", "unavailable", "unavailable", "pending"];
+    var availability = ["available", "available", "available", "available", "available", "available", "unavailable", "pending"];
     var pictureUrls = require("./seedInfo/imageurls.js").imageUrls;
 
     return rp(url)
@@ -178,19 +178,19 @@ var seedUsers = function() {
 
 var randReview = function() {
     return {
-        reviewTitle: chance.sentence({
+        title: chance.sentence({
             words: 4
         }),
-        reviewContent: chance.paragraph(),
+        content: chance.paragraph(),
         rating: chance.integer({
             min: 1,
             max: 5
         }),
-        aptId: aptIds[chance.integer({
+        apartment: aptIds[chance.integer({
             min: 0,
             max: aptIds.length - 1
         })],
-        reviewerId: userIds[chance.integer({
+        reviewer: userIds[chance.integer({
             min: 0,
             max: userIds.length - 1
         })],
@@ -203,15 +203,8 @@ var seedReviews = function() {
 
 connectToDb.then(function() {
 
-    User.findAsync({})
-    .then(function(users) {
-            // if (users.length === 0) {
-            return seedUsers();
-            // } else {
-            //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
-            //     process.kill(0);
-            // }
-        }).then(function(createdUsers) {
+    seedUsers()
+        .then(function(createdUsers) {
             userIds = createdUsers.map(function(user) {
                 return user._id
             });

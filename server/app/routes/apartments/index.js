@@ -6,20 +6,6 @@ var Apartment = mongoose.model('Apartment');
 
 // Retrieving apartments based on criteria, which are sent in the req.body
 // POST /api/apartments/filter
-router.get('/neighborhoods', function(req, res, next){
-    var neighborhoods={};
-    Apartment.find({}).exec()
-        .then(function(apartments){
-            apartments.forEach(function(apartment){
-                if (!neighborhoods[apartment.neighborhood]) neighborhoods[apartment.neighborhood] = apartment.neighborhood
-            })
-        var neighborhoodArray = Object.keys(neighborhoods).map(function(key){
-                return neighborhoods[key]
-            })
-            res.status(200).json(neighborhoodArray)
-        })
-})
-
 router.get('/', function(req, res, next){
     Apartment.find({availability:"available"}).exec()
         .then(function(apartments){
