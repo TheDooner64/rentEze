@@ -5,15 +5,15 @@
         <h2>Your application has been submitted!</h2>
     </div>
 
-    <div ng-show="isLoading" class="col-md-offset-3 col-md-6">
+    <div ng-show="isLoading" class="col-md-offset-3 col-md-6 text-center">
         <loader></loader>
         <h4>{{ currentMessage }}</h4>
     </div>
 
     <div id="checkout" class="row" ng-show="!isLoading && !showFinalPage">
 
-        <div class="col-md-6">
-            <h2>Application form</h2>
+        <div class="col-md-offset-1 col-md-4">
+            <h2>Rent this apartment</h2>
 
             <form id="checkout-form" name="checkoutForm" ng-submit="checkoutForm.$valid && sendCheckout(checkout)">
 
@@ -37,7 +37,7 @@
                 </div>
 
                 <br>
-                <h4>Employment</h4>
+                <h4>Employment Info</h4>
                 <div class="form-group">
                     <label>Occupation</label>
                     <input type="text" ng-model="checkout.occupation" class="form-control" id="occupation">
@@ -52,7 +52,7 @@
                 </div>
 
                 <br>
-                <h4>Residence</h4>
+                <h4>Residence Info</h4>
                 <div class="form-group">
                     <label>Current Address</label>
                     <input type="text" ng-model="checkout.currentAddress" class="form-control" id="currentAddress">
@@ -66,21 +66,22 @@
                     <input type="tel" ng-model="checkout.landlordPhoneNumber" class="form-control" id="landlordPhoneNumber">
                 </div>
 
-                <button type="submit" class="btn btn-default" id="submit-button" ng-disabled="checkoutForm.$invalid">Submit</button>
+                <button type="submit" class="btn btn-default btn-block" id="submit-button" ng-disabled="checkoutForm.$invalid">Submit</button>
             </form>
+            <div class="big-spacer"></div>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-offset-2 col-md-4">
             <div class="checkout-summary">
-                <h2>Apartment Summary</h2>
-                <div class="spacer"></div>
+                <h3>You're applying for…</h3>
+
                 <div class="apt-img">
                     <img ng-src="{{ apartment.pictureUrls[0] }}">
                 </div>
                 <div class="apt-details">
                     <h4>{{ apartment.title }}</h4>
                     <!-- Need to fix this later with new method to grab title? -->
-                    <p class="detail-title">Address</p>
+                    <p class="detail-title tiny-sc">Address</p>
                     <span class="address">{{ apartment.streetAddress }}</span>
                     <br>
                     <div ng-show="apartment.aptNum"><span class="address">Apt {{ apartment.aptNum }}</span>
@@ -88,20 +89,31 @@
                     </div>
                     <span class="address">{{ apartment.city }}, {{ apartment.state }} {{ apartment.zipCode }}</span>
 
-                    <p class="detail-title">Monthly Rent</p>
+                    <hr>
+
+                    <p class="detail-title tiny-sc">Monthly Rent</p>
                     <span class="rent">{{ apartment.monthlyPrice | currency }}</span>
 
-                    <p class="detail-title">Number of Bedrooms</p>
+                    <hr>
+
+                    <p class="detail-title tiny-sc">Number of Bedrooms</p>
                     <span class="num-bedrooms">{{ apartment.numBedrooms }}</span>
 
-                    <p class="detail-title">Number of Bathrooms</p>
+                    <hr>
+
+                    <p class="detail-title tiny-sc">Number of Bathrooms</p>
                     <span class="num-bathrooms">{{ apartment.numBathrooms }}</span>
 
-                    <p class="detail-title">Square Footage</p>
+                    <hr>
+
+                    <p class="detail-title tiny-sc">Square Footage</p>
                     <span class="num-bathrooms">{{ apartment.squareFootage }} sq. feet</span>
 
-                    <p class="detail-title">Term of Lease</p>
+                    <hr>
+
+                    <p class="detail-title tiny-sc">Term of Lease</p>
                     <span class="term-of-lease">{{ apartment.termOfLease }}</span>
+                    <hr>
                 </div>
             </div>
         </div>
