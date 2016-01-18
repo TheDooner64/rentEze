@@ -64,6 +64,9 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
                 }).then(null, console.error);
         } else {
             var allCurrentFavorites = localStorageService.get('favorites');
+            var aptToSendToDb = {
+                apartment: apartment
+            };
             // If there are no favorites saved yet
             // The second condition here (checking if allCurrentFavorites[0] contains null
             // is just for weird buggy behavior that happens from time to time)
@@ -83,9 +86,6 @@ app.factory('FavoritesFactory', function($http, AuthService, localStorageService
                 } else {
                     console.log("Nope, it hasn't already been saved. I'll save it now!");
                     // Set up the apartment object so we're sending the correctly formatted apartment
-                    var aptToSendToDb = {
-                        apartment: apartment
-                    };
                     // Add the current apartment to that object, if that apartment isn't already in the favorites
                     allCurrentFavorites.push(aptToSendToDb);
                     // Re-set that object on localStorage
