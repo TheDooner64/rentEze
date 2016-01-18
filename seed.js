@@ -29,9 +29,9 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 80;
-var numUsers = 50;
-var numReviews = 100;
+var numApts = 8;
+var numUsers = 5;
+var numReviews = 10;
 var userIds;
 var aptIds;
 
@@ -54,7 +54,7 @@ var randApt = function() {
 
     var termOfLease = ["1 month", "3 months", "3 months", "3 months", "6 months", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "1 year", "2 years"];
     var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latLong + '&key=' + apiKey;
-    var availability = ["available", "available", "available", "available", "available", "unavailable", "unavailable", "pending"];
+    var availability = ["available", "available", "available", "available", "available", "available", "unavailable", "pending"];
     var pictureUrls = require("./seedInfo/imageurls.js").imageUrls;
 
     return rp(url)
@@ -88,13 +88,13 @@ var randApt = function() {
             var neighborhood = addressComponents.filter(function(component) {
                 return component.types.indexOf('neighborhood') > -1
             })[0];
-
+            console.log(neighborhood, latLong)
             return {
                 streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
                 city: city.long_name,
                 state: state.long_name,
                 zipCode: zip.long_name,
-                neighborhood: neighborhood.long_name,
+                neighborhoodString: neighborhood.long_name,
                 title: numBed + "  Bed" + adjectives[chance.integer({
                     min: 0,
                     max: adjectives.length - 1
@@ -134,10 +134,8 @@ var randApt = function() {
 
 var seedApartments = function() {
     var aptPromises = _.times(numApts, randApt)
-        // console.log(aptPromises);
     return Promise.all(aptPromises)
         .then(function(apartmentArray) {
-            // console.log(apartmentArray);
             return Apartment.createAsync(apartmentArray);
         }).then(null, console.log)
 }
@@ -180,40 +178,33 @@ var seedUsers = function() {
 
 var randReview = function() {
     return {
-        reviewTitle: chance.sentence({
+        title: chance.sentence({
             words: 4
         }),
-        reviewContent: chance.paragraph(),
+        content: chance.paragraph(),
         rating: chance.integer({
             min: 1,
             max: 5
         }),
-        aptId: aptIds[chance.integer({
+        apartment: aptIds[chance.integer({
             min: 0,
             max: aptIds.length - 1
         })],
-        reviewerId: userIds[chance.integer({
+        reviewer: userIds[chance.integer({
             min: 0,
             max: userIds.length - 1
         })],
     }
 }
 
-
-
 var seedReviews = function() {
     return Review.createAsync(_.times(numReviews, randReview));
 }
 
 connectToDb.then(function() {
-    User.findAsync({}).then(function(users) {
-            // if (users.length === 0) {
-            return seedUsers();
-            // } else {
-            //     console.log(chalk.magenta('Seems to already be user data, exiting!'));
-            //     process.kill(0);
-            // }
-        }).then(function(createdUsers) {
+
+    seedUsers()
+        .then(function(createdUsers) {
             userIds = createdUsers.map(function(user) {
                 return user._id
             });

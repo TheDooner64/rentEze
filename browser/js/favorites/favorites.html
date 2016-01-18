@@ -13,9 +13,11 @@
                 <span class="num bathrooms">{{ favorite.apartment.numBathrooms }} bathrooms</span><br>
                 <span class="favorite-price">{{ favorite.apartment.monthlyPrice | currency }}/month</span><br>
                 <button id="available" class="btn btn-primary btn-md" ng-show="favorite.apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+                <button id="pending" class="btn btn-primary btn-md" ng-show="favorite.apartment.availability === 'pending'"><i class="glyphicon glyphicon-minus-sign"></i> Pending</button>
+                <button id="unavailable" class="btn btn-primary btn-md" ng-show="favorite.apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-ban-circle"></i> Unavailable</button>
             </div>
             <div class="favorite-actions pull-right">
-                <button class="btn pull-right">Rent this apartment</button><br>
+                <button class="btn pull-right" ng-disabled="favorite.apartment.availability === 'pending' || favorite.apartment.availability === 'unavailable'" ui-sref="checkout({aptId: favorite.apartment._id})">Rent this apartment</button><br>
                 <button class="btn remove-favorite pull-right" ng-click="removeFavorite(favorite)"><i class="glyphicon glyphicon-remove"></i> Remove from favorites</button>
             </div>
         </div>

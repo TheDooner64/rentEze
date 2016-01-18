@@ -45,9 +45,4 @@ app.controller('FavoritesCtrl', function($scope, FavoritesFactory, localStorageS
         }
     }
 
-    // console.log("Here's what's on the $scope.favorites…");
-    // console.log($scope.favorites);
-    // console.log("Here's what's on the localStorage 'favorites' key…");
-    // console.log(localStorageService.get('favorites'));
-
 });

@@ -3,12 +3,12 @@ var mongoose = require('mongoose');
 
 
 var schema = new mongoose.Schema({
-    aptId: {
+    apartment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Apartment',
         required: true
     },
-    buyerId: {
+    buyer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -17,6 +17,10 @@ var schema = new mongoose.Schema({
     },
     dateSold: {
         type: Date
+    },
+    status:{
+        // "created", "processing", "cancelled", "completed"
+        type: String
     }
 });
 

@@ -2,18 +2,18 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-    aptId: {
+    apartment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Apartment'
     },
-    reviewerId: {
+    reviewer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    reviewTitle: {
+    title: {
         type: String
     },
-    reviewContent: {
+    content: {
         type: String,
         required: true
     },

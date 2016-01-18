@@ -51,7 +51,7 @@
             <div class="list-apartment">
                 <button id="close-panel" ng-click="closeApartmentSelectPanel()">x<span class="tiny-sc">Close</span></button>
                 <div class="clearfix">
-                    <h2 class="pull-left">{{displayTitle()}}</h2>
+                    <h2 class="pull-left">{{ apartment.title }}</h2>
                 </div>
                 <div class="clearfix">
                     <div class="address pull-left">
@@ -62,7 +62,8 @@
                         <div class="action-buttons">
                             <button id="add-to-favorites" class="btn btn-primary btn-md" ng-click="addToFavorites()"><i class="glyphicon glyphicon-star"></i> Favorite</button>
                             <button id="available" class="btn btn-primary btn-md" ng-show="apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
-                            <button id="unavailable" class="btn btn-primary btn-md" ng-show="apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-remove-circle"></i> Unavailable now</button>
+                            <button id="pending" class="btn btn-primary btn-md" ng-show="apartment.availability === 'pending'"><i class="glyphicon glyphicon-minus-sign"></i> Pending</button>
+                            <button id="unavailable" class="btn btn-primary btn-md" ng-show="apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-ban-circle"></i> Unavailable</button>
                         </div>
                     </div>
                     <div class="rent pull-right">
@@ -92,7 +93,7 @@
                     <div class="apt-info">
                         <span class="tiny-sc">Star Rating</span>
                         <br>
-                        <span class="medium-stat">4.2</span>
+                        <span class="medium-stat">{{apartment.rating}}</span>
                     </div>
                 </div>
                 <div class="pictures">
@@ -144,13 +145,13 @@
 
                     <div class="review well" ng-repeat="review in reviews">
                         <div class="review-info clearfix">
-                            <h6 class="review-title pull-left">{{review.reviewTitle}}</h6>
-                            <span class="tiny-sc pull-right">by {{review.reviewerId.email}}</span>
+                            <h6 class="review-title pull-left">{{review.title}}</h6>
+                            <span class="tiny-sc pull-right">by {{review.reviewer.email}}</span>
                         </div>
                         <div class="review-stars">
                             <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating"></uib-rating>
                         </div>
-                        <p class="review-content">{{review.reviewContent}}</p>
+                        <p class="review-content">{{review.content}}</p>
                     </div>
                 </div>
             </div>

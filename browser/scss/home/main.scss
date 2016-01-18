@@ -1,3 +1,5 @@
+@import '../variables';
+
 #home {
     h1 {
         margin-top: 40px;
@@ -19,12 +21,29 @@
             margin-top: 125px;
         }
 
-        input {
-            height: 54px;
+        button {
             font-size: 24px;
+            &:active, &:focus {
+                background: $bright-robin-egg-blue;
+            }
         }
 
-        button {
+        oi-select .select-search {
+            border: 0;
+            height: 52px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            padding-top: 4px;
+            padding-left: 5px;
+        }
+
+        oi-select .select-search input {
+            font-size: 24px;
+            line-height: 1.3333333;
+        }
+
+        oi-select:not(.multiple) .select-search-list-item_selection {
+            padding-top: 0px;
             font-size: 24px;
         }
     }

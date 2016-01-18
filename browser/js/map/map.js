@@ -1,15 +1,15 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('map', {
-        url: '/map/:query',
+        url: '/map/:lat/:lng',
         templateUrl: 'js/map/map.html',
         controller: 'MapCtrl',
         resolve: {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
             },
-            center: function(MapFactory, $stateParams) {
-                return MapFactory.findCenter($stateParams.query)
+            center: function($stateParams) {
+                return {lat:$stateParams.lat, lng:$stateParams.lng}
             }
         }
     });
@@ -52,31 +52,36 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.currentMarkers = [];
 
     // Function to add a marker to the map
+    function changeSelectedMarker(marker) {
+        if ($scope.currentMarker)
+            $scope.currentMarker.setIcon("/assets/images/home.png")
+        $scope.currentMarker = marker;
+        $scope.currentMarker.setIcon("/assets/images/star-3.png");
+    }
+
     var addMarkerToMap = function(apartment) {
 
-        if (apartment.latLong) {
-
-            var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
-                icon: "/assets/images/home.png"
-            });
+            if (apartment.latLong) {
+                var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
+                    icon: "/assets/images/home.png"
+                });
 
             // Add the apartment id to the marker object
-            createdMapMarker.apartmentId = apartment._id;
+                createdMapMarker.apartmentId = apartment._id;
 
             // Add click event to marker
-            // createdMapMarker.addListener("click", $scope.selectApartment);
-            createdMapMarker.addListener("click", function() {
-                $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
-                    .then(function(results) {
-                        console.log("results");
-                        $scope.reviews = results[1];
-                        console.log($scope.reviews);
-                        $scope.selectApartment(results[0]);
-                    }).then(null, console.log)
-            });
+                createdMapMarker.addListener("click", function() {
+                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
+                        .then(function(results) {
+                            $scope.reviews = results[1];
+                            $scope.selectApartment(results[0]);
+                            changeSelectedMarker(createdMapMarker);
+                        }).then(null, console.log)
+                });
+                $scope.currentMarkers.push(createdMapMarker);
 
-            $scope.currentMarkers.push(createdMapMarker);
-        }
+
+            }
     }
 
     // Adds all apartments to the map on initial page load
@@ -148,7 +153,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     }
 
     $scope.addReview = function() {
-        $scope.review.aptId = $scope.apartment._id
+        $scope.review.apartment = $scope.apartment._id
         ReviewFactory.addReview($scope.newReview)
             .then(function(addedReview) {
                 $scope.isCollapsed = true;
@@ -163,15 +168,18 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         return $scope.reviews.length;
     };
 
-    $scope.displayTitle = function() {
-        if (!$scope.apartment) return;
-        var title = $scope.apartment.title.split(" ");
-        if (parseInt(title[0]) === 0) {
-            title.shift();
-            title[0] = "Studio";
-        }
-        return title.join(" ");
-    }
+    // $scope.displayTitle = function() {
+    //     if (!$scope.apartment) return;
+    //     var title = $scope.apartment.title.split(" ");
+    //     if (parseInt(title[0]) === 0) {
+    //         title.shift();
+    //         title.shift();
+    //         var spotForAdj = title.indexOf("Apartment")
+    //         title.splice(spotForAdj,0, "Studio");
+    //         title[0] = "Studio";
+    //     }
+    //     return title.join(" ");
+    // }
 
     $scope.addToFavorites = function() {
         FavoritesFactory.addFavorite($scope.apartment);

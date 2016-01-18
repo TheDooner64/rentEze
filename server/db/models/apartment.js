@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Review = mongoose.model('Review');
+var Neighborhood = mongoose.model('Neighborhood');
 var rp = require('request-promise');
 
 var latLongSchema = new mongoose.Schema({
@@ -47,7 +48,8 @@ var schema = new mongoose.Schema({
         ref: "User"
     },
     neighborhood: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Neighborhood'
     }, //TODO we expect to remove the neighborhood model
     numBedrooms: {
         type: Number
@@ -65,6 +67,9 @@ var schema = new mongoose.Schema({
         type: String
     },
     availability: {
+        type: String
+    },
+    neighborhoodString :{
         type: String
     }
     // },
@@ -104,10 +109,22 @@ schema.pre('save', function(next) {
 
 });
 
-// NOTE: Need to change averageRating to a method
-schema.virtuals.averageRating = function() {
+schema.pre('validate', function(next){
     var apartment = this;
-    Review.find({
+    console.log(apartment)
+    if (!apartment.neighborhoodString) next();
+    Neighborhood.findOrCreate({name:apartment.neighborhoodString})
+        .then(function(neighborhood){
+            apartment.neighborhood = neighborhood._id;
+            console.log(apartment)
+            next();
+        }).then(null, console.log);
+})
+
+// NOTE: Need to change averageRating to a method
+schema.methods.averageRating = function() {
+    var apartment = this;
+    return Review.find({
             aptId: apartment._id
         }).exec()
         .then(function(reviews) {
