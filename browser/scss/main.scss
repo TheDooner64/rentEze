@@ -24,6 +24,10 @@ body {
     margin-top: 30px;
 }
 
+.big-spacer {
+    margin-top: 60px;
+}
+
 
 /* Font styles */
 
@@ -40,6 +44,12 @@ p,
 span {
     font-family: $paragraph-font-stack;
     color: $deep-brown;
+}
+
+a {
+    &:visited {
+        text-decoration: none;
+    }
 }
 
 .tiny-sc {
@@ -61,6 +71,10 @@ button {
         &:hover {
             background: lighten($bright-robin-egg-blue, 10%);
         }
+    }
+    &#available {
+        color: green;
+        background: none;
     }
 }
 

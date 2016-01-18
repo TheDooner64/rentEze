@@ -5,6 +5,9 @@ module.exports = router;
 // /api/members
 router.use('/members', require('./members'));
 
+// /api/users
+router.use('/users', require('./users'));
+
 // /api/members
 router.use('/apartments', require('./apartments'));
 

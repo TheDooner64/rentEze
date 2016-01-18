@@ -25,7 +25,7 @@ router.get('/', function(req, res, next){
         .then(function(apartments){
             res.json(apartments);
         }).then(null, function(err){
-            throw new Error("Something went wrong when finding apartments!");
+            err.message = "Something went wrong when finding apartments!";
             next(err);
         })
 })
@@ -50,7 +50,7 @@ router.post('/filter', function(req, res, next) {
             console.log("Apt found in DB: ", apartments);
             res.status(200).json(apartments);
         }).then(null, function(err) {
-            throw new Error("Something went wrong when finding apartments!");
+            err.message = "Something went wrong when filtering apartments!";
             next(err);
         });
 });
@@ -62,7 +62,7 @@ router.post('/', function(req, res, next) {
         .then(function(apartment) {
             res.status(201).json(apartment);
         }).then(null, function(err) {
-            throw new Error("Apartment was not created!");
+            err.message = "Apartment was not created!";
             next(err);
         });
 });
@@ -74,7 +74,7 @@ router.get("/:aptId", function(req, res, next){
     .then(function(apartment){
         res.status(200).json(apartment);
     }).then(null, function(err) {
-            throw new Error("Apartment was not successfully saved :(");
+            err.message = "Apartment was not successfully found";
             next(err);
         });
 });
@@ -92,7 +92,7 @@ router.put('/:aptId', function(req, res, next) {
         }).then(function(savedApt) {
             res.status(200).json(savedApt);
         }).then(null, function(err) {
-            throw new Error("Apartment was not successfully saved :(");
+            err.message = "Apartment was not successfully saved";
             next(err);
         });
 });

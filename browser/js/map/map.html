@@ -18,12 +18,12 @@
 
                 <div class="form-group">
                     <label>Rent</label>
-                    <input type="text" class="form-control" ng-model="filterCriteria.monthlyPriceMin" placeholder="Min">
+                    <input type="number" class="form-control" ng-model="filterCriteria.monthlyPriceMin" placeholder="Min">
                 </div>
 
                 <div class="form-group">
                     <label>to</label>
-                    <input type="text" class="form-control" ng-model="filterCriteria.monthlyPriceMax" placeholder="Max">
+                    <input type="number" class="form-control" ng-model="filterCriteria.monthlyPriceMax" placeholder="Max">
                 </div>
 
                 <div class="form-group">
@@ -51,22 +51,26 @@
             <div class="list-apartment">
                 <button id="close-panel" ng-click="closeApartmentSelectPanel()">x<span class="tiny-sc">Close</span></button>
                 <div class="clearfix">
-                    <h2 class="pull-left">{{displayTitle()}} <span class="availability-label label label-success">Available</span></h2>
-                    <div class="monthly-rent apt-info pull-right">
-                        <span class="tiny-sc">Monthly Rent</span>
-                        <br>
-                        <span class="big-price">$ {{apartment.monthlyPrice}}</span>
-                    </div>
+                    <h2 class="pull-left">{{displayTitle()}}</h2>
                 </div>
                 <div class="clearfix">
                     <div class="address pull-left">
-                        <span class="tiny-sc">{{apartment.streetAddress}}</span>
+                        <span class="address">{{apartment.streetAddress}}</span>
                         <br>
-                        <span class="tiny-sc">New York, NY 10001</span>
+                        <span class="address">New York, NY 10001</span>
                         <br>
+                        <div class="action-buttons">
+                            <button id="add-to-favorites" class="btn btn-primary btn-md" ng-click="addToFavorites()"><i class="glyphicon glyphicon-star"></i> Favorite</button>
+                            <button id="available" class="btn btn-primary btn-md" ng-show="apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+                            <button id="unavailable" class="btn btn-primary btn-md" ng-show="apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-remove-circle"></i> Unavailable now</button>
+                        </div>
                     </div>
-                    <div class="favorite pull-right">
-                        <button class="btn btn-primary btn-md"><i class="glyphicon glyphicon-star"></i> Add to favorites</button>
+                    <div class="rent pull-right">
+                        <div class="monthly-rent apt-info">
+                            <span class="tiny-sc">Monthly Rent</span>
+                            <br>
+                            <span class="big-price">$ {{apartment.monthlyPrice}}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="stats">
@@ -101,7 +105,7 @@
                 </div>
                 <div class="spacer"></div>
                 <div class="landlord">
-                    <a herf="#"><h5>Contact Landlord</h5></a>
+                    <a href="#"><h5>Contact Landlord</h5></a>
                 </div>
                 <div class="spacer"></div>
                 <div class="reviews">
@@ -139,9 +143,12 @@
 
 
                     <div class="review well" ng-repeat="review in reviews">
-                        <div class="clearfix">
+                        <div class="review-info clearfix">
                             <h6 class="review-title pull-left">{{review.reviewTitle}}</h6>
                             <span class="tiny-sc pull-right">by {{review.reviewerId.email}}</span>
+                        </div>
+                        <div class="review-stars">
+                            <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating"></uib-rating>
                         </div>
                         <p class="review-content">{{review.reviewContent}}</p>
                     </div>

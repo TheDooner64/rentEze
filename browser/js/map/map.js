@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
             apartments: function(ApartmentFactory) {
                 return ApartmentFactory.getAllApartments();
             },
-            center: function(MapFactory, $stateParams){
+            center: function(MapFactory, $stateParams) {
                 return MapFactory.findCenter($stateParams.query)
             }
         }
@@ -16,12 +16,12 @@ app.config(function($stateProvider) {
 
 });
 
-
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, ApartmentFactory, apartments, center, $q) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, center, $q, localStorageService) {
     $scope.center = center;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
+
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -48,14 +48,103 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.apartmentIsSelected = false;
     $scope.reviews;
 
-
-    // Place to store all of the currentMarkers, in case we need it
+    // This holds all of the current markers on the map
     $scope.currentMarkers = [];
+
+    // Function to add a marker to the map
+    function changeSelectedMarker(marker) {
+        if ($scope.currentMarker)
+            $scope.currentMarker.setIcon("/assets/images/home.png")
+        $scope.currentMarker = marker;
+        $scope.currentMarker.setIcon("/assets/images/star-3.png");
+    }
+
+    var addMarkerToMap = function(apartment) {
+
+            if (apartment.latLong) {
+                var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
+                    icon: "/assets/images/home.png"
+                });
+
+            // Add the apartment id to the marker object
+                createdMapMarker.apartmentId = apartment._id;
+
+            // Add click event to marker
+                createdMapMarker.addListener("click", function() {
+                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
+                        .then(function(results) {
+                            $scope.reviews = results[1];
+                            $scope.selectApartment(results[0]);
+                            changeSelectedMarker(createdMapMarker);
+                        }).then(null, console.log)
+                });
+                $scope.currentMarkers.push(createdMapMarker);
+
+
+            }
+    }
+
+    // Adds all apartments to the map on initial page load
+    $scope.apartments.forEach(function(apartment) {
+        addMarkerToMap(apartment);
+    });
+
+    // Function to check all filter criteria
+    var checkAllCriteria = function(apartmentToCheck) {
+
+        // Helper functions to check each criteria
+        var checkBedrooms = function() {
+            if (!$scope.filterCriteria.numBedrooms) return true;
+            if ($scope.filterCriteria.numBedrooms.val === apartmentToCheck.numBedrooms) return true;
+            return false;
+        }
+
+        var checkRent = function() {
+            var minRent = $scope.filterCriteria.monthlyPriceMin ? $scope.filterCriteria.monthlyPriceMin : 0;
+            var maxRent = $scope.filterCriteria.monthlyPriceMax ? $scope.filterCriteria.monthlyPriceMax : 1000000000;
+
+            if (apartmentToCheck.monthlyPrice >= minRent && apartmentToCheck.monthlyPrice <= maxRent) return true;
+            return false;
+        }
+
+        var checkTerm = function() {
+            if (!$scope.filterCriteria.termOfLease) return true;
+            if ($scope.filterCriteria.termOfLease === apartmentToCheck.termOfLease) return true;
+            return false;
+        }
+
+        // NOTE: Rating currently doesn't work
+        // var checkRating = function() {
+        //     if (!$scope.filterCriteria.averageRating) return true;
+        //     if (apartmentToCheck.averageRating >= $scope.filterCriteria.averageRating - 0.5) return true;
+        //     return false;
+        // }
+
+        if (!checkBedrooms()) return false;
+        if (!checkRent()) return false;
+        if (!checkTerm()) return false;
+        // if (!checkRating()) return false;
+
+        return true;
+    }
+
+    // Filter results based on the criteria the users submits
+    $scope.filterResults = function() {
+        // Reset all of the map markers. Not sure if there's a better way to do this
+        $scope.currentMarkers.forEach(function(mapMarker) {
+            mapMarker.setMap(null);
+        });
+        $scope.currentMarkers = [];
+
+        // Loop over each apartment and check if a marker should be added
+        $scope.apartments.forEach(function(apartmentToCheck) {
+            if (checkAllCriteria(apartmentToCheck)) addMarkerToMap(apartmentToCheck);
+        });
+    }
 
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
-        console.log(apartment)
-        $scope.apartment=apartment;
+        $scope.apartment = apartment;
     }
 
     $scope.closeApartmentSelectPanel = function() {
@@ -63,78 +152,37 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         $scope.reviews = null;
     }
 
-    // Function to add the markers to the map
-    var addMarkersToMap = function(apartments) {
-        apartments.forEach(function(apartment) {
-            if (apartment.latLong) {
-                var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
-                    icon: "/assets/images/home.png"
-                });
-                createdMapMarker.apartmentId = apartment._id;
-
-                // Add click event to marker
-                // createdMapMarker.addListener("click", $scope.selectApartment);
-                createdMapMarker.addListener("click", function(){
-                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
-                    .then(function(results){
-                        console.log("results")
-                        $scope.reviews = results[1];
-                        console.log($scope.reviews)
-                        $scope.selectApartment(results[0]);
-                    }).then(null, console.log)
-                });
-
-                $scope.currentMarkers.push(createdMapMarker);
-            }
-        });
-    }
-
-    var removeHalf = function() {
-        for (var i = 0; i < $scope.currentMarkers.length; i++) {
-            if (i < $scope.currentMarkers.length / 2) {
-                $scope.currentMarkers[i].setMap(null);
-            }
-        }
-    }
-
-    $scope.filterResults = function() {
-        FilterFactory.filterResults($scope.filterCriteria)
-            .then(function(apartments) {
-                console.log("Apartments found: ", apartments);
-                var filteredIds = apartments.map(function(apartment) {
-                    return apartment._id;
-                });
-                $scope.currentMarkers.forEach(function(marker) {
-                    if (filteredIds.indexOf(marker.apartmentId) === -1) marker.setMap(null);
-                    else marker.setMap($scope.map)
-                })
-            });
-    }
-
-    addMarkersToMap($scope.apartments);
-    // Function to retrieve apartments based on user filters
-
     $scope.addReview = function() {
         $scope.review.aptId = $scope.apartment._id
         ReviewFactory.addReview($scope.newReview)
-            .then((addedReview) => {
+            .then(function(addedReview) {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
                 $scope.$digest();
             });
     };
-    $scope.getNumReviews = function(){
+
+    $scope.getNumReviews = function() {
         if (!$scope.reviews) return;
-        if ($scope.reviews.length < 1) return "No Reviews for this Address";
-        return $scope.reviews.length
-    }
-    $scope.displayTitle = function(){
+        if ($scope.reviews.length < 1) return "No Reviews";
+        return $scope.reviews.length;
+    };
+
+    $scope.displayTitle = function() {
         if (!$scope.apartment) return;
         var title = $scope.apartment.title.split(" ");
-        if (parseInt(title[0])===0) {
+        if (parseInt(title[0]) === 0) {
             title.shift();
-            title[0]="Studio";
+            title.shift();
+            var spotForAdj = title.indexOf("Apartment")
+            title.splice(spotForAdj,0, "Studio");
+            title[0] = "Studio";
         }
         return title.join(" ");
     }
+
+    $scope.addToFavorites = function() {
+        FavoritesFactory.addFavorite($scope.apartment);
+    };
+
 });

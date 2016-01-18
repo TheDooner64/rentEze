@@ -39,14 +39,44 @@
             font-size: 20px;
             margin-top: 5px;
             position: relative;
+            z-index: 3000000;
             .tiny-sc {
                 color: $ivory;
                 vertical-align: middle;
                 margin-left: 10px;
             }
         }
+        .action-buttons {
+            margin-top: 15px;
+            button {
+                margin-right: 3px;
+                &#unavailable {
+                    color: red;
+                    background: none;
+                }
+                &#add-to-favorites {
+                    &:hover {
+                        color: black;
+                    }
+                    &:focus {
+                        background-color: $bright-robin-egg-blue;
+                        color: black;
+                    }
+                    &:visited {
+                        background-color: $bright-robin-egg-blue;
+                        color: black;
+                    }
+                }
+            }
+        }
         .monthly-rent {
             margin-top: 12px;
+            &.apt-info {
+                padding: 10px;
+                border: 1px solid $light-grey;
+                border-radius: 5px;
+                width: 125px;
+            }
         }
         span.availability-label {
             vertical-align: top;
@@ -84,7 +114,7 @@
                 width: 100%;
             }
         }
-        .reviews {
+        .review {
             h5 {
                 span {
                     margin-left: 5px;
@@ -93,6 +123,10 @@
             }
             h6.review-title {
                 margin-top: 0px;
+                margin-bottom: 5px;
+            }
+            .review-stars {
+                margin-bottom: 10px;
             }
         }
         .add-review-well {
