@@ -17,7 +17,8 @@ app.controller('HomeCtrl', function($scope, localStorageService, $state, neighbo
         console.log($scope.query);
         $state.go('map', {
             lat: $scope.query.latLong.lat,
-            lng: $scope.query.latLong.lng
+            lng: $scope.query.latLong.lng,
+            neighborhood:$scope.query.name
         });
     }
 
