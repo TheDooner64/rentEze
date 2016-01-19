@@ -13,7 +13,6 @@ app.config(function($stateProvider) {
             }
         }
     });
-
 });
 
 app.controller('CheckoutCtrl', function($scope, loggedInUser, CheckoutFactory, selectedApt) {
@@ -25,8 +24,6 @@ app.controller('CheckoutCtrl', function($scope, loggedInUser, CheckoutFactory, s
     var prepareApplication = function() {
         $scope.messages.forEach(function(message, index) {
             setTimeout(function() {
-                console.log("index", index);
-                console.log("message", message);
                 $scope.currentMessage = message;
                 $scope.$apply();
                 if (index === 3) {
@@ -43,5 +40,4 @@ app.controller('CheckoutCtrl', function($scope, loggedInUser, CheckoutFactory, s
         prepareApplication();
         CheckoutFactory.sendCheckout(checkoutInfo, $scope.apartment);
     };
-
 });
