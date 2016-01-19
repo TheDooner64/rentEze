@@ -31,5 +31,9 @@ app.factory('AdminFactory', function($http){
             }).then(null, console.error);
     };
 
+    AdminFactory.resetPassword = function(userToReset) {
+        return $http.post('/api/users/' + userToReset + '/reset');
+    }
+
     return AdminFactory;
 });

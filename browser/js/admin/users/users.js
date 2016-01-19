@@ -42,4 +42,8 @@ app.controller('AdminUserCtrl', function ($scope, AuthService, $state, users, Ad
             }).then(null, console.error);
     };
 
+    $scope.resetPassword = function(user) {
+        AdminFactory.resetPassword(user._id);
+    }
+
 });
