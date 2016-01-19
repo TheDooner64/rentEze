@@ -1,13 +1,7 @@
-app.factory('CheckoutFactory', function($http, AuthService) {
+app.factory('CheckoutFactory', function($http, AuthService, localStorageService) {
     var CheckoutFactory = {};
 
-    var sendConfirmationEmail = function() {
-
-    };
-
     CheckoutFactory.sendCheckout = function(checkoutInfo, apartment) {
-
-        var checkoutInfoForMailer = checkoutInfo;
 
         if (AuthService.isAuthenticated()) {
             return AuthService.getLoggedInUser()
@@ -20,11 +14,14 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                         status: "processing"
                     };
                     return $http.post('/api/orders/', orderToSendToDb);
-                }).then(function(savedOrder) {
+                }).then(function(response) {
+                    var savedOrder = response.data;
+                    // Send confirmation e-mail for logged in user
+                    return $http.post('/api/users/' + savedOrder.buyer + '/mailer', savedOrder);
+                }).then(function(confirmationEmail) {
                     var updates = {};
                     updates.availability = "pending";
                     return $http.put('/api/apartments/' + apartment._id, updates);
-                }).then(function(savedApt) {
                 }).then(null, console.error);
         } else {
             var orderToSendToDb = {
@@ -33,13 +30,22 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                 dateSold: Date.now(),
                 status: "processing"
             };
+
+            // Update apartment in localStorage so it appears as "pending"
+            var allCurrentFavorites = localStorageService.get('favorites');
+            allCurrentFavorites.forEach(function(localApartment) {
+                if (localApartment.apartment._id === apartment._id) {
+                    localApartment.apartment.availability = "pending";
+                }
+                return localApartment;
+            });
+            localStorageService.set('favorites', allCurrentFavorites);
+
             return $http.post('/api/orders/', orderToSendToDb)
-                .then(function(savedOrder) {
+                .then(function(response) {
                     var updates = {};
                     updates.availability = "pending";
                     return $http.put('/api/apartments/' + apartment._id, updates);
-                }).then(function(savedApt) {
-                    // Mailer
                 }).then(null, console.error);
         }
     }

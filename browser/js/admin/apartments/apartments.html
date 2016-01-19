@@ -20,6 +20,8 @@
                     <span class="favorite-price">{{ apartment.monthlyPrice | currency }}/month</span><br>
                     <!-- TODO: make available an on/off switch -->
                     <button id="available" class="btn btn-primary btn-md" ng-show="apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+                <button id="pending" class="btn btn-primary btn-md" ng-show="apartment.availability === 'pending'"><i class="glyphicon glyphicon-minus-sign"></i> Pending</button>
+                <button id="unavailable" class="btn btn-primary btn-md" ng-show="apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-ban-circle"></i> Unavailable</button>
                 </div>
                 <div class="admin-actions pull-right">
                     <button class="btn pull-right" ng-click="editApartment(apartment)"><i class="glyphicon glyphicon-pencil"></i> Edit apartment</button>
