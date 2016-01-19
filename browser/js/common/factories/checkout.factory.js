@@ -1,4 +1,4 @@
-app.factory('CheckoutFactory', function($http, AuthService) {
+app.factory('CheckoutFactory', function($http, AuthService, localStorageService) {
     var CheckoutFactory = {};
 
     CheckoutFactory.sendCheckout = function(checkoutInfo, apartment) {
@@ -30,6 +30,17 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                 dateSold: Date.now(),
                 status: "processing"
             };
+
+            // Update apartment in localStorage so it appears as "pending"
+            var allCurrentFavorites = localStorageService.get('favorites');
+            allCurrentFavorites.forEach(function(localApartment) {
+                if (localApartment.apartment._id === apartment._id) {
+                    localApartment.apartment.availability = "pending";
+                }
+                return localApartment;
+            });
+            localStorageService.set('favorites', allCurrentFavorites);
+
             return $http.post('/api/orders/', orderToSendToDb)
                 .then(function(response) {
                     var updates = {};

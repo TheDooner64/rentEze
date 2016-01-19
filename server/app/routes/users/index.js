@@ -14,7 +14,7 @@ var mandrillClient = apiInfo.mandrillClient;
 var fs = require("fs");
 var ejs = require("ejs");
 
-// Send an e-mail confirmation
+// Route to send an e-mail confirmation
 // GET /api/users/:userId/mailer
 router.post('/:userId/mailer', function(req, res, next) {
 
@@ -69,16 +69,6 @@ router.post('/:userId/mailer', function(req, res, next) {
         });
 });
 
-// router.param('/:userId', function(req, res, next, id) {
-//     User.findOne(id).exec()
-//         .then(function(user) {
-//             console.log("Getting to the router.param, here's the user…");
-//             console.log(user);
-//             req.user = user;
-//             next();
-//         }).then(null, next);
-// });
-
 // Get all of one user's favorites
 // GET /api/users/:userId/favorites
 router.get('/:userId/favorites', function(req, res, next) {
@@ -103,7 +93,6 @@ router.post('/:userId/favorites', function(req, res, next) {
         }).then(null, next);
 });
 
-// NOTE: Not sure if we need this, but here it is, we can wipe it if we don't need it
 // Delete a favorite
 // DELETE /api/users/:userId/favorites/:favoriteId
 router.delete('/:userId/favorites/:favoriteId', function(req, res, next) {
