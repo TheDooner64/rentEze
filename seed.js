@@ -24,7 +24,7 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 8;
+var numApts = 80;
 var numUsers = 5;
 var numReviews = 10;
 var userIds;
@@ -129,10 +129,10 @@ var randApt = function() {
 
 var seedApartments = function() {
     var aptPromises = _.times(numApts, randApt)
-    return Promise.all(aptPromises)
-        .then(function(apartmentArray) {
-            return Apartment.createAsync(apartmentArray);
-        }).then(null, console.log)
+    return Promise.map(aptPromises, function(apartment){
+        return Apartment.createAsync(apartment)
+    }, {concurrency: 1})
+    .then(null, console.log)
 }
 
 var emails = chance.unique(chance.email, numUsers);
