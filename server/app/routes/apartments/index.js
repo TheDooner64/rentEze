@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
 var _ = require('lodash');
 var Promise = require('bluebird')
+
 // Retrieving all available apartments
 // POST /api/apartments
 router.get('/', function(req, res, next){
