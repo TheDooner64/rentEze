@@ -22,7 +22,6 @@ app.config(function($stateProvider) {
 app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, $q, localStorageService, $stateParams, user, favorites) {
     $scope.center = {lat:$stateParams.lat, lng:$stateParams.lng};
     $scope.neighborhood = $stateParams.neighborhood;
-    console.log(favorites)
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;

@@ -24,7 +24,7 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 8;
+var numApts = 80;
 var numUsers = 5;
 var numReviews = 10;
 var userIds;

@@ -33,7 +33,6 @@ app.factory('FilterFactory', function() {
         // }
 
         if (!checkBedrooms()) return false;
-        console.log("third")
         if (!checkRent()) return false;
         if (!checkTerm()) return false;
         // if (!checkRating()) return false;
@@ -143,7 +142,6 @@ app.factory('FilterFactory', function() {
 
     };
     FilterFactory.recommendOnFilters = function(apartments){
-        console.log("Averages: ", averages)
         var newFilterCriteria = {};
         var rawCriteriaValues = Object.keys(averages).map(function(key){
             var roundedAverage = Math.round(getWeightedAverages(averages[key]));
