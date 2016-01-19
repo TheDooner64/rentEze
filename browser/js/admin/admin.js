@@ -10,12 +10,15 @@ app.config(function ($stateProvider) {
         resolve: {
             user: function(AuthService) {
                 return AuthService.getLoggedInUser();
+            },
+            apartments: function(ApartmentFactory) {
+                return ApartmentFactory.getAllApartments();
             }
         }
     });
 
 });
 
-app.controller('AdminCtrl', function ($scope, AuthService, $state, user) {
+app.controller('AdminCtrl', function ($scope, AuthService, $state, user, apartments) {
     $scope.user = user;
 });
