@@ -1,7 +1,14 @@
 app.factory('CheckoutFactory', function($http, AuthService) {
     var CheckoutFactory = {};
 
+    var sendConfirmationEmail = function() {
+
+    };
+
     CheckoutFactory.sendCheckout = function(checkoutInfo, apartment) {
+
+        var checkoutInfoForMailer = checkoutInfo;
+
         if (AuthService.isAuthenticated()) {
             return AuthService.getLoggedInUser()
                 .then(function(user) {
@@ -14,14 +21,10 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                     };
                     return $http.post('/api/orders/', orderToSendToDb);
                 }).then(function(savedOrder) {
-                    console.log("Ok! Your order was saved!");
                     var updates = {};
                     updates.availability = "pending";
-                    console.log("Here are the updates: ", updates);
                     return $http.put('/api/apartments/' + apartment._id, updates);
                 }).then(function(savedApt) {
-                    console.log("The following apartment is no longer available on the market…");
-                    console.log(savedApt);
                 }).then(null, console.error);
         } else {
             var orderToSendToDb = {
@@ -30,16 +33,13 @@ app.factory('CheckoutFactory', function($http, AuthService) {
                 dateSold: Date.now(),
                 status: "processing"
             };
-            $http.post('/api/orders/', orderToSendToDb)
+            return $http.post('/api/orders/', orderToSendToDb)
                 .then(function(savedOrder) {
-                    console.log("Ok! Your order was saved!");
                     var updates = {};
                     updates.availability = "pending";
-                    console.log("Here are the updates: ", updates);
                     return $http.put('/api/apartments/' + apartment._id, updates);
                 }).then(function(savedApt) {
-                    console.log("The following apartment is no longer available on the market…");
-                    console.log(savedApt);
+                    // Mailer
                 }).then(null, console.error);
         }
     }

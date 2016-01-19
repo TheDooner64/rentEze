@@ -6,10 +6,10 @@ var Apartment = mongoose.model('Apartment');
 var _ = require('lodash');
 var Promise = require('bluebird')
 var promiseApartment = Promise.promisifyAll(Apartment)
-// Retrieving apartments based on criteria, which are sent in the req.body
-// POST /api/apartments/filter
+// Retrieving all available apartments
+// POST /api/apartments
 router.get('/', function(req, res, next){
-    promiseApartment.find({availability:"available"}).exec()
+    promiseApartment.find().exec()
         .then(function(apartments){
             var apartmentPromises = apartments.map(function(apartment){
                 return apartment.averageRating().
@@ -28,26 +28,39 @@ router.get('/', function(req, res, next){
             err.message = "Something went wrong when finding apartments!";
             next(err);
         })
-})
+});
 
+
+// Get a single apartment by ID
+// get /api/apartments/:aptId
+router.get("/:aptId", function(req, res, next) {
+
+    Apartment.findById(req.params.aptId)
+        .then(function(apartment) {
+            apartment.averageRating()
+                .then(function(rating) {
+                    apartment = apartment.toJSON();
+                    apartment.rating = rating;
+                    res.status(200).json(apartment);
+                }).then(null, function(err) {
+                    err.message = "Apartment was not successfully found";
+                    next(err);
+                });
+
+        }).then(null, function(err) {
+            err.message = "Apartment was not successfully found";
+            next(err);
+        });
+});
+
+// Retrieving apartments based on criteria, which are sent in the req.body
+// POST /api/apartments/filter
 router.post('/filter', function(req, res, next) {
 
-    var rawFilterCriteria = req.body;
+    var filterCriteria = req.body;
 
-    // Create MongoDB search object
-    // Need to figure out how to populate averageRating virtual field
-    var cleanFilterCriteria = {
-        monthlyPrice:{}
-    };
-
-    if (rawFilterCriteria.numBedrooms) cleanFilterCriteria.numBedrooms = rawFilterCriteria.numBedrooms.val;
-    if (rawFilterCriteria.monthlyPriceMin) cleanFilterCriteria.monthlyPrice.$gt = parseInt(rawFilterCriteria.monthlyPriceMin);
-    if (rawFilterCriteria.monthlyPriceMax) cleanFilterCriteria.monthlyPrice.$lt = parseInt(rawFilterCriteria.monthlyPriceMax);
-    if (rawFilterCriteria.termOfLease) cleanFilterCriteria.termOfLease = rawFilterCriteria.termOfLease;
-    console.log(cleanFilterCriteria)
-    Apartment.find(cleanFilterCriteria)
+    Apartment.find(filterCriteria)
         .then(function(apartments) {
-            console.log("Apt found in DB: ", apartments);
             res.status(200).json(apartments);
         }).then(null, function(err) {
             err.message = "Something went wrong when filtering apartments!";
@@ -67,36 +80,11 @@ router.post('/', function(req, res, next) {
         });
 });
 
-router.get("/:aptId", function(req, res, next){
-    Apartment.findOne({
-        _id: req.params.aptId
-    }).exec()
-    .then(function(apartment){
-        apartment.averageRating()
-        .then(function(rating){
-            apartment = apartment.toJSON();
-            apartment.rating = rating;
-            res.status(200).json(apartment);
-        }).then(null, function(err) {
-            err.message = "Apartment was not successfully found";
-            next(err);
-        });
-
-    }).then(null, function(err) {
-            err.message = "Apartment was not successfully found";
-            next(err);
-        });
-});
-
 // Updating an apartment
 // PUT /api/apartments/:aptId
 router.put('/:aptId', function(req, res, next) {
     Apartment.findById(req.params.aptId)
         .then(function(apartment) {
-            // req.body needs to be the entire apartment object
-            // console.log("Here's what the apartment looks like, before it's updated…");
-            // console.log(apartment);
-            // apartment = req.body;
             _.extend(apartment, req.body);
             return apartment.save();
         }).then(function(savedApt) {

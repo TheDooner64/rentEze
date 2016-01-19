@@ -44,6 +44,4 @@ app.controller('CheckoutCtrl', function($scope, loggedInUser, CheckoutFactory, s
         CheckoutFactory.sendCheckout(checkoutInfo, $scope.apartment);
     };
 
-
-
 });

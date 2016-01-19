@@ -6,6 +6,60 @@ var User = mongoose.model('User');
 var Favorite = mongoose.model('Favorite');
 var Order = mongoose.model('Order');
 
+// Mandrill API to send automatic e-mails
+var apiInfo = require("../../../../apiInfo.js");
+var mandrillClient = apiInfo.mandrillClient;
+
+// Send an e-mail confirmation
+// GET /api/users/:userId/mailer
+// router.post('/:userId/mailer', function(req, res, next) {
+//     var message_html = "<html>
+//   <head><meta charset='utf-8'></head>
+//   <body>
+//     <p>Hey " + req.params.userId + ",</p>
+//     <br>
+//     <p>
+//       This is to confirm your receipt application for the apartment.
+//     </p>
+//     <p>
+//       Good luck with the application, you will hear from the landlord in 1-3 days,<br>
+//       RentEze team
+//     </p>
+//   </body>
+// </html>";
+
+//     var message = {
+//       "html": message_html,
+//       "subject": "RentEze apartment application confirmation",
+//       "from_email": "Robert.Muldoon.1@gmail.com",
+//       "from_name": "RentEze team",
+//       "to": [{
+//         "email": "Robert.Muldoon.1@gmail.com",
+//         "name": req.params.userId
+//       }],
+//       "important": false,
+//       "track_opens": true,
+//       "auto_html": false,
+//       "preserve_recipients": true,
+//       "merge": false,
+//       "tags": [
+//         "RentEze"
+//       ]
+//     };
+
+//     var async = false;
+//     var ip_pool = "Main Pool";
+
+//     mandrillClient.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
+//       console.log("Result from mailer: ", result);
+//       res.status(201).send(result);
+//     }, function(err) {
+//       // Mandrill returns the error as an object with name and message keys
+//       console.log('A mandrill error occurred: ' + err.name + ' - ' + err.message);
+//       next(err);
+//     });
+// });
+
 // router.param('/:userId', function(req, res, next, id) {
 //     User.findOne(id).exec()
 //         .then(function(user) {
@@ -17,7 +71,7 @@ var Order = mongoose.model('Order');
 // });
 
 // Get all of one user's favorites
-// GET /api/users/:userId/favorites/
+// GET /api/users/:userId/favorites
 router.get('/:userId/favorites', function(req, res, next) {
     Favorite.find({ user: req.params.userId }).populate("apartment")
         .then(function(favorites) {
@@ -30,7 +84,7 @@ router.get('/:userId/favorites', function(req, res, next) {
 });
 
 // Create a favorite for a user
-// POST /api/users/:userId/favorites/
+// POST /api/users/:userId/favorites
 router.post('/:userId/favorites', function(req, res, next) {
     Favorite.findOrCreate(req.body)
     .then(function(favorite) {
