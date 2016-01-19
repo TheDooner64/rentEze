@@ -123,7 +123,7 @@ schema.pre('validate', function(next){
 schema.methods.averageRating = function() {
     var apartment = this;
     return Review.find({
-            aptId: apartment._id
+            apartment: apartment._id
         }).exec()
         .then(function(reviews) {
             if (reviews.length === 0) return null;

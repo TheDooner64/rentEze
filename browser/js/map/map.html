@@ -46,12 +46,11 @@
     </div>
 
     <div id="map-and-list-area" class="clearfix">
-
         <div id="map-list" ng-show="apartmentIsSelected">
             <div class="list-apartment">
                 <button id="close-panel" ng-click="closeApartmentSelectPanel()">x<span class="tiny-sc">Close</span></button>
                 <div class="clearfix">
-                    <h2 class="pull-left">{{ apartment.title }}</h2>
+                    <h2 class="pull-left">{{ displayTitle()}}</h2>
                 </div>
                 <div class="clearfix">
                     <div class="address pull-left">
@@ -127,7 +126,7 @@
                             <form name="addReviewForm" ng-submit="addReview()" class="clearfix">
                                 <div class="form-group">
                                     <label class="tiny-sc">Review Title</label>
-                                    <input type="text" class="form-control" ng-model="newReview.reviewTitle" required>
+                                    <input type="text" class="form-control" ng-model="newReview.title" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Choose a rating…</label><br>
@@ -135,7 +134,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Write your review below…</label>
-                                    <textarea class="form-control" ng-model="newReview.reviewContent" rows="4" required></textarea>
+                                    <textarea class="form-control" ng-model="newReview.content" rows="4" required></textarea>
                                 </div>
                                 <button type="submit" ng-disabled="addReviewForm.$invalid" class="post-review-btn btn pull-right">Post your review</button>
                             </form>
@@ -149,11 +148,76 @@
                             <span class="tiny-sc pull-right">by {{review.reviewer.email}}</span>
                         </div>
                         <div class="review-stars">
-                            <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating"></uib-rating>
+                            <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating">{{displayStars()}}</uib-rating>
                         </div>
                         <p class="review-content">{{review.content}}</p>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Recommended apartments show when no apartments are selected -->
+        <div id="map-list" ng-hide="apartmentIsSelected">
+            <div class="clearfix">
+                <h5 class="pull-left">Recommened Apartments</h5>
+            </div>
+            <div class="list-apartment" ng-repeat="apartment in recommended">
+                <div class="clearfix">
+                    <h2 class="pull-left">{{ apartment.title }}</h2>
+                </div>
+                <div class="clearfix">
+                    <div class="address pull-left">
+                        <span class="address">{{apartment.streetAddress}}</span>
+                        <br>
+                        <span class="address">New York, NY 10001</span>
+                        <br>
+                        <div class="action-buttons">
+                            <button id="add-to-favorites" class="btn btn-primary btn-md" ng-click="addToFavorites()"><i class="glyphicon glyphicon-star"></i> Favorite</button>
+                            <button id="available" class="btn btn-primary btn-md" ng-show="apartment.availability === 'available'"><i class="glyphicon glyphicon-ok-circle"></i> Available now</button>
+                            <button id="pending" class="btn btn-primary btn-md" ng-show="apartment.availability === 'pending'"><i class="glyphicon glyphicon-minus-sign"></i> Pending</button>
+                            <button id="unavailable" class="btn btn-primary btn-md" ng-show="apartment.availability === 'unavailable'"><i class="glyphicon glyphicon-ban-circle"></i> Unavailable</button>
+                        </div>
+                    </div>
+                    <div class="rent pull-right">
+                        <div class="monthly-rent apt-info">
+                            <span class="tiny-sc">Monthly Rent</span>
+                            <br>
+                            <span class="big-price">$ {{apartment.monthlyPrice}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="apt-info">
+                        <span class="tiny-sc">Bedrooms</span>
+                        <br>
+                        <span class="medium-stat">{{apartment.numBedrooms}}</span>
+                    </div>
+                    <div class="apt-info">
+                        <span class="tiny-sc">Bathrooms</span>
+                        <br>
+                        <span class="medium-stat">{{apartment.numBathrooms}}</span>
+                    </div>
+                    <div class="apt-info">
+                        <span class="tiny-sc">Square Footage</span>
+                        <br>
+                        <span class="medium-stat">{{apartment.squareFootage}}</span>
+                    </div>
+                    <div class="apt-info">
+                        <span class="tiny-sc">Star Rating</span>
+                        <br>
+                        <span class="medium-stat">{{apartment.rating}}</span>
+                    </div>
+                </div>
+                <div class="pictures">
+                    <img ng-src="{{apartment.pictureUrls[0]}}">
+                </div>
+                <div class="spacer"></div>
+                <div class="description">
+                    <h5>Description</h5>
+                    <p>{{apartment.description}}</p>
+                </div>
+                <div class="spacer"></div>
+
             </div>
         </div>
 

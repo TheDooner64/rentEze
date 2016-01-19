@@ -1,20 +1,15 @@
 /*
-
 This seed file is only a placeholder. It should be expanded and altered
 to fit the development of your application.
-
 It uses the same file the server uses to establish
 the database connection:
 --- server/db/index.js
-
 The name of the database used is set in your environment files:
 --- server/env/*
-
 This seed file has a safety check to see if you already have users
 in the database. If you are developing multiple applications with the
 fsg scaffolding, keep in mind that fsg always uses the same database
 name in the environment files.
-
 */
 
 var mongoose = require('mongoose');
@@ -29,7 +24,7 @@ var Review = Promise.promisifyAll(mongoose.model('Review'));
 var apiKey = require('./apiInfo.js').maps;
 var rp = require('request-promise');
 var _ = require('lodash');
-var numApts = 8;
+var numApts = 80;
 var numUsers = 5;
 var numReviews = 10;
 var userIds;
@@ -95,7 +90,7 @@ var randApt = function() {
                 state: state.long_name,
                 zipCode: zip.long_name,
                 neighborhoodString: neighborhood.long_name,
-                title: numBed + "  Bed" + adjectives[chance.integer({
+                title: numBed + "  Bed" + " " + adjectives[chance.integer({
                     min: 0,
                     max: adjectives.length - 1
                 })] + ' Apartment',
@@ -134,10 +129,10 @@ var randApt = function() {
 
 var seedApartments = function() {
     var aptPromises = _.times(numApts, randApt)
-    return Promise.all(aptPromises)
-        .then(function(apartmentArray) {
-            return Apartment.createAsync(apartmentArray);
-        }).then(null, console.log)
+    return Promise.map(aptPromises, function(apartment){
+        return Apartment.createAsync(apartment)
+    }, {concurrency: 1})
+    .then(null, console.log)
 }
 
 var emails = chance.unique(chance.email, numUsers);
