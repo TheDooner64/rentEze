@@ -19,7 +19,6 @@ router.post('/', function(req, res, next) {
     console.log(req.body)
     Order.create(req.body)
     .then(function(order) {
-        console.log('I create order: ', order);
         res.status(201).json(order)
     }).then(null, next);
 });
