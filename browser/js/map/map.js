@@ -64,10 +64,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         $scope.currentMarker.setIcon("/assets/images/star-3.png");
     }
 
-    var addMarkerToMap = function(apartment) {
+    var addMarkerToMap = function(apartment, map) {
 
             if (apartment.latLong) {
-                var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
+                var createdMapMarker = MapFactory.drawLocation(map, apartment, {
                     icon: "/assets/images/home.png"
                 });
 
@@ -91,7 +91,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     // Adds all apartments to the map on initial page load
     $scope.apartments.forEach(function(apartment) {
-        addMarkerToMap(apartment);
+        if (apartment.availability === "available"){
+            addMarkerToMap(apartment, $scope.map);
+        }
+        else addMarkerToMap(apartment, null);
     });
 
     // Filter results based on the criteria the users submits
@@ -106,6 +109,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         $scope.apartments.forEach(function(apartmentToCheck) {
             if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck);
         });
+        console.log($scope.filterCriteria)
         FilterFactory.updateAverages($scope.filterCriteria);
         $scope.recommended = FilterFactory.recommendApartments(apartments, user, favorites);
         console.log("After filter", $scope.recommended);
@@ -156,6 +160,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     }
     $scope.addToFavorites = function() {
         FavoritesFactory.addFavorite($scope.apartment);
+        favorites.push({apartment:$scope.apartment})
+        $scope.recommended = FilterFactory.recommendApartments(apartments, user, favorites);
     };
 
 });
