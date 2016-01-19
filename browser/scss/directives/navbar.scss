@@ -57,16 +57,20 @@ navbar {
         &.active {
             color: darken($bright-robin-egg-blue, 10%);
         }
-        &:hover {
-            background: none;
-            color: $ivory
-        }
         &:focus {
             background: none;
             text-decoration: none;
         }
         &:visited {
             color: $bright-robin-egg-blue;
+        }
+        &:visited:hover {
+            background: none;
+            color: $ivory
+        }
+        &:hover {
+            background: none;
+            color: $ivory
         }
     }
     .signup-button {

@@ -68,6 +68,12 @@ button {
         border-radius: 4px;
         background: $bright-robin-egg-blue;
         color: $space-dark-blue;
+        &:active {
+            background: $bright-robin-egg-blue;
+        }
+        &:focus {
+            background: $bright-robin-egg-blue;
+        }
         &:hover {
             background: lighten($bright-robin-egg-blue, 10%);
         }
@@ -84,6 +90,18 @@ button {
         color: darken(gold, 10%);
         background: none;
     }
+    &.btn-grey {
+        background: darken($light-grey, 5%);
+        &:hover {
+            background: lighten($light-grey, 5%);
+        }
+        &:active {
+            background: darken($light-grey, 5%);
+        }
+        &:focus {
+            background: darken($light-grey, 5%);
+        }
+    }
 }
 
 @import 'directives/main';
@@ -93,4 +111,5 @@ button {
 @import 'map/main';
 @import 'checkout/main';
 @import 'favorites/main';
+@import 'admin/main';
 @import 'orders/main';

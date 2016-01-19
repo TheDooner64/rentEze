@@ -1,0 +1,114 @@
+@import '../variables';
+p.admin-welcome {
+    font-family: $header-font-stack;
+    font-size: 28px;
+    vertical-align: bottom;
+}
+
+.admin-panel {
+    font-size: 18px;
+    margin-top: 10px;
+    &.btn {
+        margin-top: 2px;
+    }
+}
+
+.manage-box {
+    background: $light-grey;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-radius: 5px;
+    &:hover {
+        background: lighten($light-grey, 3%);
+        cursor: pointer;
+    }
+    i {
+        display: block;
+        font-size: 80px;
+    }
+    .manage-title {
+        display: block;
+        margin-top: 10px;
+        font-size: 20px;
+    }
+}
+
+.user {
+    background: $light-grey;
+    margin-bottom: 30px;
+    min-height: 200px;
+    .user-details {
+        padding-top: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        .tiny-sc {
+            color: darken($light-grey, 30%);
+        }
+    }
+    .user-actions {
+        background: darken($light-grey, 5%);
+        width: 100%;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+    }
+    i {
+        padding-right: 4px;
+    }
+    ul > li > a {
+        color: black;
+        font-weight: 900;
+        &:hover {
+            cursor: pointer;
+            text-decoration: none;
+            color: lighten(gray, 5%);
+        }
+    }
+    .label {
+        background: black;
+        color: $bright-robin-egg-blue;
+    }
+}
+
+.admin-apartment {
+    display: block;
+    background: $light-grey;
+    padding: 20px;
+    margin-bottom: 15px;
+    img {
+        height: 150px;
+    }
+    .admin-details {
+        margin-left: 15px;
+    }
+    .admin-actions {
+        button {
+            margin-bottom: 4px;
+            width: 200px;
+            &.remove-favorite {
+                background: darken($light-grey, 20%);
+                &:hover {
+                    background: darken($light-grey, 10%);
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    top: 50px;
+}
+
+#apt-photo {
+    margin-bottom: 5px;
+}
+
+button {
+    &.btn.add-button {
+        padding-top: 8px;
+        padding-bottom: 7px;
+    }
+}

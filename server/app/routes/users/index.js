@@ -9,6 +9,7 @@ var Order = mongoose.model('Order');
 // Mandrill API to send automatic e-mails
 var apiInfo = require("../../../../apiInfo.js");
 var mandrillClient = apiInfo.mandrillClient;
+var _ = require('lodash');
 
 // fs and ejs to create email template
 var fs = require("fs");
@@ -67,6 +68,86 @@ router.post('/:userId/mailer', function(req, res, next) {
 
             });
         });
+});
+
+router.post('/:userId/reset', function(req, res, next) {
+
+    User.findById(req.params.userId)
+        .then(function(user) {
+            fs.readFile(__dirname + "/../../views/reset-password.ejs", "utf8", function(err, data) {
+                if (err) next(err);
+                var emailTemplate = data;
+                var customizedTemplate = ejs.render(emailTemplate, {
+                    firstName: user.firstName
+                });
+                var message = {
+                    "html": customizedTemplate,
+                    "subject": "Reset Your RentEze Password",
+                    "from_email": "nsiegel2@gmail.com",
+                    "from_name": "RentEze team",
+                    "to": [{
+                        "email": user.email,
+                        "name": user.firstName
+                    }],
+                    "important": false,
+                    "track_opens": true,
+                    "auto_html": false,
+                    "preserve_recipients": true,
+                    "merge": false,
+                    "tags": [
+                        "RentEze",
+                        "Password"
+                    ]
+                };
+
+                var async = false;
+                var ip_pool = "Main Pool";
+
+                mandrillClient.messages.send({
+                    "message": message,
+                    "async": async,
+                    "ip_pool": ip_pool
+                }, function(result) {
+                    console.log("Result from mailer: ", result);
+                    res.status(201).send(result);
+                }, function(err) {
+                    // Mandrill returns the error as an object with name and message keys
+                    console.log('A mandrill error occurred: ' + err.name + ' - ' + err.message);
+                    next(err);
+                });
+
+            });
+        });
+});
+
+// Get all users
+// GET /api/users
+router.get('/', function(req, res, next) {
+    User.find({}).exec()
+    .then(function(users) {
+        res.status(200).json(users);
+    }).then(null, next);
+});
+
+// Update a user
+// PUT /api/users/:userId
+router.put('/:userId', function(req, res, next) {
+    User.findById(req.params.userId)
+        .then(function(user) {
+            _.extend(user, req.body);
+            return user.save();
+        }).then(function(savedUser) {
+            res.status(200).json(savedUser);
+        }).then(null, next);
+});
+
+// Delete a user
+// DELETE /api/users/:userId
+router.delete('/:userId', function(req, res, next) {
+    User.remove({ _id: req.params.userId })
+        .then(function(removedUser) {
+            res.status(200).send();
+        }).then(null, next);
 });
 
 // Get all of one user's favorites
