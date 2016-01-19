@@ -33,6 +33,7 @@ app.factory('FilterFactory', function() {
         // }
 
         if (!checkBedrooms()) return false;
+        console.log("third")
         if (!checkRent()) return false;
         if (!checkTerm()) return false;
         // if (!checkRating()) return false;
@@ -43,7 +44,6 @@ app.factory('FilterFactory', function() {
     FilterFactory.recommendApartments = function(apartments, user, favorites){
         var FilterFactory = this;
         if(!favorites) favorites = [];
-        console.log(favorites)
         if (favorites.length < 1){
             return FilterFactory.recommendOnFilters(apartments); //or user has no favorites
         }
@@ -55,9 +55,9 @@ app.factory('FilterFactory', function() {
                 criteria.numBedrooms = fav.apartment.numBedrooms;
                 // criteria.rating = fav.apartment.rating;
                 criteria.termOfLease = fav.apartment.termOfLease;
-                // console.log(criteria)
                 FilterFactory.updateAverages(criteria);
-                // console.log(averages)
+                FilterFactory.updateAverages(criteria);
+
             })
             return FilterFactory.recommendOnFilters(apartments)
         }
@@ -143,10 +143,10 @@ app.factory('FilterFactory', function() {
 
     };
     FilterFactory.recommendOnFilters = function(apartments){
+        console.log("Averages: ", averages)
         var newFilterCriteria = {};
         var rawCriteriaValues = Object.keys(averages).map(function(key){
             var roundedAverage = Math.round(getWeightedAverages(averages[key]));
-            console.log("averages: ", roundedAverage);
             return {key:key, weightedAverage:roundedAverage};
         });
 
@@ -158,12 +158,12 @@ app.factory('FilterFactory', function() {
             var filterCheck = apartments.filter(function(apartment){
                 return FilterFactory.checkAllCriteria(newFilterCriteria, apartment);
             })
-            if (filterCheck.length < 1) newFilterCriteria[currentValue.key]=null;
-            if (filterCheck.length <=3) return filterCheck;
-            if (filterCheck.length > 3) filtered = filterCheck;
+            var filterResultsLength = filterCheck.length
+            if (filterResultsLength < 1) newFilterCriteria[currentValue.key]=null;
+            else if (filterResultsLength <=3 ) return filterCheck;
+            if (filterResultsLength > 3) filtered = filterCheck;
 
         }
-        console.log(filtered);
         if (filtered.length <=3) return filtered;
         return filtered.sort(function(a,b){
             return b.rating - a.rating
