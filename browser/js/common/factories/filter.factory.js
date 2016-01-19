@@ -64,6 +64,7 @@ app.factory('FilterFactory', function() {
 
     FilterFactory.totalFilters = 0;
     FilterFactory.updateAverages = function(filterCriteria){
+        console.log(averages)
         // max rent
         if (filterCriteria.monthlyPriceMax > 0 &&
             filterCriteria.monthlyPriceMax <= 1000) averages.monthlyPriceMax["0-1000"].counter++;
@@ -87,7 +88,7 @@ app.factory('FilterFactory', function() {
         if (filterCriteria.monthlyPriceMin > 4000 &&
             filterCriteria.monthlyPriceMin <= 5000) averages.monthlyPriceMin["4001-5000"].counter++;
         // numBedrooms
-        if (filterCriteria.numBedrooms === "Studio") averages.numBedrooms[0].counter++;
+        if (filterCriteria.numBedrooms === 0) averages.numBedrooms[0].counter++;
         if (filterCriteria.numBedrooms === 1) averages.numBedrooms[1].counter++;
         if (filterCriteria.numBedrooms === 2) averages.numBedrooms[2].counter++;
         if (filterCriteria.numBedrooms === 3) averages.numBedrooms[3].counter++;
