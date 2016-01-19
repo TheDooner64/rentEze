@@ -12,7 +12,7 @@ router.get('/:aptId', function(req, res, next){
         }).then(null, console.log)
 })
 
-router.post('/', function(req, res, next){
+router.post('/', function(req, res, next) {
     Review.create(req.body)
         .then(review => {
             res.status(201).json(review);
