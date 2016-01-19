@@ -45,6 +45,7 @@ app.factory('FilterFactory', function() {
             return this.recommendOnFilters(apartments) //or user has no favorites
         }
     };
+    FilterFactory.totalFilters = 0;
     FilterFactory.updateAverages = function(filterCriteria){
         // max rent
         if (filterCriteria.monthlyPriceMax > 0 &&

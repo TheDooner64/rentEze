@@ -6,7 +6,7 @@ var Review = mongoose.model('Review');
 
 // POST /api/reviews
 router.get('/:aptId', function(req, res, next){
-    Review.find({aptId:req.params.aptId}).populate('reviewer').exec()
+    Review.find({apartment:req.params.aptId}).populate('reviewer').exec()
         .then(reviews => {
             res.status(200).json(reviews);
         }).then(null, console.log)
