@@ -1,5 +1,4 @@
 @import '../variables';
-
 p.admin-welcome {
     font-family: $header-font-stack;
     font-size: 28px;
@@ -9,6 +8,9 @@ p.admin-welcome {
 .admin-panel {
     font-size: 18px;
     margin-top: 10px;
+    &.btn {
+        margin-top: 2px;
+    }
 }
 
 .manage-box {
@@ -20,12 +22,10 @@ p.admin-welcome {
         background: lighten($light-grey, 3%);
         cursor: pointer;
     }
-
     i {
         display: block;
         font-size: 80px;
     }
-
     .manage-title {
         display: block;
         margin-top: 10px;
@@ -35,16 +35,69 @@ p.admin-welcome {
 
 .user {
     background: $light-grey;
-    padding: 15px;
     margin-bottom: 30px;
+    min-height: 200px;
+    .user-details {
+        padding-top: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        .tiny-sc {
+            color: darken($light-grey, 30%);
+        }
+    }
     .user-actions {
+        background: darken($light-grey, 5%);
+        width: 100%;
         display: block;
-        margin-top: 10px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
     }
     i {
         padding-right: 4px;
     }
     ul > li > a {
-        color: darken($bright-robin-egg-blue, 20%);
+        color: black;
+        font-weight: 900;
+        &:hover {
+            cursor: pointer;
+            text-decoration: none;
+            color: lighten(gray, 5%);
+        }
     }
+    .label {
+        background: black;
+        color: $bright-robin-egg-blue;
+    }
+}
+
+.admin-apartment {
+    display: block;
+    background: $light-grey;
+    padding: 20px;
+    margin-bottom: 15px;
+    img {
+        height: 150px;
+    }
+    .admin-details {
+        margin-left: 15px;
+    }
+    .admin-actions {
+        button {
+            margin-bottom: 4px;
+            width: 200px;
+            &.remove-favorite {
+                background: darken($light-grey, 20%);
+                &:hover {
+                    background: darken($light-grey, 10%);
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    top: 50px;
 }

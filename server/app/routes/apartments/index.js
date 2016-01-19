@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
         }).then(null, function(err) {
             err.message = "Something went wrong when finding apartments!";
             next(err);
-        })
+        });
 });
 
 // Get a single apartment by ID

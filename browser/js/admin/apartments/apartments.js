@@ -1,4 +1,4 @@
-app.config(function ($stateProvider) {
+app.config(function($stateProvider) {
 
     $stateProvider.state('adminApt', {
         url: '/admin/apartments',
@@ -16,11 +16,13 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('AdminAptCtrl', function ($scope, AuthService, $state, apartments, AdminFactory) {
+app.controller('AdminAptCtrl', function($scope, AuthService, $state, apartments, AdminFactory, $uibModal, $log) {
     $scope.apartments = apartments;
     $scope.editApt = null;
     $scope.edit = false;
     $scope.add = false;
+
+    console.log(apartments);
 
     // Adds new apartment to db
     $scope.submitNewApartment = function(aptInfo) {
@@ -43,9 +45,26 @@ app.controller('AdminAptCtrl', function ($scope, AuthService, $state, apartments
 
     // Puts the apartment info you want to edit on the scope
     $scope.editApartment = function(apt) {
-        console.log(apt);
-        $scope.editApt = apt;
-        $scope.toggleEdit();
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'js/admin/apartments/edit-apartment.html',
+            controller: 'EditApartmentController',
+            resolve: {
+                apartment: function() {
+                    return apt;
+                },
+                allNeighborhoods: function(NeighborhoodFactory) {
+                    return NeighborhoodFactory.getNeighborhoods();
+                }
+            }
+        });
+
+        modalInstance.result
+            .then(function(selectedItem) {
+                $scope.selected = selectedItem;
+            }, function() {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
     };
 
     // Hides update apartment form

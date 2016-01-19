@@ -68,6 +68,12 @@ button {
         border-radius: 4px;
         background: $bright-robin-egg-blue;
         color: $space-dark-blue;
+        &:active {
+            background: $bright-robin-egg-blue;
+        }
+        &:focus {
+            background: $bright-robin-egg-blue;
+        }
         &:hover {
             background: lighten($bright-robin-egg-blue, 10%);
         }
@@ -83,6 +89,18 @@ button {
     &#pending {
         color: darken(gold, 10%);
         background: none;
+    }
+    &.btn-grey {
+        background: $light-grey;
+        &:hover {
+            background: lighten($light-grey, 10%);
+        }
+        &:active {
+            background: $light-grey;
+        }
+        &:focus {
+            background: $light-grey;
+        }
     }
 }
 
