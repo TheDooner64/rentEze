@@ -139,18 +139,18 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         return $scope.reviews.length;
     };
 
-    // $scope.displayTitle = function() {
-    //     if (!$scope.apartment) return;
-    //     var title = $scope.apartment.title.split(" ");
-    //     if (parseInt(title[0]) === 0) {
-    //         title.shift();
-    //         title.shift();
-    //         var spotForAdj = title.indexOf("Apartment")
-    //         title.splice(spotForAdj,0, "Studio");
-    //         title[0] = "Studio";
-    //     }
-    //     return title.join(" ");
-    // }
+    $scope.displayTitle = function() {
+        if (!$scope.apartment) return;
+        var title = $scope.apartment.title.split(" ");
+        if (parseInt(title[0]) === 0) {
+            title.shift();
+            title.shift();
+            title.shift();
+            var spotForAdj = title.indexOf("Apartment")
+            title.splice(spotForAdj,0, "Studio");
+        }
+        return title.join(" ");
+    }
     $scope.displayStars = function () {
         if (!$scope.apartment.rating) return "Unrated"
         return $scope.apartment.rating

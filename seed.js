@@ -90,7 +90,7 @@ var randApt = function() {
                 state: state.long_name,
                 zipCode: zip.long_name,
                 neighborhoodString: neighborhood.long_name,
-                title: numBed + "  Bed" + adjectives[chance.integer({
+                title: numBed + "  Bed" + " " + adjectives[chance.integer({
                     min: 0,
                     max: adjectives.length - 1
                 })] + ' Apartment',
