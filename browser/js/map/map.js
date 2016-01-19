@@ -10,19 +10,22 @@ app.config(function($stateProvider) {
             },
             user: function(AuthService){
                 return AuthService.getLoggedInUser();
+            },
+            favorites: function(FavoritesFactory){
+                return FavoritesFactory.getAllFavorites();
             }
         }
     });
 
 });
 
-app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, $q, localStorageService, $stateParams, user) {
+app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFactory, FavoritesFactory, ApartmentFactory, apartments, $q, localStorageService, $stateParams, user, favorites) {
     $scope.center = {lat:$stateParams.lat, lng:$stateParams.lng};
     $scope.neighborhood = $stateParams.neighborhood;
     $scope.isCollapsed = true;
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
-    $scope.recommended = FilterFactory.recommendApartments(apartments, user);
+    $scope.recommended = FilterFactory.recommendApartments(apartments, user, favorites);
     console.log("recommended on page load...", $scope.recommended);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
@@ -111,6 +114,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
         $scope.apartment = apartment;
+        console.log($scope.apartment)
     };
 
     $scope.closeApartmentSelectPanel = function() {
@@ -146,7 +150,10 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     //     }
     //     return title.join(" ");
     // }
-
+    $scope.displayStars = function () {
+        if (!$scope.apartment.rating) return "Unrated"
+        return $scope.apartment.rating
+    }
     $scope.addToFavorites = function() {
         FavoritesFactory.addFavorite($scope.apartment);
     };

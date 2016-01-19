@@ -149,7 +149,7 @@
                             <span class="tiny-sc pull-right">by {{review.reviewer.email}}</span>
                         </div>
                         <div class="review-stars">
-                            <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating"></uib-rating>
+                            <uib-rating class="review-stars" ng-model="review.rating" readonly="true" aria-labelledby="default-rating">{{displayStars()}}</uib-rating>
                         </div>
                         <p class="review-content">{{review.content}}</p>
                     </div>

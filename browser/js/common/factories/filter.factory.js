@@ -40,9 +40,23 @@ app.factory('FilterFactory', function() {
         return true;
     };
 
-    FilterFactory.recommendApartments = function(apartments, user){
+    FilterFactory.recommendApartments = function(apartments, user, favorites){
+        var FilterFactory = this
         if (!user){
-            return this.recommendOnFilters(apartments); //or user has no favorites
+            return FilterFactory.recommendOnFilters(apartments); //or user has no favorites
+        }
+        if (favorites){
+            favorites.forEach(function(fav){
+                var criteria ={}
+                criteria.monthlyPriceMax  = fav.apartment.monthlyPrice + 500;
+                criteria.monthlyPriceMin = fav.apartment.monthlyPrice - 500;
+                criteria.numBedrooms = fav.apartment.numBedrooms;
+                // criteria.rating = fav.apartment.rating;
+                criteria.termOfLease = fav.apartment.termOfLease;
+                FilterFactory.updateAverages(criteria);
+                FilterFactory.updateAverages(criteria);
+            })
+            return FilterFactory.recommendOnFilters(apartments)
         }
     };
     FilterFactory.totalFilters = 0;
