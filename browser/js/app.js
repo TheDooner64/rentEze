@@ -26,18 +26,12 @@ app.run(function ($rootScope, AuthService, $state) {
 
     // $stateChangeStart is an event fired
     // whenever the process of changing a state begins.
-    // THIS IS MIDDLE WARE - IT RUNS BETWEEN THE TIME FROM RESPONSE TO
-    // ROUTING TO A CONTROLLER
-    // STATE CHANGE --> MIDDLEWARE -->CONTROLLER
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (destinationStateRequiresAdmin(toState)) {
             // The destination state does not require admin
             // Short circuit with return.
-            console.log(AuthService.isAuthenticated())
-            console.log(AuthService.isAdmin())
             if (AuthService.isAuthenticated() && AuthService.isAdmin()) {
                 // the user has admin status
-                console.log('hi');
                 return;
             }
 
@@ -53,7 +47,9 @@ app.run(function ($rootScope, AuthService, $state) {
                 } else if (user.isAdmin) {
                     $state.go(toState.name, toParams);
                 } else {
-                    $state.go('login');
+                    // FIGURE OUT HERE TO DIRECT IF NOT AUTHORIZED
+                    console.log('add html that says not authorized user?')
+                    $state.go('home');
                 }
             });
 

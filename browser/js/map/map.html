@@ -126,7 +126,7 @@
                             <form name="addReviewForm" ng-submit="addReview()" class="clearfix">
                                 <div class="form-group">
                                     <label class="tiny-sc">Review Title</label>
-                                    <input type="text" class="form-control" ng-model="newReview.reviewTitle" required>
+                                    <input type="text" class="form-control" ng-model="newReview.title" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Choose a rating…</label><br>
@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="tiny-sc">Write your review below…</label>
-                                    <textarea class="form-control" ng-model="newReview.reviewContent" rows="4" required></textarea>
+                                    <textarea class="form-control" ng-model="newReview.content" rows="4" required></textarea>
                                 </div>
                                 <button type="submit" ng-disabled="addReviewForm.$invalid" class="post-review-btn btn pull-right">Post your review</button>
                             </form>

@@ -4,5 +4,5 @@ app.factory('NeighborhoodFactory', function ($http) {
         return $http.get('/api/neighborhoods')
         .then(function(response){return response.data}).then(null, console.log)
     }
-    return NeighborhoodFactory
+    return NeighborhoodFactory;
 })

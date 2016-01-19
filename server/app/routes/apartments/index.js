@@ -5,29 +5,30 @@ var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
 var _ = require('lodash');
 var Promise = require('bluebird')
+
 // Retrieving all available apartments
-// POST /api/apartments
-router.get('/', function(req, res, next){
+// GET /api/apartments
+router.get('/', function(req, res, next) {
     Apartment.find({}).exec()
-        .then(function(apartments){
-            var apartmentPromises = apartments.map(function(apartment){
+        .then(function(apartments) {
+            var apartmentPromises = apartments.map(function(apartment) {
                 return apartment.averageRating();
             })
             Promise.all(apartmentPromises)
-            .then(function(ratings){
-                var moddedApts = apartments.map(function(apartment, index){
-                    apartment = apartment.toJSON();
-                    apartment.rating = ratings[index];
-                    return apartment;
-                });
-                console.log(moddedApts[0].rating)
-                res.status(200).json(moddedApts);
+                .then(function(ratings) {
+                    var moddedApts = apartments.map(function(apartment, index) {
+                        apartment = apartment.toJSON();
+                        apartment.rating = ratings[index];
+                        return apartment;
+                    });
+                    console.log(moddedApts[0].rating)
+                    res.status(200).json(moddedApts);
                 })
         })
-        .then(null, function(err){
+        .then(null, function(err) {
             err.message = "Something went wrong when finding apartments!";
             next(err);
-        })
+        });
 });
 
 
@@ -71,6 +72,8 @@ router.post('/filter', function(req, res, next) {
 // Adding a new apartment
 // POST /api/apartments/
 router.post('/', function(req, res, next) {
+    console.log("Heres the req.body");
+    console.log(req.body);
     Apartment.create(req.body)
         .then(function(apartment) {
             res.status(201).json(apartment);
@@ -91,6 +94,20 @@ router.put('/:aptId', function(req, res, next) {
             res.status(200).json(savedApt);
         }).then(null, function(err) {
             err.message = "Apartment was not successfully saved";
+            next(err);
+        });
+});
+
+// Deleting an apartment
+// DELETE /api/apartments/:aptId
+router.delete('/:aptId', function(req, res, next) {
+    Apartment.remove({
+            _id: req.params.aptId
+        })
+        .then(function(removedApartment) {
+            res.status(201).send();
+        }).then(null, function(err) {
+            err.message = "Apartment was not deleted!";
             next(err);
         });
 });
