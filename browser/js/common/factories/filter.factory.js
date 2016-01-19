@@ -9,7 +9,7 @@ app.factory('FilterFactory', function() {
             if (!filterCriteria.numBedrooms) return true;
             if (filterCriteria.numBedrooms.val === apartmentToCheck.numBedrooms) return true;
             return false;
-        }
+        };
 
         var checkRent = function() {
             var minRent = filterCriteria.monthlyPriceMin ? filterCriteria.monthlyPriceMin : 0;
@@ -17,13 +17,13 @@ app.factory('FilterFactory', function() {
 
             if (apartmentToCheck.monthlyPrice >= minRent && apartmentToCheck.monthlyPrice <= maxRent) return true;
             return false;
-        }
+        };
 
         var checkTerm = function() {
             if (!filterCriteria.termOfLease) return true;
             if (filterCriteria.termOfLease === apartmentToCheck.termOfLease) return true;
             return false;
-        }
+        };
 
         // NOTE: Rating currently doesn't work
         // var checkRating = function() {
@@ -38,11 +38,11 @@ app.factory('FilterFactory', function() {
         // if (!checkRating()) return false;
 
         return true;
-    }
+    };
 
     FilterFactory.recommendApartments = function(apartments, user){
         if (!user){
-            return this.recommendOnFilters(apartments) //or user has no favorites
+            return this.recommendOnFilters(apartments); //or user has no favorites
         }
     };
     FilterFactory.updateAverages = function(filterCriteria){
@@ -87,7 +87,7 @@ app.factory('FilterFactory', function() {
         if (filterCriteria.termOfLease === "1 year") averages.termOfLease["1 year"].counter++;
         if (filterCriteria.termOfLease === "2 year") averages.termOfLease["2 years"].counter++;
 
-    }
+    };
 
     var rentKeys ={
         monthlyPriceMax: {
@@ -124,11 +124,11 @@ app.factory('FilterFactory', function() {
 
     };
     FilterFactory.recommendOnFilters = function(apartments){
-        var newFilterCriteria = {}
+        var newFilterCriteria = {};
         var rawCriteriaValues = Object.keys(averages).map(function(key){
-            var roundedAverage = Math.round(getWeightedAverages(averages[key]))
-            return {key:key, weightedAverage:roundedAverage}
-        })
+            var roundedAverage = Math.round(getWeightedAverages(averages[key]));
+            return {key:key, weightedAverage:roundedAverage};
+        });
 
         var filtered = apartments;
         for(var i=0; i<rawCriteriaValues.length; i++){
@@ -136,16 +136,16 @@ app.factory('FilterFactory', function() {
                 // first checks max rent
             newFilterCriteria[currentValue.key]=rentKeys[currentValue.key][currentValue.weightedAverage];
             var filterCheck = apartments.filter(function(apartment){
-                return FilterFactory.checkAllCriteria(newFilterCriteria, apartment)
+                return FilterFactory.checkAllCriteria(newFilterCriteria, apartment);
             })
             if (filterCheck.length < 1) newFilterCriteria[currentValue.key]=null;
             if (filterCheck.length <=3) return filterCheck;
-            if (filterCheck.length > 3) filtered = filterCheck
+            if (filterCheck.length > 3) filtered = filterCheck;
 
         }
-        console.log(filtered)
+        console.log(filtered);
         return filtered;
-    }
+    };
 
    var averages = {
         monthlyPriceMax:{
@@ -183,7 +183,7 @@ app.factory('FilterFactory', function() {
             "3001-4000": {val:4, counter:0},
             "4001-5000": {val:5, counter:0}
         }
-    }
+    };
 
     function getWeightedAverages(property){
         var keys = Object.keys(property);
@@ -192,7 +192,7 @@ app.factory('FilterFactory', function() {
         keys.forEach(function(key){
             total += property[key].val*property[key].counter;
             counterSum += property[key].counter;
-        })
+        });
         if (counterSum === 0) return null;
         return total/counterSum;
     }
