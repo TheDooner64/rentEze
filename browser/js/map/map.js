@@ -66,27 +66,26 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     var addMarkerToMap = function(apartment) {
 
-            if (apartment.latLong) {
-                var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
-                    icon: "/assets/images/home.png"
-                });
+        if (apartment.latLong) {
+            var createdMapMarker = MapFactory.drawLocation($scope.map, apartment, {
+                icon: "/assets/images/home.png"
+            });
 
             // Add the apartment id to the marker object
-                createdMapMarker.apartmentId = apartment._id;
+            createdMapMarker.apartmentId = apartment._id;
 
             // Add click event to marker
-                createdMapMarker.addListener("click", function() {
-                    $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
-                        .then(function(results) {
-                            $scope.reviews = results[1];
-                            $scope.selectApartment(results[0]);
-                            changeSelectedMarker(createdMapMarker);
-                        }).then(null, console.log);
-                });
-                $scope.currentMarkers.push(createdMapMarker);
+            createdMapMarker.addListener("click", function() {
+                $q.all([ApartmentFactory.getOneApartment(createdMapMarker.apartmentId), ReviewFactory.getAllReviews(apartment._id)])
+                    .then(function(results) {
+                        $scope.reviews = results[1];
+                        $scope.selectApartment(results[0]);
+                        changeSelectedMarker(createdMapMarker);
+                    }).then(null, console.log);
+            });
 
-
-            }
+            $scope.currentMarkers.push(createdMapMarker);
+        }
     };
 
     // Adds all apartments to the map on initial page load
@@ -114,7 +113,6 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
         $scope.apartment = apartment;
-        console.log($scope.apartment)
     };
 
     $scope.closeApartmentSelectPanel = function() {
@@ -123,13 +121,18 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     };
 
     $scope.addReview = function() {
-        $scope.review.apartment = $scope.apartment._id;
+        if(user) $scope.newReview.reviewer = user._id;
+        $scope.newReview.apartment = $scope.apartment._id;
+
         ReviewFactory.addReview($scope.newReview)
             .then(function(addedReview) {
                 $scope.isCollapsed = true;
                 $scope.reviewPosted = true;
-                $scope.$digest();
-            });
+                return ReviewFactory.getAllReviews(addedReview.apartment);
+            })
+            .then(function(allReviews) {
+                $scope.reviews = allReviews;
+            }).then(null, console.error);
     };
 
     $scope.getNumReviews = function() {
@@ -149,11 +152,13 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
             title.splice(spotForAdj,0, "Studio");
         }
         return title.join(" ");
-    }
+    };
+
     $scope.displayStars = function () {
         if (!$scope.apartment.rating) return "Unrated"
         return $scope.apartment.rating
-    }
+    };
+
     $scope.addToFavorites = function() {
         FavoritesFactory.addFavorite($scope.apartment);
     };
