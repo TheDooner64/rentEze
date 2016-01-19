@@ -42,32 +42,32 @@ app.factory('FilterFactory', function() {
 
     FilterFactory.recommendApartments = function(apartments, user){
         if (!user){
-            this.recommendOnFilters(apartments) //or user has no favoritest
+            return this.recommendOnFilters(apartments) //or user has no favorites
         }
     };
     FilterFactory.updateAverages = function(filterCriteria){
         // max rent
         if (filterCriteria.monthlyPriceMax > 0 &&
-            filterCriteria.monthlyPriceMax <= 1000) averages.maxRent["0-1000"].counter++;
+            filterCriteria.monthlyPriceMax <= 1000) averages.monthlyPriceMax["0-1000"].counter++;
         if (filterCriteria.monthlyPriceMax > 1000 &&
-            filterCriteria.monthlyPriceMax <= 2000) averages.maxRent["1001-2000"].counter++;
+            filterCriteria.monthlyPriceMax <= 2000) averages.monthlyPriceMax["1001-2000"].counter++;
         if (filterCriteria.monthlyPriceMax > 2000 &&
-            filterCriteria.monthlyPriceMax <= 3000) averages.maxRent["2001-3000"].counter++;
+            filterCriteria.monthlyPriceMax <= 3000) averages.monthlyPriceMax["2001-3000"].counter++;
         if (filterCriteria.monthlyPriceMax > 3000 &&
-            filterCriteria.monthlyPriceMax <= 4000) averages.maxRent["3001-4000"].counter++;
+            filterCriteria.monthlyPriceMax <= 4000) averages.monthlyPriceMax["3001-4000"].counter++;
         if (filterCriteria.monthlyPriceMax > 4000 &&
-            filterCriteria.monthlyPriceMax <= 5000) averages.maxRent["4001-5000"].counter++;
+            filterCriteria.monthlyPriceMax <= 5000) averages.monthlyPriceMax["4001-5000"].counter++;
         // min rent
         if (filterCriteria.monthlyPriceMin > 0 &&
-            filterCriteria.monthlyPriceMin <= 1000) averages.minRent["0-1000"].counter++;
+            filterCriteria.monthlyPriceMin <= 1000) averages.monthlyPriceMin["0-1000"].counter++;
         if (filterCriteria.monthlyPriceMin > 1000 &&
-            filterCriteria.monthlyPriceMin <= 2000) averages.minRent["1001-2000"].counter++;
+            filterCriteria.monthlyPriceMin <= 2000) averages.monthlyPriceMin["1001-2000"].counter++;
         if (filterCriteria.monthlyPriceMin > 2000 &&
-            filterCriteria.monthlyPriceMin <= 3000) averages.minRent["2001-3000"].counter++;
+            filterCriteria.monthlyPriceMin <= 3000) averages.monthlyPriceMin["2001-3000"].counter++;
         if (filterCriteria.monthlyPriceMin > 3000 &&
-            filterCriteria.monthlyPriceMin <= 4000) averages.minRent["3001-4000"].counter++;
+            filterCriteria.monthlyPriceMin <= 4000) averages.monthlyPriceMin["3001-4000"].counter++;
         if (filterCriteria.monthlyPriceMin > 4000 &&
-            filterCriteria.monthlyPriceMin <= 5000) averages.minRent["4001-5000"].counter++;
+            filterCriteria.monthlyPriceMin <= 5000) averages.monthlyPriceMin["4001-5000"].counter++;
         // numBedrooms
         if (filterCriteria.numBedrooms === "Studio") averages.numBedrooms[0].counter++;
         if (filterCriteria.numBedrooms === 1) averages.numBedrooms[1].counter++;
@@ -88,16 +88,67 @@ app.factory('FilterFactory', function() {
         if (filterCriteria.termOfLease === "2 year") averages.termOfLease["2 years"].counter++;
 
     }
-    FilterFactory.recommendOnFilters = function(filterCriteria){
 
-        console.log(Object.keys(averages).map(function(key){
+    var rentKeys ={
+        monthlyPriceMax: {
+            1: 1000,
+            2: 2000,
+            3: 3000,
+            4: 4000,
+            5: 5000
+        }, numBedrooms: {
+            1: 0,
+            2: 1,
+            3: 2,
+            4: 3,
+            5: 4
+        }, rating: {
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5
+        }, termOfLease: {
+            1: '1 month',
+            2: '3 months',
+            3: '6 months',
+            4: '1 year',
+            5: '2 years'
+        }, monthlyPriceMin: {
+            1: 0,
+            2: 1000,
+            3: 2000,
+            4: 3000,
+            5: 4000
+        }
+
+    };
+    FilterFactory.recommendOnFilters = function(apartments){
+        var newFilterCriteria = {}
+        var rawCriteriaValues = Object.keys(averages).map(function(key){
             var roundedAverage = Math.round(getWeightedAverages(averages[key]))
             return {key:key, weightedAverage:roundedAverage}
-        }))
+        })
+
+        var filtered = apartments;
+        for(var i=0; i<rawCriteriaValues.length; i++){
+            var currentValue = rawCriteriaValues[i];
+                // first checks max rent
+            newFilterCriteria[currentValue.key]=rentKeys[currentValue.key][currentValue.weightedAverage];
+            var filterCheck = apartments.filter(function(apartment){
+                return FilterFactory.checkAllCriteria(newFilterCriteria, apartment)
+            })
+            if (filterCheck.length < 1) newFilterCriteria[currentValue.key]=null;
+            if (filterCheck.length <=3) return filterCheck;
+            if (filterCheck.length > 3) filtered = filterCheck
+
+        }
+        console.log(filtered)
+        return filtered;
     }
 
    var averages = {
-        maxRent:{
+        monthlyPriceMax:{
             "0-1000": {val:1, counter:0},
             "1001-2000": {val:2, counter:0},
             "2001-3000": {val:3, counter:0},
@@ -125,7 +176,7 @@ app.factory('FilterFactory', function() {
             "1 year": {val:4, counter:0},
             "2 years": {val:5, counter:0}
         },
-        minRent: {
+        monthlyPriceMin: {
             "0-1000": {val:1, counter:0},
             "1001-2000": {val:2, counter:0},
             "2001-3000": {val:3, counter:0},

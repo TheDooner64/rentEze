@@ -23,6 +23,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
     $scope.recommended = FilterFactory.recommendApartments(apartments, user);
+    console.log("recommended on page load...", $scope.recommended)
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -103,6 +104,8 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
             if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck);
         });
         FilterFactory.updateAverages($scope.filterCriteria)
+        $scope.recommended = FilterFactory.recommendApartments(apartments, user);
+        console.log("After filter", $scope.recommended)
     }
 
     $scope.selectApartment = function(apartment) {
