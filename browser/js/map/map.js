@@ -23,7 +23,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     $scope.map = MapFactory.initialize_gmaps($scope.center);
     $scope.apartments = apartments;
     $scope.recommended = FilterFactory.recommendApartments(apartments, user);
-    console.log("recommended on page load...", $scope.recommended)
+    console.log("recommended on page load...", $scope.recommended);
     // Change bedroom options to numbers so they match database
     // Need to figure out how to display 0 as "studio" on front end, and handle the 3+
     $scope.bedroomOptions = [{
@@ -56,7 +56,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
     // Function to add a marker to the map
     function changeSelectedMarker(marker) {
         if ($scope.currentMarker)
-            $scope.currentMarker.setIcon("/assets/images/home.png")
+            $scope.currentMarker.setIcon("/assets/images/home.png");
         $scope.currentMarker = marker;
         $scope.currentMarker.setIcon("/assets/images/star-3.png");
     }
@@ -78,13 +78,13 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
                             $scope.reviews = results[1];
                             $scope.selectApartment(results[0]);
                             changeSelectedMarker(createdMapMarker);
-                        }).then(null, console.log)
+                        }).then(null, console.log);
                 });
                 $scope.currentMarkers.push(createdMapMarker);
 
 
             }
-    }
+    };
 
     // Adds all apartments to the map on initial page load
     $scope.apartments.forEach(function(apartment) {
@@ -103,23 +103,23 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         $scope.apartments.forEach(function(apartmentToCheck) {
             if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck);
         });
-        FilterFactory.updateAverages($scope.filterCriteria)
+        FilterFactory.updateAverages($scope.filterCriteria);
         $scope.recommended = FilterFactory.recommendApartments(apartments, user);
-        console.log("After filter", $scope.recommended)
-    }
+        console.log("After filter", $scope.recommended);
+    };
 
     $scope.selectApartment = function(apartment) {
         $scope.apartmentIsSelected = true;
         $scope.apartment = apartment;
-    }
+    };
 
     $scope.closeApartmentSelectPanel = function() {
         $scope.apartmentIsSelected = false;
         $scope.reviews = null;
-    }
+    };
 
     $scope.addReview = function() {
-        $scope.review.apartment = $scope.apartment._id
+        $scope.review.apartment = $scope.apartment._id;
         ReviewFactory.addReview($scope.newReview)
             .then(function(addedReview) {
                 $scope.isCollapsed = true;
