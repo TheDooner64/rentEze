@@ -91,15 +91,15 @@ button {
         background: none;
     }
     &.btn-grey {
-        background: $light-grey;
+        background: darken($light-grey, 5%);
         &:hover {
-            background: lighten($light-grey, 10%);
+            background: lighten($light-grey, 5%);
         }
         &:active {
-            background: $light-grey;
+            background: darken($light-grey, 5%);
         }
         &:focus {
-            background: $light-grey;
+            background: darken($light-grey, 5%);
         }
     }
 }

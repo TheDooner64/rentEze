@@ -6,7 +6,7 @@ var Apartment = mongoose.model('Apartment');
 var _ = require('lodash');
 
 // Retrieving all available apartments
-// POST /api/apartments
+// GET /api/apartments
 router.get('/', function(req, res, next) {
     Apartment.find({}).then(function(apartments) {
             res.status(200).json(apartments);
@@ -56,6 +56,8 @@ router.post('/filter', function(req, res, next) {
 // Adding a new apartment
 // POST /api/apartments/
 router.post('/', function(req, res, next) {
+    console.log("Heres the req.body");
+    console.log(req.body);
     Apartment.create(req.body)
         .then(function(apartment) {
             res.status(201).json(apartment);
@@ -76,6 +78,18 @@ router.put('/:aptId', function(req, res, next) {
             res.status(200).json(savedApt);
         }).then(null, function(err) {
             err.message = "Apartment was not successfully saved";
+            next(err);
+        });
+});
+
+// Deleting an apartment
+// DELETE /api/apartments/:aptId
+router.delete('/:aptId', function(req, res, next) {
+    Apartment.remove({ _id: req.params.aptId })
+        .then(function(removedApartment) {
+            res.status(201).send();
+        }).then(null, function(err) {
+            err.message = "Apartment was not deleted!";
             next(err);
         });
 });

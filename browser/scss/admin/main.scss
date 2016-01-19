@@ -101,3 +101,14 @@ p.admin-welcome {
 .modal {
     top: 50px;
 }
+
+#apt-photo {
+    margin-bottom: 5px;
+}
+
+button {
+    &.btn.add-button {
+        padding-top: 8px;
+        padding-bottom: 7px;
+    }
+}

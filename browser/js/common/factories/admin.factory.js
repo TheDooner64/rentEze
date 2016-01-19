@@ -2,7 +2,6 @@ app.factory('AdminFactory', function($http){
     var AdminFactory = {};
 
     AdminFactory.addApartment = function(aptInfo) {
-        console.log('i am adding ', aptInfo)
         return $http.post('/api/apartments', aptInfo)
         .then(function(res) {
             return res.data;
@@ -12,6 +11,13 @@ app.factory('AdminFactory', function($http){
     AdminFactory.updateApartment = function(aptToUpdate) {
         var route = '/api/apartments/' + aptToUpdate._id;
         return $http.put(route, aptToUpdate)
+        .then(function(res) {
+            return res.data;
+        }).then(null, console.error);
+    };
+
+    AdminFactory.deleteApartment = function(aptToUpdate) {
+        return $http.delete('/api/apartments/' + aptToUpdate._id)
         .then(function(res) {
             return res.data;
         }).then(null, console.error);
