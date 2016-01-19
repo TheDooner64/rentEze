@@ -41,8 +41,10 @@ app.factory('FilterFactory', function() {
     };
 
     FilterFactory.recommendApartments = function(apartments, user, favorites){
-        var FilterFactory = this
-        if (!user){
+        var FilterFactory = this;
+        if(!favorites) favorites = [];
+        console.log(favorites)
+        if (favorites.length < 1){
             return FilterFactory.recommendOnFilters(apartments); //or user has no favorites
         }
         if (favorites){
@@ -53,12 +55,14 @@ app.factory('FilterFactory', function() {
                 criteria.numBedrooms = fav.apartment.numBedrooms;
                 // criteria.rating = fav.apartment.rating;
                 criteria.termOfLease = fav.apartment.termOfLease;
+                // console.log(criteria)
                 FilterFactory.updateAverages(criteria);
-                FilterFactory.updateAverages(criteria);
+                // console.log(averages)
             })
             return FilterFactory.recommendOnFilters(apartments)
         }
     };
+
     FilterFactory.totalFilters = 0;
     FilterFactory.updateAverages = function(filterCriteria){
         // max rent
@@ -142,6 +146,7 @@ app.factory('FilterFactory', function() {
         var newFilterCriteria = {};
         var rawCriteriaValues = Object.keys(averages).map(function(key){
             var roundedAverage = Math.round(getWeightedAverages(averages[key]));
+            console.log("averages: ", roundedAverage);
             return {key:key, weightedAverage:roundedAverage};
         });
 
@@ -159,7 +164,10 @@ app.factory('FilterFactory', function() {
 
         }
         console.log(filtered);
-        return filtered;
+        if (filtered.length <=3) return filtered;
+        return filtered.sort(function(a,b){
+            return b.rating - a.rating
+        }).slice(0,3)
     };
 
    var averages = {

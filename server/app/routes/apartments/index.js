@@ -5,25 +5,25 @@ var mongoose = require('mongoose');
 var Apartment = mongoose.model('Apartment');
 var _ = require('lodash');
 var Promise = require('bluebird')
-var promiseApartment = Promise.promisifyAll(Apartment)
 // Retrieving all available apartments
 // POST /api/apartments
 router.get('/', function(req, res, next){
-    promiseApartment.find().exec()
+    Apartment.find({}).exec()
         .then(function(apartments){
             var apartmentPromises = apartments.map(function(apartment){
-                return apartment.averageRating().
-                then(function(rating){
-                    apartment = apartment.toJSON();
-                    apartment.rating = rating;
-                })
+                return apartment.averageRating();
             })
-            console.log(apartmentPromises)
-            return Promise.all(apartmentPromises);
-        }).then(function(apartments){
-                    console.log(apartments)
-                    res.status(200).json(apartments);
+            Promise.all(apartmentPromises)
+            .then(function(ratings){
+                var moddedApts = apartments.map(function(apartment, index){
+                    apartment = apartment.toJSON();
+                    apartment.rating = ratings[index];
+                    return apartment;
+                });
+                console.log(moddedApts[0].rating)
+                res.status(200).json(moddedApts);
                 })
+        })
         .then(null, function(err){
             err.message = "Something went wrong when finding apartments!";
             next(err);
