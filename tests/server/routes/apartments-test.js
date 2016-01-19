@@ -1,4 +1,4 @@
-// Instantiate all models
+// Instantiate models
 var mongoose = require('mongoose');
 require('../../../server/db/models');
 var User = mongoose.model('User');
@@ -161,6 +161,7 @@ describe('Apartment routes', function() {
             });
         });
 
+        // BOBBY NOTE: Change this route and test so only admins can add apartments
         it('can add a new apartment', function(done) {
             var newApartment = {
             title: 'My new apartment',
