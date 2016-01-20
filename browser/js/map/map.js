@@ -107,7 +107,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
         // $FilterFactory.updateAverages($scope.filterCriteria);
         // Loop over each apartment and check if a marker should be added
         $scope.apartments.forEach(function(apartmentToCheck) {
-            if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck);
+            if (FilterFactory.checkAllCriteria($scope.filterCriteria, apartmentToCheck)) addMarkerToMap(apartmentToCheck, $scope.map);
         });
         console.log($scope.filterCriteria)
         FilterFactory.updateAverages($scope.filterCriteria);
