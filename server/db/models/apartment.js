@@ -112,11 +112,12 @@ schema.pre('save', function(next) {
 schema.pre('validate', function(next){
     var apartment = this;
     if (!apartment.neighborhoodString) next();
-    Neighborhood.findOrCreate({name:apartment.neighborhoodString})
+    else { Neighborhood.findOrCreate({name:apartment.neighborhoodString})
         .then(function(neighborhood){
             apartment.neighborhood = neighborhood._id;
             next();
         }).then(null, console.log);
+    }
 })
 
 // NOTE: Need to change averageRating to a method
