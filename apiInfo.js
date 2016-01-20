@@ -8,4 +8,4 @@ var mandrillClient = new mandrill.Mandrill('aaw5lnuyBBUpyYn9WUII1Q');
 
 // Export the secret variables we'll need access to
 module.exports.mandrillClient = mandrillClient;
-module.exports.maps = "AIzaSyDG1T1ZvOqHtAqgmkjjjHtXZz5HvwrW_w0";
+module.exports.maps = "AIzaSyD5ByoWNmx_l4l3Q-DWNxs4ADgVLk2eyPw";
