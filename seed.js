@@ -84,12 +84,11 @@ var randApt = function() {
                 return component.types.indexOf('neighborhood') > -1
             })[0];
             console.log(neighborhood, latLong)
-            return {
+            var apt = {
                 streetAddress: addressComponents[0].long_name + ' ' + addressComponents[1].long_name,
                 city: city.long_name,
                 state: state.long_name,
                 zipCode: zip.long_name,
-                neighborhoodString: neighborhood.long_name,
                 title: numBed + "  Bed" + " " + adjectives[chance.integer({
                     min: 0,
                     max: adjectives.length - 1
@@ -124,6 +123,10 @@ var randApt = function() {
                     max: availability.length - 1
                 })]
             };
+            if (neighborhood && neighborhood.long_name) {
+                apt.neighborhoodString = neighborhood.long_name;
+            }
+            return apt;
         });
 };
 
