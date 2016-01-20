@@ -48,6 +48,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     $scope.ratingOptions = [1, 2, 3, 4, 5];
     $scope.termOfLease = ["1 month", "3 months", "6 months", "1 year", "2 years"];
+    $scope.favoriteAction = "Favorite";
 
     // Default to false so the side-panel is not displayed
     $scope.apartmentIsSelected = false;
@@ -165,6 +166,7 @@ app.controller('MapCtrl', function($scope, MapFactory, FilterFactory, ReviewFact
 
     $scope.addToFavorites = function() {
         FavoritesFactory.addFavorite($scope.apartment);
+        $scope.favoriteAction = "Favorited";
         favorites.push({apartment:$scope.apartment})
         $scope.recommended = FilterFactory.recommendApartments(apartments, user, favorites);
     };
